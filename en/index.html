@@ -677,6 +677,8 @@ ol.list li{padding-left:4px}
           <li><b>Cmd+click</b> a URL in the terminal to open it in your browser.</li>
           <li>Click <b>📎</b> in the header to open the attachment dialog. Like the drawer, it lets you add, delete, reorder, edit memos, and drop files. Use <b>Insert into terminal</b> or <b>Insert all</b> to paste them into the input line. You press Enter yourself.</li>
           <li>Click <b>Snippets</b> to open the <b>Shared</b> and <b>This path</b> command lists. Picking one fills the edit area, and <b>Apply</b> runs it.</li>
+          <li>To click claude's mod panels with the mouse, run claude with the <b>fullscreen renderer</b>: run <code>/tui fullscreen</code> in claude, or start it with the <code>CLAUDE_CODE_NO_FLICKER=1</code> environment variable. With the default renderer, claude does not accept mouse input, so clicks do nothing (this is claude's behavior).</li>
+          <li>Emoji used in mod panels (⬜, 📋, 🧩 and so on) are counted as two cells, so panel text stays aligned. With the fullscreen renderer, widen the window until the terminal is 144 columns or more, and you also see the mod panels that open without being requested.</li>
         </ul>
       </div>
       <div class="card">

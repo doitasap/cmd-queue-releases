@@ -677,8 +677,8 @@ ol.list li{padding-left:4px}
           <li>터미널의 주소는 <b>Cmd+클릭</b>으로 브라우저에서 엽니다.</li>
           <li>헤더의 <b>📎</b>로 첨부 다이얼로그를 엽니다. 드로어처럼 추가·삭제·순서 변경·메모 수정·끌어다 놓기가 되고, <b>터미널에 넣기</b>·<b>전체 넣기</b>로 입력줄에 붙여 넣습니다. Enter는 직접 누릅니다.</li>
           <li><b>스니펫</b> 버튼으로 <b>공통</b>·<b>이 경로</b> 명령 목록을 펼칩니다. 고르면 편집 영역이 채워지고 <b>적용</b>을 누르면 실행됩니다.</li>
-          <li>claude 의 mod 패널을 마우스로 누르려면 claude 를 <b>fullscreen 렌더러</b>로 띄웁니다. claude 에서 <code>/tui fullscreen</code> 을 실행하거나 <code>CLAUDE_CODE_NO_FLICKER=1</code> 환경변수를 주고 실행하세요. 기본 렌더러의 claude 는 마우스 입력을 받지 않아 눌러도 반응하지 않습니다(claude 의 동작입니다).</li>
-          <li>mod 패널에 쓰이는 이모지(⬜·📋·🧩 등)를 2칸으로 세므로 패널 글자가 어긋나지 않습니다. fullscreen 렌더러에서 창을 넓혀 터미널이 144열 이상이 되면 요청하지 않아도 열리는 mod 패널도 보입니다.</li>
+          <li>claude 에 mod 패널을 붙여 쓴다면, 패널을 마우스로 누르려면 claude 를 <b>fullscreen 렌더러</b>로 띄웁니다. claude 에서 <code>/tui fullscreen</code> 을 실행하거나 <code>CLAUDE_CODE_NO_FLICKER=1</code> 환경변수를 주고 실행하세요. 기본 렌더러의 claude 는 마우스 입력을 받지 않아 눌러도 반응하지 않습니다(claude 의 동작입니다). 터미널을 더 넓게 쓰려면 설정 › 일반 › 터미널 창 폭을 「전체 화면 폭」으로 바꾸세요.</li>
+          <li>이모지(⬜·📋·🧩 등)를 claude 와 같이 2칸으로 세므로, 이모지가 섞인 표나 패널의 글자가 어긋나지 않습니다. 창을 넓히면 터미널 열 수도 함께 늘어납니다.</li>
         </ul>
       </div>
       <div class="card">
@@ -739,6 +739,7 @@ ol.list li{padding-left:4px}
           <tr class="grp"><td colspan="2">일반</td></tr>
           <tr><td>언어</td><td class="def">시스템 설정 따름 · 한국어 · English. 바로 바뀜</td></tr>
           <tr><td>테마</td><td class="def">다크(기본) · 라이트</td></tr>
+          <tr><td>터미널 창 폭</td><td class="def">기본(최대 1000px) · 전체 화면 폭. 열려 있는 터미널에도 바로 적용</td></tr>
           <tr><td>데스크톱 알림</td><td class="def">완료·한도 도달·실패·입력 대기 때 알림</td></tr>
           <tr><td>대화형 입력 대기 알림</td><td class="def">출력이 이 초만큼 멎으면 알림. 기본 8초, 0이면 끔</td></tr>
           <tr><td>시스템 로그인 시 시작</td><td class="def">로그인하면 앱이 떠 자동 큐를 이어 처리</td></tr>

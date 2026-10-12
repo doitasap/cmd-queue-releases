@@ -677,8 +677,8 @@ ol.list li{padding-left:4px}
           <li><b>Cmd+click</b> a URL in the terminal to open it in your browser.</li>
           <li>Click <b>📎</b> in the header to open the attachment dialog. Like the drawer, it lets you add, delete, reorder, edit memos, and drop files. Use <b>Insert into terminal</b> or <b>Insert all</b> to paste them into the input line. You press Enter yourself.</li>
           <li>Click <b>Snippets</b> to open the <b>Shared</b> and <b>This path</b> command lists. Picking one fills the edit area, and <b>Apply</b> runs it.</li>
-          <li>To click claude's mod panels with the mouse, run claude with the <b>fullscreen renderer</b>: run <code>/tui fullscreen</code> in claude, or start it with the <code>CLAUDE_CODE_NO_FLICKER=1</code> environment variable. With the default renderer, claude does not accept mouse input, so clicks do nothing (this is claude's behavior).</li>
-          <li>Emoji used in mod panels (⬜, 📋, 🧩 and so on) are counted as two cells, so panel text stays aligned. With the fullscreen renderer, widen the window until the terminal is 144 columns or more, and you also see the mod panels that open without being requested.</li>
+          <li>If you use mod panels with claude, run claude with the <b>fullscreen renderer</b> to click them with the mouse: run <code>/tui fullscreen</code> in claude, or start it with the <code>CLAUDE_CODE_NO_FLICKER=1</code> environment variable. With the default renderer, claude does not accept mouse input, so clicks do nothing (this is claude's behavior). To make the terminal wider, set Settings › General › Terminal window width to Full width.</li>
+          <li>Emoji (⬜, 📋, 🧩 and so on) are counted as two cells, as claude does, so tables and panels that mix in emoji stay aligned. Widening the window also adds terminal columns.</li>
         </ul>
       </div>
       <div class="card">
@@ -739,6 +739,7 @@ ol.list li{padding-left:4px}
           <tr class="grp"><td colspan="2">General</td></tr>
           <tr><td>Language</td><td class="def">Follow System · 한국어 · English. Applies immediately</td></tr>
           <tr><td>Theme</td><td class="def">Dark (default) · Light</td></tr>
+          <tr><td>Terminal window width</td><td class="def">Default (up to 1000px) · Full width. Applies to an open terminal right away</td></tr>
           <tr><td>Desktop notifications</td><td class="def">Notifies you when a task finishes, hits a limit, fails, or waits for input</td></tr>
           <tr><td>Interactive input-wait alert</td><td class="def">Notifies you when output stops for this many seconds. Default 8 seconds, 0 turns it off</td></tr>
           <tr><td>Start at login</td><td class="def">Opens the app when you log in so it keeps working through the auto queue</td></tr>

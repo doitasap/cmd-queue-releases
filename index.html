@@ -679,6 +679,7 @@ ol.list li{padding-left:4px}
           <li><b>스니펫</b> 버튼으로 <b>공통</b>·<b>이 경로</b> 명령 목록을 펼칩니다. 고르면 편집 영역이 채워지고 <b>적용</b>을 누르면 실행됩니다.</li>
           <li>claude 에 mod 패널을 붙여 쓴다면, 패널을 마우스로 누르려면 claude 를 <b>fullscreen 렌더러</b>로 띄웁니다. claude 에서 <code>/tui fullscreen</code> 을 실행하거나 <code>CLAUDE_CODE_NO_FLICKER=1</code> 환경변수를 주고 실행하세요. 기본 렌더러의 claude 는 마우스 입력을 받지 않아 눌러도 반응하지 않습니다(claude 의 동작입니다). 터미널을 더 넓게 쓰려면 설정 › 일반 › 터미널 창 폭을 「전체 화면 폭」으로 바꾸세요.</li>
           <li>이모지(⬜·📋·🧩 등)를 claude 와 같이 2칸으로 세므로, 이모지가 섞인 표나 패널의 글자가 어긋나지 않습니다. 창을 넓히면 터미널 열 수도 함께 늘어납니다.</li>
+          <li>다른 앱에 갔다 돌아오거나 터미널을 다시 열면 claude 가 화면 전체를 다시 그리게 해, 오른쪽 패널이나 글자가 비어 보이지 않게 합니다. 그래도 화면이 비면 <code>⇧⌘D</code>로 진단 파일을 저장해 이슈에 첨부해 주세요(앱 데이터 폴더의 <code>diagnostics/</code>, 터미널 출력이 담기므로 공유 전에 확인하세요).</li>
         </ul>
       </div>
       <div class="card">
@@ -809,6 +810,7 @@ ol.list li{padding-left:4px}
     <ul class="list" style="margin-top:16px">
       <li>앱 창에 포커스가 있을 때만 동작합니다. 전면 모달이나 대화형 터미널이 열려 있으면 설정·스니펫 추가·터미널·뒤로만 동작합니다.</li>
       <li>명령창 제출 키(<code>Enter</code>=To Do, <code>⌘Enter</code>·<code>⌃Enter</code>·<code>⌃⌘Enter</code>=자동 큐, <code>Shift+Enter</code>=줄바꿈)는 바꿀 수 없습니다.</li>
+      <li>대화형 터미널의 진단 저장(<code>⇧⌘D</code>)은 예약 조합이라 다른 동작에 지정할 수 없습니다.</li>
       <li>Mission Control의 「왼쪽 스페이스로 이동」(<code>⌃←</code>)이 켜져 있으면 뒤로 키를 다른 조합으로 바꾸십시오.</li>
     </ul>
   </div>

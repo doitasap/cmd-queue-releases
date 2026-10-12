@@ -679,6 +679,7 @@ ol.list li{padding-left:4px}
           <li>Click <b>Snippets</b> to open the <b>Shared</b> and <b>This path</b> command lists. Picking one fills the edit area, and <b>Apply</b> runs it.</li>
           <li>If you use mod panels with claude, run claude with the <b>fullscreen renderer</b> to click them with the mouse: run <code>/tui fullscreen</code> in claude, or start it with the <code>CLAUDE_CODE_NO_FLICKER=1</code> environment variable. With the default renderer, claude does not accept mouse input, so clicks do nothing (this is claude's behavior). To make the terminal wider, set Settings › General › Terminal window width to Full width.</li>
           <li>Emoji (⬜, 📋, 🧩 and so on) are counted as two cells, as claude does, so tables and panels that mix in emoji stay aligned. Widening the window also adds terminal columns.</li>
+          <li>When you come back from another app or reopen a terminal, CmdQ has claude redraw the whole screen so the right-hand panel and text don't go blank. If the screen still goes blank, press <code>⇧⌘D</code> to save a diagnostic file and attach it to an issue (it goes to <code>diagnostics/</code> in the app data folder and contains terminal output, so review it before sharing).</li>
         </ul>
       </div>
       <div class="card">
@@ -809,6 +810,7 @@ ol.list li{padding-left:4px}
     <ul class="list" style="margin-top:16px">
       <li>Shortcuts work only while the app window has focus. When a full-screen modal or an interactive terminal is open, only Settings, Add snippet, Terminals, and Back work.</li>
       <li>The command box submit keys can't be changed: <code>Enter</code> for To Do, <code>⌘Enter</code>, <code>⌃Enter</code>, or <code>⌃⌘Enter</code> for the auto queue, and <code>Shift+Enter</code> for a new line.</li>
+      <li>Save diagnostics in the interactive terminal (<code>⇧⌘D</code>) is a reserved combination and can't be assigned to another action.</li>
       <li>If Mission Control's “Move left a space” (<code>⌃←</code>) is turned on, assign Back to a different combination.</li>
     </ul>
   </div>

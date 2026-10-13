@@ -6,7 +6,7 @@
 <title>개인정보 처리방침 — CmdQ</title>
 <meta name="description" content="CmdQ 개인정보 처리방침. 사용자 데이터를 수집하지 않습니다.">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23171B22'/%3E%3Crect x='7' y='8' width='18' height='3.4' rx='1.7' fill='%23E0805B'/%3E%3Crect x='7' y='14.3' width='13' height='3.4' rx='1.7' fill='%237C8AA5'/%3E%3Crect x='7' y='20.6' width='9' height='3.4' rx='1.7' fill='%23556072'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/cmdq-icon.png">
 <style>
 :root{
   --bg:#F4F6F9; --surface:#FFFFFF; --border:#E2E7EF;
@@ -44,7 +44,8 @@ code{font-family:var(--mono);font-size:.92em;word-break:break-all}
 .wrap{max-width:760px;margin:0 auto;padding:0 24px}
 .topbar{border-bottom:1px solid var(--border);background:var(--surface)}
 .topbar .wrap{display:flex;align-items:center;height:56px;gap:16px}
-.brand{font-weight:700;font-size:15px}
+.brand{display:inline-flex;align-items:center;font-weight:700;font-size:15px}
+.brand-mark{display:block;flex-shrink:0;margin-right:8px}
 .brand-q{color:var(--accent)}
 .back{margin-left:auto;font-size:13.5px;display:inline-flex;align-items:center;min-height:24px;padding:0 8px}
 header.doc{padding:48px 0 28px;border-bottom:1px solid var(--border)}
@@ -80,7 +81,7 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
 
 <div class="topbar">
   <div class="wrap">
-    <span class="brand">Cmd<span class="brand-q">Q</span></span>
+    <span class="brand"><img class="brand-mark" src="assets/cmdq-icon.png" alt="" width="22" height="22">Cmd<span class="brand-q">Q</span></span>
     <a class="back" href="./">← 홈으로</a>
   </div>
 </div>

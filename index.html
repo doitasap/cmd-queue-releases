@@ -10,7 +10,7 @@
 <link rel="alternate" hreflang="ko" href="https://doitasap.github.io/cmd-queue-releases/">
 <link rel="alternate" hreflang="en" href="https://doitasap.github.io/cmd-queue-releases/en/">
 <link rel="alternate" hreflang="x-default" href="https://doitasap.github.io/cmd-queue-releases/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23171B22'/%3E%3Crect x='7' y='8' width='18' height='3.4' rx='1.7' fill='%23E0805B'/%3E%3Crect x='7' y='14.3' width='13' height='3.4' rx='1.7' fill='%237C8AA5'/%3E%3Crect x='7' y='20.6' width='9' height='3.4' rx='1.7' fill='%23556072'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/cmdq-icon.png">
 <style>
 /* ── 토큰: 라이트 기본 ───────────────────────────────── */
 :root{
@@ -63,7 +63,8 @@ code,kbd{font-family:var(--mono);font-size:.92em}
   backdrop-filter:blur(10px);border-bottom:1px solid var(--border);
 }
 .topbar .wrap{display:flex;align-items:center;gap:16px;height:56px}
-.brand{font-weight:700;letter-spacing:-.01em;font-size:15px;flex-shrink:0}
+.brand{display:inline-flex;align-items:center;font-weight:700;letter-spacing:-.01em;font-size:15px;flex-shrink:0}
+.brand-mark{display:block;flex-shrink:0;margin-right:8px}
 .brand-q{color:var(--accent)}
 .topnav{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
 .topnav::-webkit-scrollbar{display:none}
@@ -96,11 +97,10 @@ code,kbd{font-family:var(--mono);font-size:.92em}
 .hero{padding:64px 0 56px;border-bottom:1px solid var(--border)}
 .hero-grid{display:grid;grid-template-columns:1fr 420px;gap:48px;align-items:center}
 .hero-grid>*{min-width:0}
-.eyebrow{
-  display:inline-block;font-size:12px;font-weight:600;letter-spacing:.04em;
-  color:var(--accent);border:1px solid var(--border);background:var(--surface);
-  padding:4px 10px;border-radius:999px;margin-bottom:18px;
-}
+.hero-app{display:flex;align-items:center;gap:14px;margin:0 0 22px -7px}
+.hero-icon{display:block;flex-shrink:0}
+.hero-app-name{font-size:24px;font-weight:750;letter-spacing:-.01em;line-height:1.1}
+.hero-app-meta{font-size:13px;color:var(--text-dim);margin-top:4px}
 h1{font-size:clamp(30px,4.6vw,46px);line-height:1.2;letter-spacing:-.02em;font-weight:750}
 .lede{font-size:clamp(15px,2vw,17.5px);color:var(--text-dim);margin-top:16px;max-width:34em}
 .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
@@ -281,6 +281,8 @@ ol.list li{padding-left:4px}
 @media (max-width:720px){
   .wrap{padding:0 18px}
   .hero{padding:44px 0 40px}
+  .hero-app{margin-left:-6px}
+  .hero-icon{width:72px;height:72px}
   section{padding:44px 0}
   .grid2,.grid3{grid-template-columns:1fr}
   .topnav a,.lang,.docs-link{min-height:44px}
@@ -303,7 +305,7 @@ ol.list li{padding-left:4px}
 
 <div class="topbar">
   <div class="wrap">
-    <span class="brand">Cmd<span class="brand-q">Q</span></span>
+    <span class="brand"><img class="brand-mark" src="assets/cmdq-icon.png" alt="" width="22" height="22">Cmd<span class="brand-q">Q</span></span>
     <nav class="topnav" aria-label="문서 목차">
       <a href="#why" data-panel="why">왜 CmdQ인가</a>
       <a href="#start" data-panel="start">시작하기</a>
@@ -322,7 +324,13 @@ ol.list li{padding-left:4px}
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="eyebrow">macOS · 개발자 도구</span>
+      <div class="hero-app">
+        <img class="hero-icon" src="assets/cmdq-app-icon.png" alt="" width="84" height="84">
+        <div>
+          <p class="hero-app-name">Cmd<span class="brand-q">Q</span></p>
+          <p class="hero-app-meta">macOS · 개발자 도구</p>
+        </div>
+      </div>
       <h1>자리에 없어도,<br>리셋되는 순간 큐가 대신 일한다</h1>
       <p class="lede">
         CmdQ는 여러 프로젝트의 Claude Code 작업을 줄 세워 두면 알아서 차례대로 실행합니다.

@@ -79,6 +79,12 @@ code,kbd{font-family:var(--mono);font-size:.92em}
   white-space:nowrap;min-height:36px;display:flex;align-items:center;flex-shrink:0;
 }
 .lang:hover{background:var(--surface);color:var(--text);text-decoration:none}
+.docs-link{
+  color:var(--text-dim);font-size:13.5px;padding:8px 10px;border-radius:8px;
+  white-space:nowrap;min-height:36px;display:flex;align-items:center;flex-shrink:0;
+}
+.docs-link:hover{background:var(--surface);color:var(--text);text-decoration:none}
+.more{margin-top:14px;font-size:14px}
 .tbtn{
   background:var(--surface);border:1px solid var(--border);color:var(--text-dim);
   min-width:36px;min-height:36px;border-radius:9px;cursor:pointer;font-size:14px;
@@ -268,7 +274,8 @@ ol.list li{padding-left:4px}
 @media (max-width:860px){
   .topbar .wrap{flex-wrap:wrap;height:auto;gap:0 8px;padding-top:6px}
   .topnav{order:3;width:100%;margin-left:0;flex-wrap:wrap;overflow-x:visible}
-  .lang{margin-left:auto}
+  .docs-link{margin-left:auto}
+  .docs-link+.lang{margin-left:0}
   [id]{scroll-margin-top:112px}
 }
 @media (max-width:720px){
@@ -276,7 +283,7 @@ ol.list li{padding-left:4px}
   .hero{padding:44px 0 40px}
   section{padding:44px 0}
   .grid2,.grid3{grid-template-columns:1fr}
-  .topnav a,.lang{min-height:44px}
+  .topnav a,.lang,.docs-link{min-height:44px}
   .topnav a{padding:8px}
   [id]{scroll-margin-top:156px}
   .btn,.copy,.tbtn{min-height:44px}
@@ -305,6 +312,7 @@ ol.list li{padding-left:4px}
       <a href="#trouble" data-panel="trouble">Troubleshooting</a>
       <a href="#policy" data-panel="policy">Policy &amp; privacy</a>
     </nav>
+    <a class="docs-link" href="guide.html">Docs</a>
     <a class="lang" href="../" hreflang="ko" lang="ko">한국어</a>
     <button class="tbtn" id="theme-toggle" type="button" aria-label="Toggle theme">◑</button>
   </div>
@@ -317,13 +325,13 @@ ol.list li{padding-left:4px}
       <span class="eyebrow">macOS · Developer tool</span>
       <h1>Step away.<br>The queue gets back to work the moment your limit resets</h1>
       <p class="lede">
-        CmdQ queues Claude Code tasks for your project folders and runs them for you.
-        Tasks in the same path run one after another, and up to three paths run at the same time by default.
-        A task that hits the usage limit doesn't fail. It waits and picks up again when the limit resets.
+        Queue up Claude Code tasks across your projects and let them run on their own.
+        Anything stopped by a usage limit picks up again when the limit resets.
       </p>
       <div class="cta">
         <a class="btn btn-primary" href="https://github.com/doitasap/cmd-queue-releases/releases/latest">Download for macOS</a>
         <a class="btn btn-ghost" href="#start">Get started in 3 minutes</a>
+        <a class="btn btn-ghost" href="guide.html">Detailed guide</a>
         <a class="btn btn-ghost" href="https://github.com/doitasap/cmd-queue-releases">★ Star on GitHub</a>
       </div>
       <p class="req">
@@ -373,31 +381,36 @@ ol.list li{padding-left:4px}
   <div class="wrap">
     <div class="sec-head">
       <h2>Why CmdQ</h2>
-      <p><b>Does it help you get more done? Yes.</b> Claude Code users keep running into three problems. CmdQ was built to remove them.</p>
+      <p>Your Claude Code work keeps moving when you're not at the keyboard.</p>
     </div>
     <div class="grid3">
       <div class="card why-item">
-        <h3>① Time lost to usage limits</h3>
+        <h3>① Usage-limit downtime</h3>
         <dl>
-          <dt>Before</dt><dd>When you hit the 5-hour or weekly limit, the work stops. You wait for the reset and type the command again.</dd>
-          <dt>With CmdQ</dt><dd>The stopped task stays in <b>Waiting for reset</b> and continues in the same session after the reset. Work moves forward while you're away.</dd>
+          <dt>Before</dt><dd>Work stops at the limit, and you come back later to type the command again.</dd>
+          <dt>With CmdQ</dt><dd>The task moves to <b>Waiting for reset</b> and continues in the same session after the reset.</dd>
         </dl>
       </div>
       <div class="card why-item">
-        <h3>② Keeping several projects in order</h3>
+        <h3>② Several projects at once</h3>
         <dl>
-          <dt>Before</dt><dd>You keep a window open for each project and switch between them to see what has finished.</dd>
-          <dt>With CmdQ</dt><dd>Different paths run at the same time, and tasks in the same path run in order. Link a follow-up task as a <b>chain</b>, and a flow like build → summarize the logs keeps going without you.</dd>
+          <dt>Before</dt><dd>One window per project, and you keep checking which one is done.</dd>
+          <dt>With CmdQ</dt><dd>Projects run side by side, and each project's tasks run in order. Link a follow-up as a <b>chain</b> and it runs when the first task is done.</dd>
         </dl>
       </div>
       <div class="card why-item">
-        <h3>③ To-dos that live only in your head</h3>
+        <h3>③ To-dos in your head</h3>
         <dl>
-          <dt>Before</dt><dd>You remember a command or jot it down, then type it in later.</dd>
-          <dt>With CmdQ</dt><dd>Park it in <b>To Do</b> right away. When it's ready, promote it to the <b>Auto queue</b>.</dd>
+          <dt>Before</dt><dd>You keep the next command in mind or on a sticky note.</dd>
+          <dt>With CmdQ</dt><dd>Park it in <b>To Do</b> and promote it to the <b>Auto queue</b> when it's ready.</dd>
         </dl>
       </div>
     </div>
+    <p style="margin-top:24px;color:var(--text-dim);font-size:14.5px;max-width:70ch">
+      Claude Code's own extensions, such as hooks and plugins, work inside a running session.
+      Restarting a session that stopped at a limit, ordering work across projects, and showing remaining usage and progress in the menu bar all happen outside the session.
+      That is the part CmdQ handles. It works alongside those extensions and doesn't replace them.
+    </p>
   </div>
 </section>
 </div>
@@ -416,7 +429,7 @@ ol.list li{padding-left:4px}
         <div class="step-n">1</div>
         <div class="step-body">
           <h3>Install the Claude Code CLI</h3>
-          <p>Install it with one of the first three commands. If the last command prints a version number, you're ready.</p>
+          <p>Use one of the first three commands. If the last one prints a version number, you're ready.</p>
           <div class="cmd"><code id="c1">curl -fsSL https://claude.ai/install.sh | bash</code><button class="copy" data-copy="c1" type="button">Copy</button></div>
           <div class="cmd"><code id="c2">brew install --cask claude-code</code><button class="copy" data-copy="c2" type="button">Copy</button></div>
           <div class="cmd"><code id="c3">npm install -g @anthropic-ai/claude-code</code><button class="copy" data-copy="c3" type="button">Copy</button></div>
@@ -428,16 +441,10 @@ ol.list li{padding-left:4px}
         <div class="step-n">2</div>
         <div class="step-body">
           <h3>Install CmdQ and open it</h3>
-          <p>
-            Download the DMG, move CmdQ to your Applications folder, and open it. If CmdQ can't find the CLI, it shows install instructions first.
-            Once the CLI is installed, click <b>Check again</b> to continue.
-          </p>
+          <p>Move CmdQ from the DMG to Applications and open it. On first launch you'll see this notice. Nothing runs until you click <b>Agree and start</b>.</p>
           <div class="callout warn" style="margin-top:12px">
             <p>Queued tasks run Claude Code with --dangerously-skip-permissions. Claude Code will read, write, and delete files and run commands in the target folder without asking you first. Review what you queue, keep your work under version control, and use this app only on folders you are willing to let it change. You are responsible for the results of the tasks you run.</p>
           </div>
-          <p style="margin-top:8px">
-            This notice appears the first time you open CmdQ. The queue and terminals stay off until you click <b>Agree and start</b>.
-          </p>
         </div>
       </div>
 
@@ -446,14 +453,9 @@ ol.list li{padding-left:4px}
         <div class="step-body">
           <h3>Add your first task</h3>
           <p>
-            Click <b>+ Folder</b> to open a project tab, then type a command.
-            In the command box, <b>Enter</b> adds it to To Do and <b>⌘Enter</b> adds it to the auto queue.
-            Wherever the focus is, pressing <b>/</b> moves focus to the command box.
-            A pasted image shows up as <code>[IMAGE]</code>, and CmdQ passes it along when the command runs.
-          </p>
-          <p style="margin-top:8px">
-            Type a word that starts with <code>/</code> in the command box to see your skills. Pick one with <b>↑ ↓</b> and insert it with <b>Tab</b>.
-            If you press <b>Enter</b> while the list is open, the command is added as typed, without the skill.
+            Click <b>+ Folder</b> to open a project tab and type a command.
+            <b>Enter</b> adds it to To Do, and <b>⌘Enter</b> adds it to the auto queue.
+            Type <code>/</code> to pick one of your skills.
           </p>
         </div>
       </div>
@@ -462,51 +464,35 @@ ol.list li{padding-left:4px}
   </div>
 </section>
 
-<!-- ══ Core ideas ════════════════════════════════════ -->
+<!-- ══ How it works ══════════════════════════════════ -->
 <section id="concept">
   <div class="wrap">
     <div class="sec-head">
-      <h2>Three core ideas</h2>
+      <h2>How it works</h2>
     </div>
-
-    <h3 style="margin-bottom:14px">① Two queues</h3>
     <div class="grid2">
       <div class="concept">
-        <h3>Auto queue</h3>
-        <p class="def">Runs items from the top down. In the same path, the next item starts only after the one ahead of it finishes.
-        Different paths run at the same time, up to three by default.</p>
+        <h3>Auto queue and To Do</h3>
+        <p class="def">The <b>auto queue</b> runs from the top down: one task at a time per project, up to three projects at once by default.
+        <b>To Do</b> holds work that never runs on its own until you promote it.</p>
       </div>
       <div class="concept">
-        <h3>To Do</h3>
-        <p class="def">A list for holding and reviewing work. Items here never run on their own.</p>
+        <h3>Path, Session, Interactive</h3>
+        <p class="def"><b>Path</b> starts a new session in a project folder. <b>Session</b> continues an existing conversation.
+        <b>Interactive</b> opens a terminal where you talk to Claude directly.</p>
+      </div>
+      <div class="concept">
+        <h3>Chains</h3>
+        <p class="def">Drag a task under another to chain it. The child runs in the parent's session after the parent finishes, and doesn't run if the parent fails.</p>
+      </div>
+      <div class="concept">
+        <h3>When you hit a limit</h3>
+        <p class="def">Running tasks and terminals switch to <b>Waiting for reset</b> and continue in the same session when the limit resets.
+        An interactive terminal opened without a task resumes as a background terminal. The weekly limit works the same way.</p>
       </div>
     </div>
-    <p class="arrow">▲ Promote &nbsp;/&nbsp; ▼ Move to To Do: move items between the two queues at any time</p>
-
-    <h3 style="margin:32px 0 14px">② Three kinds of target</h3>
-    <div class="grid3">
-      <div class="concept">
-        <h3>Path</h3>
-        <p class="def">Starts a <b>new session</b> in the project folder you choose.</p>
-      </div>
-      <div class="concept">
-        <h3>Session</h3>
-        <p class="def"><b>Continues</b> an existing Claude session, so the earlier conversation stays in context.</p>
-      </div>
-      <div class="concept">
-        <h3>Interactive</h3>
-        <p class="def">Skips the queue and opens an <b>interactive terminal</b> in the current tab's folder, where you talk to Claude directly.</p>
-      </div>
-    </div>
-
-    <h3 style="margin:32px 0 14px">③ Chains</h3>
-    <div class="card">
-      <p>
-        Drag an item under another item to make a <b>chain</b>. When the parent finishes, the child runs in the parent's session.
-        If the parent fails, the child doesn't run. Open the failed parent in an interactive terminal and send one message. The parent turns Done, and the waiting child runs next.
-        If a child fails, the children after it wait. <b>Re-run</b> the failed child and the chain picks up again.
-      </p>
-    </div>
+    <p class="more"><a href="guide.html#chain">Chains: details →</a></p>
+    <p class="more"><a href="guide.html#limits">Limits: details →</a></p>
   </div>
 </section>
 </div>
@@ -517,63 +503,27 @@ ol.list li{padding-left:4px}
   <div class="wrap">
     <div class="sec-head">
       <h2>Reading the screen</h2>
-      <p>Every status shows a color and a label together.</p>
     </div>
-
     <div class="table-wrap">
       <table>
         <caption class="vh">Item status</caption>
         <thead><tr><th scope="col">Status</th><th scope="col">Meaning</th><th scope="col">What happens next</th></tr></thead>
         <tbody>
-          <tr><td><span class="badge b-queue"><span class="dot"></span>Queued</span></td><td class="def">Waiting its turn</td><td class="def">Starts when the item ahead of it in the same path finishes</td></tr>
+          <tr><td><span class="badge b-queue"><span class="dot"></span>Queued</span></td><td class="def">Waiting its turn</td><td class="def">Starts when the task ahead of it in the same path finishes</td></tr>
           <tr><td><span class="badge b-run"><span class="dot"></span>Running</span></td><td class="def">Claude Code is working on it</td><td class="def">Changes to Done or Failed</td></tr>
           <tr><td><span class="badge b-wait"><span class="dot"></span>Waiting for reset</span></td><td class="def">Paused at the usage limit (not a failure)</td><td class="def">Continues in the same session after the reset</td></tr>
-          <tr><td><span class="badge b-done"><span class="dot"></span>Done</span></td><td class="def">Finished normally</td><td class="def">Its chained children run next, if it has any</td></tr>
+          <tr><td><span class="badge b-done"><span class="dot"></span>Done</span></td><td class="def">Finished normally</td><td class="def">Its chained children run next</td></tr>
           <tr><td><span class="badge b-err"><span class="dot"></span>Failed</span></td><td class="def">Ended with an error</td><td class="def">Its chained children don't run</td></tr>
         </tbody>
       </table>
     </div>
-
-    <div class="grid2" style="margin-top:28px">
-      <div class="card">
-        <h3>Usage</h3>
-        <p>
-          The header bars show <b>5-hour window</b> and <b>Weekly limit</b> usage, and the ring shows 5-hour usage. <b>Next reset</b> beside them shows the time left until the next reset.
-          The menu bar icon shows the same values.
-          If you hit the weekly limit, <b>Weekly limit · resumes</b> appears, and the queue starts again when the weekly limit resets.
-        </p>
-        <p>
-          On first launch, CmdQ asks once whether to connect the Claude Code statusline. Choose <b>Connect</b> to read usage from the statusline faster.
-          Your existing statusline display stays as it is. Choose <b>Later</b> to rely on <code>/usage</code> checks only. CmdQ won't ask again, and Settings has no option to connect later.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Project tabs and item numbers</h3>
-        <p>
-          A tab shows only the items for its path. Turn on <b>Show all</b> to see the items from every open tab, grouped by path.
-          When you switch tabs, the add form goes back to the <b>Path</b> target and the <b>To Do</b> queue.
-        </p>
-        <p>Closing a tab doesn't delete its items, and auto queue items for that path keep running.</p>
-        <p>A number such as <code>#12</code> is the item's unique ID. Notifications use the same number to point to an item.</p>
-      </div>
-      <div class="card">
-        <h3>Menu bar</h3>
-        <p>
-          Click the icon to see usage, the time until the reset, and the auto queue status. The menu includes <b>Open window</b>, <b>Report a bug</b>, and <b>Quit</b>.
-          <b>Report a bug</b> opens a new GitHub issue in your browser, and you decide whether to submit it.
-        </p>
-        <p>
-          Closing the window doesn't quit CmdQ: it stays in the menu bar and keeps running the auto queue. To stop it completely, choose <b>Quit</b>.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Dots on the icon</h3>
-        <ul class="list">
-          <li><b>Red dot, top right</b>: unread notifications</li>
-          <li><b>Yellow dot, bottom right</b>: an item is waiting for the reset</li>
-          <li><b>Green dot, bottom right</b>: an item or an interactive terminal is running</li>
-        </ul>
-      </div>
+    <div class="card" style="margin-top:20px">
+      <h3>Menu bar</h3>
+      <p>
+        The window header and the menu bar icon show <b>5-hour window</b> and <b>Weekly limit</b> usage and the time to <b>Next reset</b>.
+        Closing the window keeps CmdQ running in the menu bar. Choose <b>Quit</b> from the menu to stop it.
+      </p>
+      <p>On the icon, a red dot means unread notifications, yellow means a task is waiting for the reset, and green means something is running.</p>
     </div>
   </div>
 </section>
@@ -583,45 +533,23 @@ ol.list li{padding-left:4px}
   <div class="wrap">
     <div class="sec-head">
       <h2>Controls</h2>
+      <p>Drag a task to change its order, or drag it to the right to chain it under the task above. Hover over any card button to see its name.</p>
     </div>
-
-    <div class="card">
-      <h3>Drag to reorder or nest</h3>
-      <ol class="list">
-        <li>Drag a <b>Queued</b> or <b>Waiting for reset</b> item up or down to change the run order.</li>
-        <li>Move it to the right while dragging to make it a child (chain) of the item above. Both items must target a path, and chains go one level deep.</li>
-        <li>Dragging is locked while <b>Show all</b> is on. Pick a single tab to drag again.</li>
-      </ol>
-    </div>
-
-    <h3 style="margin:32px 0 12px">Card buttons</h3>
     <div class="table-wrap">
       <table>
-        <caption class="vh">Card buttons and what they do</caption>
+        <caption class="vh">Common card buttons</caption>
         <thead><tr><th scope="col">Button</th><th scope="col">What it does</th></tr></thead>
         <tbody>
-          <tr><td><b>▶</b> Run now (manual)</td><td class="def">Runs an auto queue item right away, out of turn</td></tr>
-          <tr><td><b>▶</b> Promote to the auto queue</td><td class="def">Moves a To Do item to the auto queue. It doesn't start right away</td></tr>
-          <tr><td><b>▶</b> Re-run</td><td class="def">Runs a failed item again</td></tr>
-          <tr><td><b>⏸</b> Stop (move back to queued)</td><td class="def">Stops the run and moves the item to To Do. A chain moves with it, and a <b>Stopping</b> badge shows until it stops</td></tr>
-          <tr><td><b>👁</b> View progress (read-only)</td><td class="def">Shows how far a running auto queue item has gotten</td></tr>
-          <tr><td><b>▽</b> Move to To Do</td><td class="def">Moves a waiting or failed auto queue item to To Do</td></tr>
-          <tr><td><b>✎</b> Edit the command</td><td class="def"><b>⌘Enter</b> saves, <b>Esc</b> cancels</td></tr>
-          <tr><td><b>💬</b> View the response</td><td class="def">Shows the result as <b>Markdown</b> or <b>Raw text</b>. Images and video aren't loaded</td></tr>
-          <tr><td><b>≡</b> Full session history</td><td class="def">The whole conversation in that session</td></tr>
-          <tr><td><b>⌘</b> Run interactively</td><td class="def">Talk to Claude directly in the app's terminal (<a href="#terminal">Interactive terminal</a>). On a <b>Queued</b> item, its command becomes the first message and the item turns Done</td></tr>
-          <tr><td><b>⤺</b> Detach from the chain (run standalone)</td><td class="def">Turns a child into a standalone item</td></tr>
-          <tr><td><b>☆</b> Add to bookmarks</td><td class="def">Pins a finished item's session to your bookmarks. The interactive terminal header and the background terminal list have the same ☆ (<a href="#bookmarks">Bookmarks</a>)</td></tr>
-          <tr><td><b>🗑</b> Delete</td><td class="def">Deletes the item right away, with no confirmation. Its chained children are deleted too, and any terminal it opened is closed</td></tr>
+          <tr><td><b>▶</b></td><td class="def">Run now, promote a To Do task to the auto queue, or re-run a failed task</td></tr>
+          <tr><td><b>⏸</b></td><td class="def">Stop the run and move the task back to To Do</td></tr>
+          <tr><td><b>💬</b></td><td class="def">View the response</td></tr>
+          <tr><td><b>⌘</b></td><td class="def">Run interactively in the app's terminal</td></tr>
+          <tr><td><b>☆</b></td><td class="def">Add the session to bookmarks</td></tr>
+          <tr><td><b>🗑</b></td><td class="def">Delete the task right away, along with its chained children</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="callout">
-      A command that targets a session won't run while that session is busy. Path targets start a new session every time, so they run side by side.
-      Click a command's text to see all of it. Close the view with <b>Esc</b> or by clicking outside it.
-      Click a session chip to copy a <code>cd … &amp;&amp; claude --resume …</code> command.
-      The button next to the chip switches the target between <b>Path</b> and <b>Session</b>. Running and finished items don't have it.
-    </div>
+    <p class="more"><a href="guide.html#card-actions">Details →</a></p>
   </div>
 </section>
 
@@ -629,26 +557,15 @@ ol.list li{padding-left:4px}
 <section id="attachments">
   <div class="wrap">
     <div class="sec-head">
-      <h2>Attaching reference material</h2>
-      <p>Attach the files, links, and notes a command is based on. Attachments belong to a session, and every command in that session shares them.</p>
+      <h2>Attachments</h2>
     </div>
-
     <div class="card">
-      <ol class="list">
-        <li><b>Attach</b>: use the <b>File</b>, <b>Link</b>, or <b>Memo</b> button in the add bar or the <b>📎</b> button on a card (it opens the drawer). You can also drag files from Finder onto the window. Child commands use the parent card's 📎. The <b>📎</b> in bookmarks and terminals opens and adds to the same session's attachments, even after the card is deleted and even when there are none yet.</li>
-        <li><b>Use in a command</b>: put <code>[첨부]</code> in a command to pass all of the session's attachments to claude when it runs, or <code>[첨부:3]</code> to pass only that one. Without a marker, no attachments are passed.</li>
-        <li><b>Pick from a list</b>: type <code>#</code> in the command box to open <b>All attachments</b>, <b>Session attachments</b>, and <b>Command attachments</b>. Select several with <b>Space</b> and press <b>Tab</b> to insert their markers. Type <code>@</code> to insert a file or folder path.</li>
-        <li><b>View</b>: in the drawer, read text as <b>Markdown</b> or <b>Raw text</b> and preview images and PDFs. Web links open with your signed-in session. For a link that needs a sign-in, use <b>Save text</b> so claude gets the saved copy.</li>
-      </ol>
+      <p>
+        Attach files, links, and notes with the <b>📎</b> button or by dropping files on the window. Attachments belong to a session and every command in it can use them.
+        Put <code>[첨부]</code> (the marker is Korean in every language) in a command to pass them to claude when it runs, or type <code>#</code> in the command box to pick specific ones.
+      </p>
     </div>
-
-    <div class="callout">
-      A session holds up to 10 attachments. Each file can be up to 20 MB by default. For a larger file, use <b>Change in settings</b> to raise the limit.
-      Text over 2 MB isn't previewed, and you get <b>Show file location</b> instead.
-      Attachments are copies the app makes. They are deleted once no command, bookmark, or running terminal uses the session, and your original files stay where they are. If deleting a bookmark would delete attachments too, the app asks first and tells you how many.
-      An expanded command is capped at 120 KB and memos at 64 KB per command, and a resumed run doesn't get the attachment list again.
-      You can't open <b>Interactive</b> from the add bar while it has attachments or attachment markers, because markers aren't expanded there.
-    </div>
+    <p class="more"><a href="guide.html#attachments">Details →</a></p>
   </div>
 </section>
 
@@ -656,49 +573,17 @@ ol.list li{padding-left:4px}
 <section id="terminal">
   <div class="wrap">
     <div class="sec-head">
-      <h2>Interactive terminal and history</h2>
-      <p>When a task needs back-and-forth instead of the queue, work in the app's terminal.</p>
+      <h2>Interactive terminal</h2>
     </div>
-    <div class="grid2">
-      <div class="card">
-        <h3>Opening a terminal and running it in the background</h3>
-        <ul class="list">
-          <li>Click <b>⌘</b> (Run interactively) on a card to open that item's terminal.</li>
-          <li>Choose <b>Interactive</b> as the add bar target to open a new claude terminal without a queue card. What you typed becomes the first message.</li>
-          <li>Choose <b>Session</b>, then click <b>▶ Terminal</b> next to <b>🕐 History</b> to attach to that session directly.</li>
-          <li>If the auto queue is running that session, a confirmation appears. Confirming stops the run and hands the session to the interactive terminal; the item is marked done with a <b>Handed off</b> badge. Cancelling changes nothing.</li>
-          <li>Click <b>Run in background</b> to keep the task going after you close the window. Click the <b>Terminal running</b> badge on the card to attach again.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Inside the terminal</h3>
-        <ul class="list">
-          <li>When output stops, you get a <b>Waiting for input</b> notification (<b>Interactive input-wait alert</b> in <a href="#config">Settings</a>).</li>
-          <li>If you hit the usage limit, the terminal closes, and the queue item changes to <b>Waiting for reset</b> and continues after the reset.</li>
-          <li><b>Cmd+click</b> a URL in the terminal to open it in your browser.</li>
-          <li>Click <b>📎</b> in the header to open the attachment dialog. Like the drawer, it lets you add, delete, reorder, edit memos, and drop files. Use <b>Insert into terminal</b> or <b>Insert all</b> to paste them into the input line. You press Enter yourself.</li>
-          <li>Click <b>Snippets</b> to open the <b>Shared</b> and <b>This path</b> command lists. Picking one fills the edit area, and <b>Apply</b> runs it.</li>
-          <li>If you use mod panels with claude, run claude with the <b>fullscreen renderer</b> to click them with the mouse: run <code>/tui fullscreen</code> in claude, or start it with the <code>CLAUDE_CODE_NO_FLICKER=1</code> environment variable. With the default renderer, claude does not accept mouse input, so clicks do nothing (this is claude's behavior). To make the terminal wider, set Settings › General › Terminal window width to Full width.</li>
-          <li>Emoji (⬜, 📋, 🧩 and so on) are counted as two cells, as claude does, so tables and panels that mix in emoji stay aligned. Widening the window also adds terminal columns.</li>
-          <li>When you come back from another app or reopen a terminal, CmdQ has claude redraw the whole screen so the right-hand panel and text don't go blank. If the screen still goes blank, press <code>⇧⌘D</code> to save a diagnostic file and attach it to an issue (it goes to <code>diagnostics/</code> in the app data folder and contains terminal output, so review it before sharing).</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Background terminal list</h3>
-        <p>
-          The <b>N terminals</b> button in the header (<code>⇧⌘T</code>) lists the live terminals so you can open or terminate them.
-          <b>Terminate all</b> needs a second click. A terminal opened from the list goes back to the list with <code>⌃←</code>.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Progress and session history</h3>
-        <p>
-          <b>👁</b> shows a running item read-only.
-          In <b>Full session history</b>, check the questions you want and save them with <b>🖼 Image</b> or <b>📄 PDF</b>.
-          On a question screen, <b>← Back</b> (<code>⌃←</code>) returns to the list.
-        </p>
-      </div>
+    <div class="card">
+      <p>
+        When a task needs back-and-forth, click <b>⌘</b> on a card or choose <b>Interactive</b> as the target to open a terminal in the app.
+        <b>Run in background</b> keeps it going after you close it, and <code>⇧⌘T</code> lists the terminals still running.
+        You get a notification when a terminal is waiting for input.
+        Click the session label in the terminal header to copy its resume command.
+      </p>
     </div>
+    <p class="more"><a href="guide.html#terminal">Details →</a></p>
   </div>
 </section>
 
@@ -710,13 +595,11 @@ ol.list li{padding-left:4px}
     </div>
     <div class="card">
       <p>
-        Click <b>☆</b> on a finished item's card to pin its session, and click <b>☆</b> in the header (<code>⇧⌘B</code>) to open the panel.
-        A session you opened with <b>Interactive</b> or <b>▶ Terminal</b> has no card, but you can still bookmark it with <b>☆</b> in the interactive terminal header or the background terminal list. Its alias is the first line of its first prompt (or the first 8 characters of the session ID if there is none), and its path is the folder it was first opened in.
-        If the session is already bookmarked, <b>☆</b> is lit, and clicking it again removes the bookmark. If attachments would be deleted with it, the app asks first.
-        In each row, <b>▶</b> opens an interactive terminal, <b>🕐</b> shows the session history, <b>✎</b> renames it, <b>✕</b> deletes it, and <b>📎</b> opens the attachment drawer.
-        A bookmark stays even after you delete the original item, and so do the session's attachments, so you can keep opening and adding to them from 📎.
+        Click <b>☆</b> to pin a session you want to return to, and open the list with <code>⇧⌘B</code>.
+        A bookmark stays after you delete the original task, so you can reopen the session in a terminal at any time.
       </p>
     </div>
+    <p class="more"><a href="guide.html#bookmarks">Details →</a></p>
   </div>
 </section>
 </div>
@@ -726,70 +609,28 @@ ol.list li{padding-left:4px}
 <section id="config">
   <div class="wrap">
     <div class="sec-head">
-      <h2>Settings reference</h2>
-      <p>
-        Open Settings with <code>⌘,</code>. The names below match the Settings screen.
-        Items marked <b>↻ Restart</b> take effect after you restart the app.
-      </p>
+      <h2>Settings</h2>
+      <p>Open Settings with <code>⌘,</code>. These are the ones you're most likely to change. Other settings are described on the Settings screen.</p>
     </div>
-
     <div class="table-wrap">
       <table>
-        <caption class="vh">Settings screen items</caption>
+        <caption class="vh">Common settings</caption>
         <thead><tr><th scope="col">Setting</th><th scope="col">Description</th></tr></thead>
         <tbody>
-          <tr class="grp"><td colspan="2">General</td></tr>
-          <tr><td>Language</td><td class="def">Follow System · 한국어 · English. Applies immediately</td></tr>
+          <tr><td>Language</td><td class="def">Follow System · 한국어 · English</td></tr>
           <tr><td>Theme</td><td class="def">Dark (default) · Light</td></tr>
-          <tr><td>Terminal window width</td><td class="def">Default (up to 1000px) · Full width. Applies to an open terminal right away</td></tr>
+          <tr><td>Terminal window width</td><td class="def">Default (up to 1000px) · Full width</td></tr>
           <tr><td>Desktop notifications</td><td class="def">Notifies you when a task finishes, hits a limit, fails, or waits for input</td></tr>
-          <tr><td>Interactive input-wait alert</td><td class="def">Notifies you when output stops for this many seconds. Default 8 seconds, 0 turns it off</td></tr>
-          <tr><td>Start at login</td><td class="def">Opens the app when you log in so it keeps working through the auto queue</td></tr>
-          <tr class="grp"><td colspan="2">Running claude</td></tr>
           <tr><td>claude executable</td><td class="def">If empty, CmdQ looks for <code>~/.local/bin/claude</code>, then searches <code>PATH</code></td></tr>
-          <tr><td>Claude config folder ↻</td><td class="def">If empty, CmdQ uses <code>CLAUDE_CONFIG_DIR</code> from your login shell, or <code>~/.claude</code> if that isn't set</td></tr>
-          <tr><td>Run check</td><td class="def">Click <b>Check</b> to run the CLI and show its version</td></tr>
-          <tr class="grp"><td colspan="2">Queue execution</td></tr>
-          <tr><td>Queue check interval</td><td class="def">How often the auto queue looks for its next item. Default 15 seconds</td></tr>
-          <tr><td>Auto-queue concurrent runs</td><td class="def">How many items the auto queue runs at once across all paths. It runs one item per path, so this is also how many paths run at the same time. Default 3</td></tr>
-          <tr><td>Concurrent runs per path</td><td class="def">Total automatic and manual runs in one path. Default 2 (1 automatic plus room for a manual run). Use 1 if your tasks edit files</td></tr>
-          <tr><td>Usage check interval</td><td class="def">Default 60 seconds. The menu bar updates on the same interval</td></tr>
-          <tr><td>Usage check timeout</td><td class="def">Time limit for a single usage check. Default 30 seconds</td></tr>
-          <tr class="grp"><td colspan="2">Logs</td></tr>
-          <tr><td>Log folder ↻</td><td class="def">If empty, <code>logs</code> in the app data folder</td></tr>
-          <tr><td>Log level ↻</td><td class="def">Default info. The <code>RUST_LOG</code> environment variable wins if it is set</td></tr>
-          <tr><td>File rotation ↻</td><td class="def">Default Daily</td></tr>
-          <tr><td>Files to keep ↻</td><td class="def">Default 14. The oldest files are deleted first</td></tr>
-          <tr><td>Compress finished run logs</td><td class="def">Compresses a run log this many days after the run finishes. Default 30 days, 0 turns it off</td></tr>
-          <tr><td>Delete finished run logs</td><td class="def">Deletes a run log this many days after the run finishes (the item stays). Default 90 days, 0 turns it off</td></tr>
-          <tr><td>Session history retention (Claude Code)</td><td class="def">Shows Claude Code's <code>cleanupPeriodDays</code> value (30 days by default). CmdQ doesn't change it (<a href="#trouble">Troubleshooting</a>)</td></tr>
-          <tr><td>Config file</td><td class="def"><b>Show in folder</b> reveals <code>config.toml</code> in Finder. <b>Reset</b> restores every setting to its default (queue items and logs are kept)</td></tr>
-          <tr class="grp"><td colspan="2">Attachments</td></tr>
-          <tr><td>Max size per file</td><td class="def">Default 20 MB. Checked only when you add a new attachment</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3 style="margin:28px 0 12px">Settings only in config.toml</h3>
-    <p style="color:var(--text-dim);font-size:14.5px">
-      Quit the app, then edit <code>~/Library/Application Support/com.doitasap.cmdq/config.toml</code>. If you edit it while the app is running, saving in Settings overwrites your changes.
-      Out-of-range values are moved to the nearest limit. A broken file is backed up as <code>.bak</code>, and the app starts with the defaults.
-    </p>
-    <div class="table-wrap" style="margin-top:12px">
-      <table>
-        <caption class="vh">Keys only in config.toml</caption>
-        <thead><tr><th scope="col">Key</th><th scope="col">Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>claude.extra_paths</code></td><td class="def">Absolute paths to add to the front of PATH. Default <code>[]</code></td></tr>
+          <tr><td>Auto-queue concurrent runs</td><td class="def">How many projects the auto queue runs at once. Default 3</td></tr>
+          <tr><td>Concurrent runs per path</td><td class="def">Automatic plus manual runs in one project. Default 2. Use 1 if your tasks edit files</td></tr>
+          <tr><td>Start at login</td><td class="def">Opens CmdQ when you log in so the auto queue keeps going</td></tr>
         </tbody>
       </table>
     </div>
 
     <h3 style="margin:28px 0 12px">Shortcuts</h3>
-    <p style="color:var(--text-dim);font-size:14.5px">
-      In the Shortcuts group in Settings, click a key field and press the combination you want. <b>Clear</b> sets it to <b>None</b>, and <b>Default</b> restores the original combination.
-    </p>
-    <div class="table-wrap" style="margin-top:12px">
+    <div class="table-wrap">
       <table>
         <caption class="vh">Default shortcuts</caption>
         <thead><tr><th scope="col">Action</th><th scope="col">Default</th></tr></thead>
@@ -797,23 +638,17 @@ ol.list li{padding-left:4px}
           <tr><td>Add project</td><td><code>⌘O</code></td></tr>
           <tr><td>Close current tab</td><td><code>⌘W</code></td></tr>
           <tr><td>Activate left tab · Activate right tab</td><td><code>⌥⌘←</code> · <code>⌥⌘→</code></td></tr>
-          <tr><td>Move tab left · Move tab right</td><td><code>⇧⌥⌘←</code> · <code>⇧⌥⌘→</code></td></tr>
           <tr><td>Select path · Select session · Select interactive</td><td><code>⌃1</code> · <code>⌃2</code> · <code>⌃3</code></td></tr>
-          <tr><td>Add snippet</td><td><code>⇧⌘P</code> (inside an interactive terminal only)</td></tr>
           <tr><td>Show all</td><td><code>⇧⌘A</code></td></tr>
           <tr><td>Settings</td><td><code>⌘,</code></td></tr>
           <tr><td>Bookmarks</td><td><code>⇧⌘B</code></td></tr>
           <tr><td>Terminals</td><td><code>⇧⌘T</code></td></tr>
-          <tr><td>Back</td><td><code>⌃←</code></td></tr>
         </tbody>
       </table>
     </div>
-    <ul class="list" style="margin-top:16px">
-      <li>Shortcuts work only while the app window has focus. When a full-screen modal or an interactive terminal is open, only Settings, Add snippet, Terminals, and Back work.</li>
-      <li>The command box submit keys can't be changed: <code>Enter</code> for To Do, <code>⌘Enter</code>, <code>⌃Enter</code>, or <code>⌃⌘Enter</code> for the auto queue, and <code>Shift+Enter</code> for a new line.</li>
-      <li>Save diagnostics in the interactive terminal (<code>⇧⌘D</code>) is a reserved combination and can't be assigned to another action.</li>
-      <li>If Mission Control's “Move left a space” (<code>⌃←</code>) is turned on, assign Back to a different combination.</li>
-    </ul>
+    <p style="margin-top:12px;color:var(--text-dim);font-size:14.5px">You can reassign these in the Shortcuts group in Settings.</p>
+    <p class="more"><a href="guide.html#settings">Settings: details →</a></p>
+    <p class="more"><a href="guide.html#shortcuts">Shortcuts: details →</a></p>
   </div>
 </section>
 </div>
@@ -825,19 +660,19 @@ ol.list li{padding-left:4px}
     <div class="sec-head"><h2>Troubleshooting</h2></div>
     <div class="table-wrap">
       <table>
-        <caption class="vh">Symptoms, what to check, and fixes</caption>
-        <thead><tr><th scope="col">Symptom</th><th scope="col">Check</th><th scope="col">Fix</th></tr></thead>
+        <caption class="vh">Symptoms and fixes</caption>
+        <thead><tr><th scope="col">Symptom</th><th scope="col">Fix</th></tr></thead>
         <tbody>
-          <tr><td>CmdQ says it can't find the CLI</td><td class="def">Run <code>which claude</code> in Terminal</td><td class="def">Enter that absolute path in <b>claude executable</b> in Settings</td></tr>
-          <tr><td>A command can't find a tool such as <code>node</code></td><td class="def">Your login shell's <code>PATH</code></td><td class="def">Add the path to <code>claude.extra_paths</code> (<a href="#config">Settings</a>)</td></tr>
-          <tr><td>An item is stuck at “Waiting · the session is in use”</td><td class="def">An in-app toast says what is using the session: the app's interactive terminal, another queue item, or a terminal or background agent outside the app</td><td class="def">Close that terminal, or wait for the earlier task to finish</td></tr>
-          <tr><td>A notification says two tasks edited the same file</td><td class="def">One change may already have been overwritten</td><td class="def">Open an interactive terminal in that path and give both instructions again, one after the other. To prevent this, set <b>Concurrent runs per path</b> to 1</td></tr>
-          <tr><td>Session history shows <b>Session file not found</b></td><td class="def"><b>Session history retention (Claude Code)</b> in Settings</td><td class="def">Claude Code deleted that session after the retention period (30 days by default). Use View the response to read the app's log</td></tr>
-          <tr><td>Items from the app's previous name are missing</td><td class="def">CmdQ moves that data once on first launch. If the move fails, a toast shows where the old data is</td><td class="def">The original data stays there. If you haven't created new data yet, CmdQ tries again on the next launch</td></tr>
-          <tr><td>After installing, macOS says the app is “damaged” or can't verify the developer</td><td class="def">Release builds are signed with an Apple Developer ID and notarized, so this warning doesn't appear for them</td><td class="def">Download the app again from <a href="https://github.com/doitasap/cmd-queue-releases/releases/latest">GitHub Releases</a></td></tr>
+          <tr><td>CmdQ says it can't find the CLI</td><td class="def">Run <code>which claude</code> in Terminal and enter that path in <b>claude executable</b> in Settings</td></tr>
+          <tr><td>A command can't find a tool such as <code>node</code></td><td class="def">Quit CmdQ and add the tool's folder to <code>claude.extra_paths</code> in <code>~/Library/Application Support/com.doitasap.cmdq/config.toml</code></td></tr>
+          <tr><td>A task is stuck at “Waiting · the session is in use”</td><td class="def">Another terminal or task is using that session. Close it or wait for it to finish</td></tr>
+          <tr><td>Session history shows <b>Session file not found</b></td><td class="def">Claude Code deletes old sessions after its retention period (30 days by default). Use View the response to read CmdQ's log</td></tr>
+          <tr><td>macOS says the app is “damaged” or can't verify the developer</td><td class="def">Release builds are signed and notarized. Download the app again from <a href="https://github.com/doitasap/cmd-queue-releases/releases/latest">GitHub Releases</a></td></tr>
+          <tr><td>The interactive terminal goes blank</td><td class="def">Press <code>⇧⌘D</code> to save a diagnostic file and attach it to an issue. It contains terminal output, so review it before sharing</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="more"><a href="guide.html#trouble">Details →</a></p>
   </div>
 </section>
 </div>
@@ -854,25 +689,22 @@ ol.list li{padding-left:4px}
       <div class="card">
         <h3>What the app does</h3>
         <ul class="list yes">
-          <li><b>Runs the official Claude Code CLI installed on your computer as a process</b></li>
-          <li>Queues tasks from several project paths and runs them in order or at a scheduled time</li>
-          <li>Shows progress in the menu bar and the app window</li>
-          <li>Checks for new versions. It only downloads release information and sends nothing</li>
+          <li><b>Runs the official Claude Code CLI installed on your computer</b></li>
+          <li>Schedules and orders tasks across your projects</li>
+          <li>Checks for new versions, downloading release information only</li>
+          <li>Only if you choose <b>Connect</b> when asked on first launch, points <code>statusLine</code> in <code>~/.claude/settings.json</code> to a wrapper that reads usage (your existing statusline display stays; <b>Later</b> leaves the file alone)</li>
         </ul>
       </div>
       <div class="card">
         <h3>What the app doesn't do</h3>
         <ul class="list no">
-          <li>Access credentials (OAuth tokens, API keys)</li>
-          <li>Store or send credentials</li>
-          <li>Send usage history or task content anywhere</li>
-          <li>Collect or analyze user data</li>
+          <li>Access, store, or send credentials (OAuth tokens, API keys)</li>
+          <li>Send usage history, task content, or any user data anywhere</li>
         </ul>
       </div>
     </div>
     <div class="callout">
-      All authentication, network traffic, and Claude calls are <b>handled by the official Claude Code CLI</b>.
-      CmdQ only decides when and in what order to run that CLI.
+      Authentication, network traffic, and Claude calls are all <b>handled by the official Claude Code CLI</b>. CmdQ only decides when and in what order to run it.
     </div>
   </div>
 </section>
@@ -886,22 +718,11 @@ ol.list li{padding-left:4px}
     <div class="grid2">
       <div class="card">
         <h3>No data is collected</h3>
-        <dl class="kv">
-          <dt>Stored in</dt><dd>~/Library/Application Support/com.doitasap.cmdq/</dd>
-          <dt>Sent off your Mac</dt><dd>Nothing</dd>
-          <dt>Shared with third parties</dt><dd>Nothing</dd>
-        </dl>
-        <p style="margin-top:14px;font-size:14px">
-          For the details and the technical basis, see the <a href="../privacy.html">Privacy Policy (Korean)</a>.
-        </p>
+        <p>Everything stays in <code>~/Library/Application Support/com.doitasap.cmdq/</code>. Nothing is sent off your Mac or shared with third parties. See the <a href="../privacy.html">Privacy Policy (Korean)</a> for details.</p>
       </div>
       <div class="card">
         <h3>Supported platforms</h3>
-        <p>
-          CmdQ currently supports <b>macOS 12 or later</b> only. If you need Windows or Linux support,
-          let us know in a <a href="https://github.com/doitasap/cmd-queue-releases/issues/new/choose">GitHub issue</a>.
-          We adjust priorities as requests come in.
-        </p>
+        <p>macOS 12 or later. For Windows or Linux support, let us know in a <a href="https://github.com/doitasap/cmd-queue-releases/issues/new/choose">GitHub issue</a>.</p>
       </div>
     </div>
   </div>

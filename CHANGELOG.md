@@ -6,22 +6,6 @@
 
 ## [Unreleased]
 
-## [0.1.1] - 2026-10-14
-
-앱 기능은 0.1.0 과 같습니다. 0.1.0 을 쓰고 있다면 앱이 이 버전을 찾아 스스로 업데이트합니다.
-
-### 안내
-
-- CmdQ 를 쓰려면 Claude Code CLI 를 설치한 뒤 터미널에서 `claude` 를 한 번 실행해 Claude 계정으로 로그인해 두어야 합니다. 로그인하지 않으면 큐 작업이 실행되지 않고 사용량도 보이지 않습니다. README 와 다운로드 페이지의 설치 안내에 이 단계를 넣었습니다.
-
----
-
-The app works the same as 0.1.0. If you're on 0.1.0, the app finds this version and updates itself.
-
-### Notes
-
-- To use CmdQ, install the Claude Code CLI, then run `claude` once in a terminal and log in with your Claude account. Without a login, queued tasks don't run and usage isn't shown. The installation guides in the README and on the download page now include this step.
-
 ## [0.1.0] - 2026-10-14
 
 첫 공개 릴리스입니다.
@@ -35,7 +19,11 @@ The app works the same as 0.1.0. If you're on 0.1.0, the app finds this version 
 - 자주 쓰는 세션을 즐겨찾기로 고정해 경로별로 다시 엽니다.
 - 명령 입력창에서 `/` 로 스킬을 자동완성하고 파일·링크·메모를 첨부합니다.
 - 한국어와 영어 화면을 지원합니다.
-- Apple 공증을 받은 앱입니다. 새 버전이 나오면 서명을 확인한 뒤 스스로 업데이트합니다.
+- Apple 공증을 받은 앱입니다. 새 버전이 나오면 설치할지 묻고, 서명을 확인한 뒤 업데이트합니다. 트레이의 「업데이트 확인…」으로 직접 확인할 수도 있습니다.
+
+### 시작하기 전에
+
+- Claude Code CLI 를 설치한 뒤 터미널에서 `claude` 를 한 번 실행해 Claude 계정으로 로그인해 두십시오. 로그인하지 않으면 큐 작업이 실행되지 않고 사용량도 보이지 않습니다.
 
 ---
 
@@ -50,4 +38,8 @@ The first public release.
 - Pin sessions you use often as bookmarks and reopen them by path.
 - Autocomplete skills with `/` in the command input, and attach files, links, and notes.
 - The interface is available in Korean and English.
-- The app is notarized by Apple. When a new version is out, it verifies the signature and updates itself.
+- The app is notarized by Apple. When a new version is out, it asks before installing and verifies the signature before it updates. You can also check from Check for Updates… in the tray.
+
+### Before you start
+
+- Install the Claude Code CLI, then run `claude` once in a terminal and log in with your Claude account. Without a login, queued tasks don't run and usage isn't shown.

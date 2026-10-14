@@ -343,7 +343,7 @@ ol.list li{padding-left:4px}
         <a class="btn btn-ghost" href="https://github.com/doitasap/cmd-queue-releases">★ Star on GitHub</a>
       </div>
       <p class="req">
-        Requires macOS 12 or later and the <a href="https://code.claude.com/docs/en/setup">Claude Code CLI</a>.
+        Requires macOS 12 or later and the <a href="https://code.claude.com/docs/en/setup">Claude Code CLI</a>, installed and logged in.
         CmdQ runs the official CLI and never calls Claude on its own.
       </p>
     </div>
@@ -429,19 +429,20 @@ ol.list li{padding-left:4px}
   <div class="wrap">
     <div class="sec-head">
       <h2>Get started in 3 minutes</h2>
-      <p>Already have the Claude Code CLI? Skip to step 2.</p>
+      <p>Already installed the Claude Code CLI and logged in? Skip to step 2.</p>
     </div>
     <div class="steps">
 
       <div class="step">
         <div class="step-n">1</div>
         <div class="step-body">
-          <h3>Install the Claude Code CLI</h3>
-          <p>Use one of the first three commands. If the last one prints a version number, you're ready.</p>
+          <h3>Install the Claude Code CLI and log in</h3>
+          <p>Use one of the first three commands and check that <code>claude --version</code> prints a version number. Then run <code>claude</code> once and log in with your Claude account. Without a login, queued tasks don't run and usage isn't shown.</p>
           <div class="cmd"><code id="c1">curl -fsSL https://claude.ai/install.sh | bash</code><button class="copy" data-copy="c1" type="button">Copy</button></div>
           <div class="cmd"><code id="c2">brew install --cask claude-code</code><button class="copy" data-copy="c2" type="button">Copy</button></div>
           <div class="cmd"><code id="c3">npm install -g @anthropic-ai/claude-code</code><button class="copy" data-copy="c3" type="button">Copy</button></div>
           <div class="cmd"><code id="c4">claude --version</code><button class="copy" data-copy="c4" type="button">Copy</button></div>
+          <div class="cmd"><code id="c5">claude</code><button class="copy" data-copy="c5" type="button">Copy</button></div>
         </div>
       </div>
 

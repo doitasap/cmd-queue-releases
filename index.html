@@ -343,7 +343,7 @@ ol.list li{padding-left:4px}
         <a class="btn btn-ghost" href="https://github.com/doitasap/cmd-queue-releases">★ GitHub에서 Star 주기</a>
       </div>
       <p class="req">
-        macOS 12 이상 · <a href="https://code.claude.com/docs/en/setup">Claude Code CLI</a> 선설치 필요 —
+        macOS 12 이상 · <a href="https://code.claude.com/docs/en/setup">Claude Code CLI</a> 설치·로그인 필요 —
         이 앱은 공식 CLI를 실행할 뿐, 자체적으로 Claude를 호출하지 않습니다.
       </p>
     </div>
@@ -427,18 +427,19 @@ ol.list li{padding-left:4px}
   <div class="wrap">
     <div class="sec-head">
       <h2>3분 만에 시작하기</h2>
-      <p>Claude Code CLI가 이미 있다면 2단계부터 보십시오.</p>
+      <p>Claude Code CLI를 설치하고 로그인까지 마쳤다면 2단계부터 보십시오.</p>
     </div>
     <div class="steps">
       <div class="step">
         <div class="step-n">1</div>
         <div class="step-body">
-          <h3>Claude Code CLI 설치</h3>
-          <p>셋 중 하나로 설치하고, 마지막 명령으로 버전이 나오는지 확인합니다.</p>
+          <h3>Claude Code CLI 설치·로그인</h3>
+          <p>셋 중 하나로 설치하고 버전이 나오는지 확인한 뒤, <code>claude</code>를 한 번 실행해 Claude 계정으로 로그인합니다. 로그인하지 않으면 큐 작업이 실행되지 않고 사용량도 보이지 않습니다.</p>
           <div class="cmd"><code id="c1">curl -fsSL https://claude.ai/install.sh | bash</code><button class="copy" data-copy="c1" type="button">복사</button></div>
           <div class="cmd"><code id="c2">brew install --cask claude-code</code><button class="copy" data-copy="c2" type="button">복사</button></div>
           <div class="cmd"><code id="c3">npm install -g @anthropic-ai/claude-code</code><button class="copy" data-copy="c3" type="button">복사</button></div>
           <div class="cmd"><code id="c4">claude --version</code><button class="copy" data-copy="c4" type="button">복사</button></div>
+          <div class="cmd"><code id="c5">claude</code><button class="copy" data-copy="c5" type="button">복사</button></div>
         </div>
       </div>
       <div class="step">

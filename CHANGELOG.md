@@ -6,8 +6,19 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-14
+
 ### 변경
-- 업데이트 정보가 없을 때 네트워크 오류와 구분해 알리고, 설치 경고는 실제로 멈출 작업만 말한다 (46e432b)
+
+- 트레이 「업데이트 확인…」에서 배포된 업데이트 정보를 찾지 못하면, 네트워크를 확인하라는 문구 대신 그 사실을 그대로 알립니다.
+- 업데이트를 설치할 때 멈추는 작업 안내가 실제로 멈출 것만 말합니다. 실행 중인 자동 큐 작업이나 열린 대화형 터미널 중 0개인 쪽은 빠집니다.
+
+---
+
+### Changes
+
+- When Check for Updates… in the tray can't find published update information, it now says so instead of asking you to check your network.
+- Before installing an update, the warning lists only the work that will actually stop. Running auto-queue tasks or open interactive terminals are left out when there are none.
 
 ## [0.1.0] - 2026-10-14
 

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CmdQ — 경로별 Claude Code 명령 대기열</title>
-<meta name="description" content="자리에 없어도, 리셋되는 순간 큐가 대신 일한다. Claude Code 작업을 경로별로 큐에 넣어 실행하는 macOS 앱. 같은 경로는 차례대로, 다른 경로는 함께 실행합니다.">
+<meta name="description" content="claude 창 여러 개 대신, 큐 하나로. Claude Code 작업을 경로별로 큐에 넣어 실행하는 macOS 앱. 같은 경로는 차례대로, 다른 경로는 함께 실행합니다.">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://doitasap.github.io/cmd-queue-releases/">
 <link rel="alternate" hreflang="ko" href="https://doitasap.github.io/cmd-queue-releases/">
@@ -334,10 +334,11 @@ ol.list li{padding-left:4px}
           <p class="hero-app-meta">macOS · 개발자 도구</p>
         </div>
       </div>
-      <h1>자리에 없어도,<br>리셋되는 순간 큐가 대신 일한다</h1>
+      <h1>claude 창 여러 개 대신,<br>큐 하나로</h1>
       <p class="lede">
-        CmdQ는 여러 프로젝트의 Claude Code 작업을 줄 세워 두면 알아서 차례대로 실행합니다.
-        사용 한도에 걸린 작업은 실패로 끝나지 않고 리셋 시각에 이어서 실행됩니다.
+        프로젝트마다 터미널을 띄워 놓고 끝났나 오가며 확인할 필요가 없습니다.
+        Claude Code 작업을 줄 세워 두면 프로젝트가 다르면 함께, 같으면 차례대로 돌립니다.
+        사용 한도에 걸린 작업도 실패로 끝나지 않고 리셋 뒤 같은 세션에서 이어 갑니다.
       </p>
       <div class="cta">
         <a class="btn btn-primary" href="https://github.com/doitasap/cmd-queue-releases/releases/latest">macOS용 다운로드</a>
@@ -391,7 +392,12 @@ ol.list li{padding-left:4px}
   <div class="wrap">
     <div class="sec-head">
       <h2>왜 CmdQ인가</h2>
-      <p><b>한도를 기다리고 창을 오가는 시간을 큐에 맡기고, 사람은 무엇을 시킬지만 정합니다.</b></p>
+      <p><b>창을 오가고 한도를 기다리는 시간은 큐에 맡기고 사람은 무엇을 시킬지만 정합니다.</b></p>
+      <p>
+        밀린 일을 한꺼번에 끝내려고 프로젝트마다 claude 터미널을 띄운 적이 있습니다.
+        창이 늘어날수록 어느 게 끝났고 어느 게 제 답을 기다리는지 자꾸 놓쳤습니다.
+        그래서 한곳에 줄 세워 돌리려고 CmdQ를 만들었습니다.
+      </p>
     </div>
     <figure class="demo">
       <video controls muted playsinline preload="metadata" poster="assets/demo/demo-ko.jpg" width="1920" height="1080" aria-label="CmdQ 실제 앱 데모 영상">
@@ -402,17 +408,17 @@ ol.list li{padding-left:4px}
     </figure>
     <div class="grid3">
       <div class="card why-item">
-        <h3>① 한도 대기</h3>
-        <dl>
-          <dt>기존 방식</dt><dd>한도에 걸리면 리셋 시각까지 기다렸다가 다시 입력합니다.</dd>
-          <dt>CmdQ</dt><dd>멈춘 작업이 <b>리셋 대기</b>로 남았다가 리셋되면 그 세션에서 이어 실행됩니다.</dd>
-        </dl>
-      </div>
-      <div class="card why-item">
-        <h3>② 여러 프로젝트의 순서</h3>
+        <h3>① 여러 프로젝트의 순서</h3>
         <dl>
           <dt>기존 방식</dt><dd>프로젝트마다 창을 띄워 두고 끝났는지 오가며 확인합니다.</dd>
           <dt>CmdQ</dt><dd>같은 경로는 차례대로, 다른 경로는 함께 실행합니다. <b>체인</b>으로 후속 작업도 이어 둡니다.</dd>
+        </dl>
+      </div>
+      <div class="card why-item">
+        <h3>② 한도 대기</h3>
+        <dl>
+          <dt>기존 방식</dt><dd>한도에 걸리면 리셋 시각까지 기다렸다가 다시 입력합니다.</dd>
+          <dt>CmdQ</dt><dd>멈춘 작업이 <b>리셋 대기</b>로 남았다가 리셋되면 그 세션에서 이어 실행됩니다.</dd>
         </dl>
       </div>
       <div class="card why-item">

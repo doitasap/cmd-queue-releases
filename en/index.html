@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CmdQ — A per-path command queue for Claude Code</title>
-<meta name="description" content="CmdQ is a macOS app that queues Claude Code tasks by project path. Tasks in the same path run in order, different paths run side by side, and work that hits the usage limit resumes when the limit resets.">
+<meta name="description" content="One queue instead of a pile of claude windows. CmdQ is a macOS app that queues Claude Code tasks by project path. Tasks in the same path run in order, different paths run side by side, and work that hits the usage limit resumes when the limit resets.">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://doitasap.github.io/cmd-queue-releases/en/">
 <link rel="alternate" hreflang="ko" href="https://doitasap.github.io/cmd-queue-releases/">
@@ -334,10 +334,11 @@ ol.list li{padding-left:4px}
           <p class="hero-app-meta">macOS · Developer tool</p>
         </div>
       </div>
-      <h1>Step away.<br>The queue gets back to work the moment your limit resets</h1>
+      <h1>One queue instead of<br>a pile of claude windows</h1>
       <p class="lede">
-        Queue up Claude Code tasks across your projects and let them run on their own.
-        Anything stopped by a usage limit picks up again when the limit resets.
+        No more keeping a terminal open per project and flipping between them to see what's done.
+        Queue up Claude Code tasks across your projects. Different projects run side by side, tasks in the same project run in order,
+        and anything that hits the usage limit picks up in the same session after the reset.
       </p>
       <div class="cta">
         <a class="btn btn-primary" href="https://github.com/doitasap/cmd-queue-releases/releases/latest">Download for macOS</a>
@@ -393,6 +394,10 @@ ol.list li{padding-left:4px}
     <div class="sec-head">
       <h2>Why CmdQ</h2>
       <p>Your Claude Code work keeps moving when you're not at the keyboard.</p>
+      <p>
+        I built this after trying to clear a backlog across a few projects with a claude terminal open for each.
+        The more windows I had, the more I lost track of which ones were done and which were waiting on me. So I put it all in one queue.
+      </p>
     </div>
     <figure class="demo">
       <video controls muted playsinline preload="metadata" poster="../assets/demo/demo-en.jpg" width="1920" height="1080" aria-label="CmdQ demo recorded from the real app">
@@ -403,17 +408,17 @@ ol.list li{padding-left:4px}
     </figure>
     <div class="grid3">
       <div class="card why-item">
-        <h3>① Usage-limit downtime</h3>
-        <dl>
-          <dt>Before</dt><dd>Work stops at the limit, and you come back later to type the command again.</dd>
-          <dt>With CmdQ</dt><dd>The task moves to <b>Waiting for reset</b> and continues in the same session after the reset.</dd>
-        </dl>
-      </div>
-      <div class="card why-item">
-        <h3>② Several projects at once</h3>
+        <h3>① Several projects at once</h3>
         <dl>
           <dt>Before</dt><dd>One window per project, and you keep checking which one is done.</dd>
           <dt>With CmdQ</dt><dd>Projects run side by side, and each project's tasks run in order. Link a follow-up as a <b>chain</b> and it runs when the first task is done.</dd>
+        </dl>
+      </div>
+      <div class="card why-item">
+        <h3>② Usage-limit downtime</h3>
+        <dl>
+          <dt>Before</dt><dd>Work stops at the limit, and you come back later to type the command again.</dd>
+          <dt>With CmdQ</dt><dd>The task moves to <b>Waiting for reset</b> and continues in the same session after the reset.</dd>
         </dl>
       </div>
       <div class="card why-item">

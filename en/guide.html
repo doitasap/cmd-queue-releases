@@ -356,6 +356,9 @@ ol.list li{padding-left:4px}
   .home{min-height:44px}
   [id]{scroll-margin-top:72px}
 }
+.clip{margin:16px 0 24px;max-width:760px}
+.clip-video{display:block;width:100%;height:auto;aspect-ratio:16/9;border:1px solid var(--border);border-radius:12px;background:#0B0E13}
+.clip figcaption{font-size:13.5px;color:var(--text-dim);margin-top:10px}
 </style>
 </head>
 <body>
@@ -591,6 +594,12 @@ ol.list li{padding-left:4px}
     <h2>Chains</h2>
     <p>A chain is a parent task with follow-up tasks nested under it. Each child waits for the step before it, then runs in the parent's claude session, so it sees what the parent did.</p>
   </div>
+  <figure class="clip">
+    <video class="clip-video" muted loop playsinline controls preload="none" poster="../assets/demo/chain-en.jpg" width="1920" height="1080" aria-label="Dragging a card to the right under its parent to make a chain">
+      <source src="../assets/demo/chain-en.mp4" type="video/mp4">
+    </video>
+    <figcaption>Drag a card to the right under its parent to make a chain. The child picks up the parent's session.</figcaption>
+  </figure>
 
   <div class="chain-demo" aria-label="Example chain">#21  Refactor the auth module to use the new token store   ~/work/api
  ↳ #22  Run the test suite and fix anything that broke
@@ -663,6 +672,12 @@ ol.list li{padding-left:4px}
     <h2>Usage limits and auto-resume</h2>
     <p>Claude Code has a 5-hour usage window and a weekly limit. Both are account-wide. When one runs out, CmdQ pauses all work and resumes it after the reset.</p>
   </div>
+  <figure class="clip">
+    <video class="clip-video" muted loop playsinline controls preload="none" poster="../assets/demo/limits-en.jpg" width="1920" height="1080" aria-label="A task hits a usage limit, shows Waiting for reset, and resumes in the same session">
+      <source src="../assets/demo/limits-en.mp4" type="video/mp4">
+    </video>
+    <figcaption>A task that hits a limit stays as <b>Waiting for reset</b>, then resumes in the same session after the reset.</figcaption>
+  </figure>
 
   <h3>When a limit is reached</h3>
   <ul class="list">
@@ -790,6 +805,12 @@ ol.list li{padding-left:4px}
     <h2>Interactive terminal</h2>
     <p>A real claude session inside CmdQ, for work that needs back-and-forth.</p>
   </div>
+  <figure class="clip">
+    <video class="clip-video" muted loop playsinline controls preload="none" poster="../assets/demo/terminal-en.jpg" width="1920" height="1080" aria-label="Interactive terminals managed in one place">
+      <source src="../assets/demo/terminal-en.mp4" type="video/mp4">
+    </video>
+    <figcaption>Interactive terminals managed in one place.</figcaption>
+  </figure>
 
   <h3>Opening one</h3>
   <ul class="list">
@@ -1111,6 +1132,25 @@ ol.list li{padding-left:4px}
   update();
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);
+})();
+
+// Play a clip only while it is visible. Do nothing under reduced motion
+(function(){
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) return;
+  var clips = document.querySelectorAll('.clip-video');
+  var io = new IntersectionObserver(function(entries){
+    for (var i = 0; i < entries.length; i++) {
+      var v = entries[i].target;
+      if (entries[i].isIntersecting) {
+        var p = v.play();
+        if (p && p.catch) p.catch(function(){});
+      } else {
+        v.pause();
+      }
+    }
+  }, { threshold: 0.5 });
+  for (var j = 0; j < clips.length; j++) io.observe(clips[j]);
 })();
 </script>
 </body>

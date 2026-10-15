@@ -299,6 +299,9 @@ ol.list li{padding-left:4px}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
 }
+.demo{margin:0 0 28px}
+.demo video{display:block;width:100%;height:auto;aspect-ratio:16/9;border:1px solid var(--border);border-radius:12px;background:#0B0E13}
+.demo figcaption{font-size:13.5px;color:var(--text-dim);margin-top:10px}
 </style>
 </head>
 <body>
@@ -391,6 +394,13 @@ ol.list li{padding-left:4px}
       <h2>Why CmdQ</h2>
       <p>Your Claude Code work keeps moving when you're not at the keyboard.</p>
     </div>
+    <figure class="demo">
+      <video controls muted playsinline preload="metadata" poster="../assets/demo/demo-en.jpg" width="1920" height="1080" aria-label="CmdQ demo recorded from the real app">
+        <source src="../assets/demo/demo-en.mp4" type="video/mp4">
+        <a href="../assets/demo/demo-en.mp4">If the video does not play, download the mp4 file.</a>
+      </video>
+      <figcaption>This is the real app. A task that hits a usage limit waits for the reset, then continues in the same session. The clip also covers chains and interactive terminals. (About 1 minute)</figcaption>
+    </figure>
     <div class="grid3">
       <div class="card why-item">
         <h3>① Usage-limit downtime</h3>

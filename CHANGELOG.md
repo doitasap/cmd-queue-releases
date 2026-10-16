@@ -6,12 +6,39 @@
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-16
+
+### 추가
+
+- 백그라운드 터미널 목록에서 ✎ 를 눌러 터미널에 이름을 붙입니다. 이름은 목록·리셋 대기 행·터미널 창 헤더에 함께 보이고 앱을 다시 켜도 남습니다. 비우고 확정하면 자동 제목으로 돌아갑니다.
+- 대화형 터미널 헤더의 🕐 로 그 세션의 질문 이력을 터미널 위에 엽니다. 닫으면 보던 터미널로 돌아갑니다.
+
 ### 변경
-- 업데이트 정보가 없을 때 네트워크 오류와 구분해 알리고, 설치 경고는 실제로 멈출 작업만 말한다 (46e432b)
+
+- 큐 작업은 시작 후 30분이 지났다고 멈추지 않고, 출력 없이 30분이 지났을 때 멈춥니다. 출력이 계속 나와도 6시간이 지나면 멈춥니다. 실패 사유에 둘 중 어느 쪽인지 남습니다.
+- 앱 아이콘을 새 로고로 바꿨습니다.
 
 ### 수정
-- 업데이트 확인 대화상자의 "CmdQ 을" 조사 오류를 앱 이름 없는 문장으로 고친다 (da7256c)
-- 터미널이 회수·종료되면 헤더 🕐 로 연 세션 이력도 함께 닫는다 (17cf161)
+
+- 업데이트 확인 대화상자의 "CmdQ 을 다시 시작합니다" 조사 오류를 "앱이 다시 시작됩니다"로 고쳤습니다.
+- 한도로 터미널이 회수되면 헤더 🕐 로 연 세션 이력도 함께 닫힙니다. 이력 창이 메인 화면 위에 남지 않습니다.
+
+---
+
+### Added
+
+- Name a terminal with ✎ in the background terminal list. The name shows in the list, the waiting-for-reset row, and the terminal window header, and it stays after you restart the app. Clear it and confirm to go back to the automatic title.
+- Open the session's prompt history over the terminal with 🕐 in the interactive terminal header. Closing it takes you back to the same terminal.
+
+### Changed
+
+- Queue tasks no longer stop 30 minutes after they start. They stop after 30 minutes with no output, and after 6 hours at most even if output keeps coming. The failure reason says which one applied.
+- The app icon uses the new logo.
+
+### Fixed
+
+- The update dialog no longer shows a wrong Korean particle after the app name.
+- When a terminal is reclaimed at the usage limit, the session history opened with 🕐 closes with it instead of staying over the main window.
 
 ## [0.2.0] - 2026-10-14
 

@@ -22,6 +22,7 @@
 
 - 업데이트 확인 대화상자의 "CmdQ 을 다시 시작합니다" 조사 오류를 "앱이 다시 시작됩니다"로 고쳤습니다.
 - 한도로 터미널이 회수되면 헤더 🕐 로 연 세션 이력도 함께 닫힙니다. 이력 창이 메인 화면 위에 남지 않습니다.
+- 업데이트 확인에 쓰는 TLS 라이브러리(rustls)를 보안 권고가 해소된 버전으로 올렸습니다.
 
 ---
 
@@ -39,6 +40,7 @@
 
 - The update dialog no longer shows a wrong Korean particle after the app name.
 - When a terminal is reclaimed at the usage limit, the session history opened with 🕐 closes with it instead of staying over the main window.
+- The TLS library (rustls) used for update checks is upgraded to a version that resolves recent security advisories.
 
 ## [0.2.0] - 2026-10-14
 

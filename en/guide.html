@@ -837,6 +837,7 @@ ol.list li{padding-left:4px}
     <li><b>Run in background</b> closes the window and leaves claude working. The card shows <b>Terminal running</b>; click it to reattach.</li>
     <li><b>Terminate</b> stops claude and ends the session.</li>
     <li>☆ bookmarks the session, even without a card.</li>
+    <li>🕐 opens this session's question history over the terminal. Pick a question to read its reply; close it (×, Esc or a click outside) to return to the same terminal and keep typing. It reloads on every press. It stays disabled until the session id is known.</li>
     <li>📎 opens the session's attachments. Add, delete, reorder, edit memos or drop files, as in the drawer. <b>Insert into terminal</b> or <b>Insert all</b> pastes them into claude's input line; you press Enter yourself.</li>
     <li><b>Snippets</b> opens saved commands in two lists, <b>Shared</b> and <b>This path</b>. Pick one to fill the edit box, then <b>Apply</b> to paste and run it. Edits there apply to that run only. <kbd>⇧⌘P</kbd> toggles the panel and jumps to the new-snippet form.</li>
   </ul>
@@ -874,7 +875,7 @@ ol.list li{padding-left:4px}
       <tbody>
         <tr><td>Live log</td><td class="def">👁 on a running card</td><td class="def">What the queue run is doing, read-only. It doesn't attach a terminal. When the run ends, the log says how it ended</td></tr>
         <tr><td>Response</td><td class="def">💬 on a done card</td><td class="def">The command and claude's reply, as <b>Markdown</b> or <b>Raw text</b>. Images and video in the reply aren't loaded; their markup shows as code</td></tr>
-        <tr><td>Session history</td><td class="def">≡ on a card, 🕐 <b>History</b>, 🕐 in a bookmark</td><td class="def">Every question in the session, with replies one click away</td></tr>
+        <tr><td>Session history</td><td class="def">≡ on a card, 🕐 <b>History</b>, 🕐 in a bookmark, 🕐 in the terminal header</td><td class="def">Every question in the session, with replies one click away</td></tr>
       </tbody>
     </table>
   </div>

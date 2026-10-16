@@ -586,6 +586,7 @@ ol.list li{padding-left:4px}
     </table>
   </div>
   <p style="margin-top:14px">Hover a <b>Failed</b> or <b>Waiting for reset</b> badge to see the reason. Click it for the full text.</p>
+  <p style="margin-top:14px">A <b>Running</b> item keeps going as long as claude produces output. After 30 minutes with no output, CmdQ treats it as stuck, stops it and marks it <b>Failed</b> with "Stopped: no output for 30 minutes". Even with steady output, a run that passes 6 hours stops with "Stopped: exceeded the 6-hour maximum run time". Either way the queue moves on to the next item. You can't change these two limits in Settings.</p>
 </section>
 
 <!-- ══ Chains ══════════════════════════════════════════ -->
@@ -1040,6 +1041,9 @@ ol.list li{padding-left:4px}
         <tr><td>A task can't find <code>node</code> or another tool</td><td class="def">Your login shell's <code>PATH</code></td><td class="def">Add the folder to <code>claude.extra_paths</code> (<a href="#config-toml">config.toml</a>)</td></tr>
         <tr><td>An item sits at “Waiting · the session is in use”</td><td class="def">The toast names the holder: a CmdQ terminal, another queue item, or a terminal or background agent outside CmdQ</td><td class="def">Close that terminal or let the other task finish. After repeated refusals the item fails; <b>Re-run</b> it then</td></tr>
         <tr><td>Notification: two runs edited the same file</td><td class="def">One set of changes may be gone</td><td class="def">Open an interactive terminal in that path and redo both, one after the other. Set <b>Concurrent runs per path</b> to 1 to avoid it</td></tr>
+        <tr><td>Failure reason is "Stopped: no output for 30 minutes"</td><td class="def">claude printed nothing for that long, e.g. a command waited for input or hung</td><td class="def">Split the work into a chain, or run it in an interactive terminal</td></tr>
+        <tr><td>Failure reason is "Stopped: exceeded the 6-hour maximum run time"</td><td class="def">Output kept coming, but the whole run took more than 6 hours</td><td class="def">Split the work into a chain</td></tr>
+        <tr><td>Failure reason is "Stopped: time limit exceeded"</td><td class="def">A record from an earlier version, which stopped runs at a total time limit after start (30 minutes by default). This version judges by the two rules above</td><td class="def">No action needed. Running it again applies the new rules</td></tr>
         <tr><td>Chain children never start</td><td class="def">Is the parent Failed, or in To Do? Is the parent's session still open in a terminal?</td><td class="def">Recover the parent (<a href="#chain">Chains</a>) or promote it. Click <b>Terminate</b> on that terminal</td></tr>
         <tr><td>Session history says <b>Session file not found</b></td><td class="def"><b>Session history retention (Claude Code)</b> in Settings</td><td class="def">Claude Code deleted the session after its retention period (30 days by default). The response view still has CmdQ's run log</td></tr>
         <tr><td>Usage shows <b>Unreadable</b></td><td class="def"><b>Run check</b> in Settings</td><td class="def">Choose <b>Refresh usage</b> in the menu bar menu, or raise <b>Usage check timeout</b></td></tr>

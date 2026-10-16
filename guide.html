@@ -573,6 +573,7 @@ ol.list li{padding-left:4px}
       </tbody>
     </table>
   </div>
+  <p style="margin-top:14px"><b>실행 중</b>인 항목은 claude가 출력을 내는 동안 계속 실행됩니다. 출력 없이 30분이 지나면 멈춘 것으로 보고 중단해 <b>실패</b>로 바꾸며, 실패 사유는 "출력 없이 30분이 지나 중단됨"입니다. 출력이 계속 나와도 최대 실행 시간 6시간을 넘으면 "최대 실행 시간 6시간을 넘겨 중단됨"으로 중단합니다. 어느 쪽이든 큐는 다음 항목으로 넘어갑니다. 두 값은 설정 화면에서 바꿀 수 없습니다.</p>
 </section>
 
 <!-- ══ 5. 체인 ══ -->
@@ -1045,7 +1046,9 @@ ol.list li{padding-left:4px}
         <tr><td>"대기 중 · 세션 사용 중"에서 멈춤</td><td class="def">토스트가 알려 주는 사용 주체: 앱의 대화형 터미널, 큐의 다른 항목, 앱 밖 터미널이나 백그라운드 에이전트</td><td class="def">그 터미널을 닫거나 앞 작업이 끝나길 기다림. 계속 거부되면 실패로 확정됨(<code>queue.max_busy_retries</code>)</td></tr>
         <tr><td>체인 하위가 시작하지 않음</td><td class="def">부모가 <b>완료</b>인지, 앞 하위가 실패하지 않았는지, 부모 세션 터미널이 열려 있지 않은지</td><td class="def"><a href="#chain">체인</a>의 실패 처리대로 부모나 하위를 이어 줌. 터미널은 <b>종료</b></td></tr>
         <tr><td>두 작업이 같은 파일을 고쳤다는 알림</td><td class="def">한쪽 변경이 이미 덮어써졌을 수 있음</td><td class="def">그 경로에서 대화형 터미널로 두 작업을 순서대로 다시 지시. 미리 막으려면 <b>같은 경로 동시 실행</b>을 1로</td></tr>
-        <tr><td>실패 사유가 시간 제한</td><td class="def">"시간 제한을 넘겨 중단됨"</td><td class="def">작업을 나눠 체인으로 묶거나 대화형으로 진행</td></tr>
+        <tr><td>실패 사유가 "출력 없이 30분이 지나 중단됨"</td><td class="def">그 시간 동안 claude가 아무것도 출력하지 않았음(명령이 입력을 기다리거나 멈춘 경우)</td><td class="def">작업을 나눠 체인으로 묶거나 대화형으로 진행</td></tr>
+        <tr><td>실패 사유가 "최대 실행 시간 6시간을 넘겨 중단됨"</td><td class="def">출력은 계속 나왔지만 전체 실행 시간이 6시간을 넘었음</td><td class="def">작업을 나눠 체인으로 묶음</td></tr>
+        <tr><td>실패 사유가 "시간 제한을 넘겨 중단됨"</td><td class="def">이전 버전에서 시작 후 총 시간 제한(기본 30분)에 걸려 중단된 기록. 지금 버전은 위 두 기준으로 판정함</td><td class="def">조치 필요 없음. 다시 실행하면 새 기준이 적용됨</td></tr>
         <tr><td>세션 이력에 <b>세션 파일이 없습니다</b></td><td class="def">설정의 <b>세션 이력 보존 (Claude Code)</b> 값</td><td class="def">보존 기간(기본 30일)이 지나 Claude Code가 지운 세션입니다. 응답 보기로 앱 로그를 확인</td></tr>
         <tr><td>사용량이 <b>읽지 못함</b></td><td class="def">설정의 <b>사용량 조회 제한시간</b>, statusline 연결 여부</td><td class="def">메뉴 막대의 <b>사용량 갱신</b>으로 다시 조회. 자주 그러면 제한시간을 늘림</td></tr>
         <tr><td>대화형 터미널 화면 일부가 비어 보임</td><td class="def">다른 앱에 갔다 와도 그대로인지</td><td class="def"><code>⇧⌘D</code>로 진단 파일을 저장해 <a href="https://github.com/doitasap/cmd-queue-releases/issues">이슈</a>에 첨부. 터미널 출력이 담기므로 공유 전에 확인</td></tr>

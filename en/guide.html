@@ -855,6 +855,7 @@ ol.list li{padding-left:4px}
     It changes only the displayed title; the queue card's command, the bookmark alias and the path shown stay the same.
     <b>Terminate all</b> asks for a second click.
     A terminal opened from the list returns to the list with <kbd>⌃←</kbd>.
+    Pressing <kbd>⇧⌘T</kbd> while an interactive terminal is open works like <b>Run in background</b>: a terminal opened from the list goes back to the list, and one opened from a card or the add bar goes back to the main window. It does nothing while another window, such as Settings, is open over the terminal.
   </p>
 
   <h3>While you work</h3>
@@ -1000,7 +1001,7 @@ ol.list li{padding-left:4px}
         <tr><td>Settings</td><td><kbd>⌘,</kbd></td><td class="def"><kbd>⌃,</kbd> also works while this is at its default</td></tr>
         <tr><td>Search</td><td><kbd>⌘K</kbd></td><td class="def">Opens or closes the search popup. Works over a terminal or session history</td></tr>
         <tr><td>Bookmarks</td><td><kbd>⇧⌘B</kbd></td><td class="def">Toggles the panel</td></tr>
-        <tr><td>Terminals</td><td><kbd>⇧⌘T</kbd></td><td class="def">Opens or closes the background terminal list</td></tr>
+        <tr><td>Terminals</td><td><kbd>⇧⌘T</kbd></td><td class="def">Opens or closes the background terminal list. With an interactive terminal open, works like <b>Run in background</b></td></tr>
         <tr><td>Back</td><td><kbd>⌃←</kbd></td><td class="def">List-opened terminal → list. Reply → session history list. Otherwise closes the terminal list or session history. In other terminals the key goes to claude</td></tr>
       </tbody>
     </table>

@@ -418,7 +418,7 @@ ol.list li{padding-left:4px}
     <li><b>Next reset</b> counts down to the next 5-hour reset. <b>Weekly reset</b> does the same for the weekly limit.</li>
     <li>When the weekly limit is used up, the label changes to <b>Weekly limit · resumes</b> and the queue waits for the weekly reset.</li>
     <li><b>Unreadable</b> means the last usage check failed. <b>N/A</b> means your plan doesn't report that value.</li>
-    <li>On the right: <b>N terminals</b> (only while background terminals exist), ☆ <b>Bookmarks</b>, the light/dark toggle, and ⚙ Settings.</li>
+    <li>On the right: <b>N terminals</b> (only while background terminals exist), 🔍 <b>Search questions</b> (<kbd>⌘K</kbd>, left of ☆; see <a href="#history">Progress and history</a>), ☆ <b>Bookmarks</b>, the light/dark toggle, and ⚙ Settings.</li>
   </ul>
 
   <h3>Project tabs</h3>
@@ -445,7 +445,7 @@ ol.list li{padding-left:4px}
     CmdQ keeps running in the menu bar after you close the window, and the auto queue keeps going. Choose <b>Quit</b> (<kbd>⌘Q</kbd>) in the menu to stop it.
   </p>
   <p>
-    Click the icon for a menu showing your plan, both usage figures, reset countdowns and an auto queue summary. Below that: <b>Refresh usage</b>, <b>Open window</b>, <b>Settings…</b>, <b>Open log folder</b>, <b>About</b>, <b>Check for Updates…</b>, <b>Report a bug</b>, <b>Request a feature</b> and <b>Quit</b>.
+    Click the icon for a menu showing your plan, both usage figures, reset countdowns and an auto queue summary. Below that: <b>Refresh usage</b>, <b>Open window</b>, <b>Settings…</b>, <b>Open log folder</b>, <b>About</b>, <b>Check for Updates…</b>, <b>Report a bug</b>, <b>Request a feature</b>, <b>❤️ Support CmdQ — Star on GitHub</b>, <b>Sponsor…</b> and <b>Quit</b>.
     <b>Report a bug</b> opens a prefilled GitHub issue in your browser with the app version, macOS version and CPU type. Nothing is sent until you submit it.
   </p>
   <p>
@@ -735,7 +735,7 @@ ol.list li{padding-left:4px}
   <h3>Clicking the card itself</h3>
   <ul class="list">
     <li>Click the command text to read the whole command. <kbd>Esc</kbd> or a click outside closes it.</li>
-    <li>Click a session chip to copy <code>cd '…' &amp;&amp; claude --resume …</code>, ready to paste into Terminal.</li>
+    <li>Click a session chip to copy the full session ID. Paste it after <code>claude --resume</code> in Terminal, run from the folder where the session was created.</li>
     <li>Click a path chip to copy the path.</li>
   </ul>
 </section>
@@ -834,7 +834,7 @@ ol.list li{padding-left:4px}
 
   <h3>Header</h3>
   <ul class="list">
-    <li>Click the project name to copy the project path. Click the session label to copy the <code>claude --resume</code> command.</li>
+    <li>Click the project name to copy the project path. Click the session label to copy the full session ID.</li>
     <li><b>Run in background</b> closes the window and leaves claude working. The card shows <b>Terminal running</b>; click it to reattach.</li>
     <li><b>Terminate</b> stops claude and ends the session.</li>
     <li>☆ bookmarks the session, even without a card.</li>
@@ -877,6 +877,7 @@ ol.list li{padding-left:4px}
         <tr><td>Live log</td><td class="def">👁 on a running card</td><td class="def">What the queue run is doing, read-only. It doesn't attach a terminal. When the run ends, the log says how it ended</td></tr>
         <tr><td>Response</td><td class="def">💬 on a done card</td><td class="def">The command and claude's reply, as <b>Markdown</b> or <b>Raw text</b>. Images and video in the reply aren't loaded; their markup shows as code</td></tr>
         <tr><td>Session history</td><td class="def">≡ on a card, 🕐 <b>History</b>, 🕐 in a bookmark, 🕐 in the terminal header</td><td class="def">Every question in the session, with replies one click away</td></tr>
+        <tr><td>Question search</td><td class="def">🔍 in the header (<kbd>⌘K</kbd>)</td><td class="def">Finds your questions across all sessions and opens that question's reply in session history. Continue it with the <b>Terminal</b> button</td></tr>
       </tbody>
     </table>
   </div>
@@ -884,6 +885,20 @@ ol.list li{padding-left:4px}
     <li>In session history, check questions (or <b>Select all</b>) and save them as <b>🖼 Image</b> or <b>📄 PDF</b>.</li>
     <li>On a reply, <b>⧉ Copy</b> copies it and <b>← Back</b> (<kbd>⌃←</kbd>) returns to the list.</li>
     <li>Run logs are what the response and live log read. Settings controls when they're compressed and deleted. Session history comes from Claude Code's own files, which Claude Code deletes on its own schedule (<a href="#trouble">Troubleshooting</a>).</li>
+  </ul>
+
+  <h3>Question search</h3>
+  <ul class="list">
+    <li>Click 🔍 in the header (left of ☆) or press <kbd>⌘K</kbd>. The search popup opens at the top center of the window. It also opens over an interactive terminal or session history, and pressing the key again closes it. <kbd>Esc</kbd> or a click outside the popup closes it too.</li>
+    <li>It searches the questions you asked in every session under <code>~/.claude/projects</code>, whichever project tabs are open. A question counts as one the same way session history decides, and subagent transcripts are left out.</li>
+    <li>Results narrow as you type. Case doesn't matter. Split the query with spaces and only questions that contain every word stay, in any order. Korean initial-consonant search isn't supported.</li>
+    <li>Each row shows a preview of the question with the matches highlighted, the project name, and the date. You get up to 50 results, newest first. The date is when you asked, or when the session file last changed if that's missing. With an empty query you see the 50 newest questions across all sessions.</li>
+    <li>CmdQ builds the question index in the background after it starts. If you open the popup before it's done, you see <b>Indexing</b> and the results found so far. The index lives in memory only and isn't saved to disk. Each time the popup opens, only changed sessions are read again.</li>
+    <li>Move with <kbd>↑</kbd>/<kbd>↓</kbd> and open with <kbd>Enter</kbd>, or click a row. <kbd>Enter</kbd> pressed while composing Korean text doesn't open anything.</li>
+    <li>Opening a result shows that session's history with the chosen question's reply already showing. It doesn't open a terminal by itself. If another interactive terminal is open, the history appears on top of it, and closing the history takes you back to that terminal. <b>← Back</b> (<kbd>⌃←</kbd>) goes to that session's question list.</li>
+    <li>Click <b>Terminal</b> in the history's title bar to close the history and continue the session in an interactive terminal (<code>claude --resume</code>). If a terminal for the session is already running in the background, CmdQ brings it forward instead of starting another. If the auto queue is running the session, CmdQ asks before taking it over, and Cancel doesn't open a terminal. The button only appears in history opened from search.</li>
+    <li>If the session file is gone or couldn't be checked, or the working folder no longer exists, there's no <b>Terminal</b> button and you see only the reply in session history. The reason it can't be continued in a terminal is shown in a bar at the top. Claude Code can delete old sessions on its own (<a href="#trouble">Troubleshooting</a>). If the reply can't be read either, you see only an error message.</li>
+    <li>A terminal opened from search isn't recorded as recently used in bookmarks.</li>
   </ul>
 </section>
 
@@ -916,6 +931,7 @@ ol.list li{padding-left:4px}
       </tbody>
     </table>
   </div>
+  <p>To find questions in a session you haven't bookmarked, use 🔍 in the header (<a href="#history">Question search</a>).</p>
 </section>
 
 <!-- ══ Settings ════════════════════════════════════════ -->
@@ -958,7 +974,7 @@ ol.list li{padding-left:4px}
         <tr class="grp"><td colspan="2">Attachments</td></tr>
         <tr><td>Max size per file</td><td class="def">Default 20 MB (1–100). Checked only when you add a file</td></tr>
         <tr class="grp"><td colspan="2">Shortcuts</td></tr>
-        <tr><td>(15 actions)</td><td class="def">See <a href="#shortcuts">Shortcuts</a></td></tr>
+        <tr><td>(16 actions)</td><td class="def">See <a href="#shortcuts">Shortcuts</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -980,6 +996,7 @@ ol.list li{padding-left:4px}
         <tr><td>Add snippet</td><td><kbd>⇧⌘P</kbd></td><td class="def">Only inside an interactive terminal</td></tr>
         <tr><td>Show all</td><td><kbd>⇧⌘A</kbd></td><td class="def"></td></tr>
         <tr><td>Settings</td><td><kbd>⌘,</kbd></td><td class="def"><kbd>⌃,</kbd> also works while this is at its default</td></tr>
+        <tr><td>Search</td><td><kbd>⌘K</kbd></td><td class="def">Opens or closes the search popup. Works over a terminal or session history</td></tr>
         <tr><td>Bookmarks</td><td><kbd>⇧⌘B</kbd></td><td class="def">Toggles the panel</td></tr>
         <tr><td>Terminals</td><td><kbd>⇧⌘T</kbd></td><td class="def">Opens or closes the background terminal list</td></tr>
         <tr><td>Back</td><td><kbd>⌃←</kbd></td><td class="def">List-opened terminal → list. Reply → session history list. Otherwise closes the terminal list or session history. In other terminals the key goes to claude</td></tr>
@@ -993,13 +1010,15 @@ ol.list li{padding-left:4px}
   <ul class="list">
     <li>A combination needs <kbd>⌘</kbd>, <kbd>⌥</kbd> or <kbd>⌃</kbd>.</li>
     <li>A combination already in use is refused with the name of the action that has it.</li>
+    <li>If you had already assigned <kbd>⌘K</kbd> to another action, Search starts as <b>None</b>. Assign it a combination in Settings to use it.</li>
     <li>You can't assign: the app menu keys (<kbd>⌘C</kbd> <kbd>⌘V</kbd> <kbd>⌘X</kbd> <kbd>⌘A</kbd> <kbd>⌘Z</kbd> <kbd>⇧⌘Z</kbd> <kbd>⌘Q</kbd> <kbd>⌘H</kbd> <kbd>⌥⌘H</kbd> <kbd>⌘M</kbd> <kbd>⌃⌘F</kbd>), the submit keys (<kbd>⌘Enter</kbd> <kbd>⌃Enter</kbd> <kbd>⌃⌘Enter</kbd>), and <kbd>⇧⌘D</kbd> (save terminal diagnostics).</li>
   </ul>
   <h3>When shortcuts work</h3>
   <ul class="list">
     <li>Only while the CmdQ window has focus.</li>
     <li>In a text field, only combinations with <kbd>⌘</kbd>, <kbd>⌥</kbd> or <kbd>⌃</kbd> fire.</li>
-    <li>With a full-screen view open (terminal, history, settings), only Settings, Add snippet and Back work, plus Terminals to close the terminal list.</li>
+    <li>With a full-screen view open (terminal, history, settings), only Settings, Search, Add snippet and Back work, plus Terminals to close the terminal list.</li>
+    <li>Search's key goes to CmdQ, not claude, even while an interactive terminal has focus.</li>
     <li>If macOS Mission Control uses <kbd>⌃←</kbd> for "Move left a space", it gets the key first. Assign Back to something else.</li>
   </ul>
 </section>

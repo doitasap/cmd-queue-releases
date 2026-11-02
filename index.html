@@ -247,7 +247,7 @@ dl.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:14px;ma
 dl.kv dt{color:var(--muted)}
 dl.kv dd{color:var(--text-dim);font-family:var(--mono);font-size:13px;word-break:break-all}
 
-footer{padding:36px 0 48px;color:var(--muted);font-size:13.5px}
+footer{padding:56px 0 48px;color:var(--muted);font-size:13.5px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;justify-content:center}
 footer .wrap a{display:inline-flex;align-items:center;min-height:24px;padding:0 8px}
 footer .legal{display:block;max-width:760px;margin-top:16px;text-align:center;font-size:12.5px;line-height:1.6}
@@ -269,9 +269,10 @@ ol.list li{padding-left:4px}
   .hero-grid{grid-template-columns:1fr;gap:36px}
   .grid3{grid-template-columns:1fr 1fr}
 }
-/* 메뉴가 한 줄에 다 들어가지 않는 폭(영어판 기준 약 810px 이하)에서는 메뉴를 다음 줄로 내리고,
-   좁은 화면에서도 6개가 모두 보이게 줄바꿈한다. 가로 스크롤로 숨기지 않는다. */
-@media (max-width:860px){
+/* 메뉴가 한 줄에 다 들어가지 않는 폭(한국어판은 약 880px 미만, 여유 30px 이상을 더해 920px 이하)에서는
+   메뉴를 다음 줄로 내리고, 좁은 화면에서도 메뉴 항목이 모두 보이게 줄바꿈한다. 가로 스크롤로 숨기지 않는다.
+   메뉴를 고치면 이 경계를 다시 잰다. */
+@media (max-width:920px){
   .topbar .wrap{flex-wrap:wrap;height:auto;gap:0 8px;padding-top:6px}
   .topnav{order:3;width:100%;margin-left:0;flex-wrap:wrap;overflow-x:visible}
   .docs-link{margin-left:auto}
@@ -316,6 +317,7 @@ ol.list li{padding-left:4px}
       <a href="#config" data-panel="config">설정</a>
       <a href="#trouble" data-panel="trouble">문제 해결</a>
       <a href="#policy" data-panel="policy">정책·개인정보</a>
+      <a href="#sponsor" data-panel="sponsor">후원</a>
     </nav>
     <a class="docs-link" href="guide.html">상세 가이드</a>
     <a class="lang" href="en/" hreflang="en" lang="en">English</a>
@@ -712,6 +714,20 @@ ol.list li{padding-left:4px}
 </section>
 </div>
 
+<div class="panel" data-panel="sponsor">
+<section id="sponsor">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>후원</h2>
+      <p>CmdQ가 작업에 도움이 되셨다면 GitHub Sponsors로 개발자를 응원해 주십시오. 후원금은 CmdQ 개발과 유지보수에 씁니다.</p>
+    </div>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/sponsors/doitasap" target="_blank" rel="noopener">GitHub Sponsors로 후원하기</a>
+    </div>
+  </div>
+</section>
+</div>
+
 <footer>
   <div class="wrap">
     <span>Cmd<span class="brand-q">Q</span></span>
@@ -773,7 +789,15 @@ ol.list li{padding-left:4px}
   var links = document.querySelectorAll('.topnav a[data-panel]');
   if (!panels.length) return;
   var bar = document.querySelector('.topbar');
-  var barH = bar ? bar.offsetHeight : 0;
+  var anchor = panels[0].querySelector('[id]');
+  // 기준선은 앵커가 멈추는 자리(scroll-margin-top)와 상단바 아래 중 낮은 쪽 바로 밑이다.
+  // 상단바 높이로만 잡으면 둘 사이 띠에 앞 패널 끝이 남아 누른 메뉴의 앞 메뉴가 강조된다.
+  function measure(){
+    var h = bar ? bar.offsetHeight : 0;
+    var m = anchor ? parseFloat(getComputedStyle(anchor).scrollMarginTop) || 0 : 0;
+    return Math.max(h, m) + 1;
+  }
+  var line = measure();
   var seen = new Set();
   var current = null;
   var io = null;
@@ -795,10 +819,10 @@ ol.list li{padding-left:4px}
       if (seen.has(panels[i])) return mark(panels[i].getAttribute('data-panel'));
     }
     // 아직 첫 패널에 닿지 않았으면(hero 만 보임) 첫 로드와 같게 표시를 지운다.
-    if (panels[0].getBoundingClientRect().top > barH) mark(null);
+    if (panels[0].getBoundingClientRect().top > line) mark(null);
   }
 
-  // 상단바 높이는 브레이크포인트마다 달라지므로, 높이가 바뀌면 기준선을 새로 잡아 다시 관찰한다.
+  // 상단바 높이와 scroll-margin 은 브레이크포인트마다 달라지므로, 기준선이 바뀌면 새로 잡아 다시 관찰한다.
   function observe(){
     if (io) io.disconnect();
     seen.clear();
@@ -807,21 +831,22 @@ ol.list li{padding-left:4px}
         if (e.isIntersecting) seen.add(e.target); else seen.delete(e.target);
       });
       update();
-    }, { rootMargin: '-' + barH + 'px 0px -60% 0px' });
+    }, { rootMargin: '-' + line + 'px 0px -60% 0px' });
     panels.forEach(function(p){ io.observe(p); });
   }
 
   function onResize(){
-    var h = bar ? bar.offsetHeight : 0;
-    if (h === barH) return;
-    barH = h;
+    var l = measure();
+    if (l === line) return;
+    line = l;
     observe();
   }
 
   observe();
   window.addEventListener('scroll', update, { passive: true });
+  // 바 높이가 그대로인 채 scroll-margin 만 바뀌어도 기준선을 다시 잡도록 창 크기 변화도 함께 본다.
   if (bar && 'ResizeObserver' in window) new ResizeObserver(onResize).observe(bar);
-  else window.addEventListener('resize', onResize);
+  window.addEventListener('resize', onResize);
 })();
 </script>
 </body>

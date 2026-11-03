@@ -388,6 +388,7 @@ ol.list li{padding-left:4px}
     <li><a href="#attachments">Attachments</a></li>
     <li><a href="#terminal">Interactive terminal</a></li>
     <li><a href="#history">Progress and history</a></li>
+    <li><a href="#decisions">Decision inbox</a></li>
     <li><a href="#bookmarks">Bookmarks</a></li>
     <li><a href="#settings">Settings</a></li>
     <li><a href="#shortcuts">Shortcuts</a></li>
@@ -420,6 +421,7 @@ ol.list li{padding-left:4px}
     <li>When the weekly limit is used up, the label changes to <b>Weekly limit · resumes</b> and the queue waits for the weekly reset.</li>
     <li><b>Unreadable</b> means the last usage check failed. <b>N/A</b> means your plan doesn't report that value.</li>
     <li>On the right: <b>N terminals</b> (only while background terminals exist), 🔍 <b>Search questions</b> (<kbd>⌘K</kbd>, left of ☆; see <a href="#history">Progress and history</a>), ☆ <b>Bookmarks</b>, the light/dark toggle, and ⚙ Settings.</li>
+    <li>When questions are waiting for your answer, a <b>? Decide N</b> badge appears left of 🔍. Click it or press <kbd>⇧⌘C</kbd> to open the <a href="#decisions">Decision inbox</a>.</li>
   </ul>
 
   <h3>Project tabs</h3>
@@ -1033,6 +1035,74 @@ ol.list li{padding-left:4px}
   </ul>
 </section>
 
+<!-- ══ Decision inbox ══════════════════════════════════ -->
+<section id="decisions">
+  <div class="sec-head"><h2>Decision inbox</h2></div>
+  <p>The decision inbox gathers the questions claude stopped on across your sessions, so you can answer them in one place. When a question is waiting, a <b>? Decide N</b> badge appears to the left of 🔍 in the header. N is the number of questions waiting for you.</p>
+
+  <h3>What it collects</h3>
+  <ul class="list">
+    <li>Interview questions, where claude shows a list of choices (AskUserQuestion). These cards are marked <b>Interview</b>. claude opened in an interactive terminal in CmdQ gets an instruction to ask with this question tool, not in plain text, when it needs a decision from you.</li>
+    <li>Questions claude asked in plain text before stopping are always collected too, including questions that ask what you want, such as "What can I help you with?". These cards are marked <b>Text</b> and <b>Guess</b> and show the end of claude's last reply. CmdQ looks at the shape of the whole reply, not only its last line, so requests to choose or decide are caught even without a question mark, such as a "Decisions needed" section in the middle, a list of options, or a note on how to reply. Replies in English and Korean are both checked. Detection is still a guess, so some cards may not be real questions. Clear those with <b>Dismiss</b>.</li>
+    <li>CmdQ checks every 15 seconds and looks at every session changed in the last 24 hours. Sessions you didn't open in CmdQ show up as cards too.</li>
+    <li>Sessions the auto queue ran are checked with broader rules. See Queue run questions below.</li>
+  </ul>
+
+  <h3>Queue run questions</h3>
+  <ul class="list">
+    <li>The auto queue runs claude headless, so interview question prompts never appear. Queue runs therefore get an instruction to end the reply with a decision block in a fixed format whenever they need a decision from you. A queue run session is one the auto queue has run headless at least once. A session first opened from a queue card in an interactive terminal follows the same rules as any other session.</li>
+    <li>When a reply ends with a decision block, its questions and choices show up in the inbox as they are, and the card is marked <b>Queue question</b>. Choices claude recommends are marked <b>Recommended</b>, but they aren't picked for you, so choose yourself. The summary written before the block is shown on the card too. A card splits up to 10 questions. With more than 10, they are listed in one numbered question that you answer by typing. Several questions or a table asked in plain text are also split up to 10, and beyond that become one question you answer by typing. Interview questions follow the question tool limit of 4.</li>
+    <li>If a queue run ends by asking in plain text without a block, CmdQ still guesses it is a text question and collects it, looking for several questions and recommended marks too. These cards are marked <b>Guess</b>, and a choice that includes (Recommended) is also marked <b>Recommended</b>. Conditional closings such as "let me know if you need anything else" aren't treated as questions.</li>
+    <li>When there are several questions, you answer them step by step, as with interviews. For text questions, only the answers are sent, one per line as <code>A1: …</code>, <code>A2: …</code>, without quoting the questions.</li>
+    <li>Like text questions, queue questions aren't sent to an interactive terminal. If the session is open in an interactive terminal in CmdQ, the card says "Queue questions aren't sent to an interactive terminal. Answer in that terminal".</li>
+    <li>Session history and the response view don't show the decision block. Only the summary before it remains. If the reply is only a block, or the block is one the inbox can't read, it is shown as is. The live log you watch during a run shows the block as written.</li>
+  </ul>
+
+  <h3>Answering</h3>
+  <ul class="list">
+    <li>Click the badge or press <kbd>⇧⌘C</kbd> to open the inbox under the badge. Press the key again, press <kbd>Esc</kbd>, or click outside to close it. When no decisions are waiting and the badge is hidden, the key does nothing. Change the key in <a href="#shortcuts">Shortcuts</a>. Hover over the badge to see the current shortcut. If none is set, it says "No shortcut — you can set one in Settings".</li>
+    <li>Click a card's title row to expand or collapse it. <kbd>⌘↑</kbd> and <kbd>⌘↓</kbd> move the expanded card up and down.</li>
+    <li>The top of an expanded card shows the <b>Project</b> path the question came from and the <b>Command</b> that led to it. Hover over a cut-off path to see all of it, and use <b>Show all</b> to read a long command in full.</li>
+    <li>Pick a choice or write in <b>Type your own</b>. Questions that allow several answers show checkboxes. If a choice has a <b>Preview</b>, expand it to read it.</li>
+    <li>When claude asked several questions at once, each gets a step button, and <b>N questions left</b> shows how many still need an answer.</li>
+    <li>An interview can be sent only after every question is answered. Text questions and queue questions can be sent once you answer one of them. Unanswered questions are left out, and the reply ends with a line such as <code>미응답(unanswered): Q2, Q3</code> so claude knows which ones were skipped.</li>
+    <li>Once the card can be sent, <b>Will send</b> shows the exact text that goes to claude. Check it, then click <b>Send</b> or press <kbd>⌘Enter</kbd>. A sent card folds into a <b>Sent ✓</b> line and then leaves the list.</li>
+    <li><b>Later (30 min)</b> puts the card away for 30 minutes. If only snoozed decisions are left, the badge reads <b>0 · later N</b>, and the badge and <kbd>⇧⌘C</kbd> still open the inbox.</li>
+    <li><b>Dismiss</b> removes the card without sending anything to claude.</li>
+    <li><b>↗ Terminal</b> closes the inbox and opens that session in an interactive terminal. If the auto queue is running the session, CmdQ asks before taking it over.</li>
+    <li><b>↩ Decisions N</b> in the interactive terminal header opens the inbox on top of the terminal and leaves the terminal as it is. Choices and text you entered on a card stay there when you close and reopen the inbox.</li>
+  </ul>
+
+  <h3>Where the answer goes</h3>
+  <p>How an answer is sent depends on where the session is open right now. The card says which before you send.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">How answers are delivered for each session state</caption>
+      <thead><tr><th scope="col">Session</th><th scope="col">Card says</th><th scope="col">On Send</th></tr></thead>
+      <tbody>
+        <tr><td>Open in an interactive terminal in CmdQ</td><td class="def">Types straight into the terminal</td><td class="def">For an interview question, closes the question prompt if one is showing and sends your answer to that terminal as a new message</td></tr>
+        <tr><td>Open in an interactive terminal in CmdQ, and the question is a text question or a queue question</td><td class="def">Text questions aren't sent to an interactive terminal. Answer in that terminal</td><td class="def">Can't be sent. Answer in that terminal</td></tr>
+        <tr><td>Not open anywhere</td><td class="def">Sends as a resume task · waits in the queue</td><td class="def">Puts a <code>--resume</code> item with your answer at the front of the auto queue and wakes the queue. It runs before the other items that were waiting. While the queue is waiting for a reset, the item waits by the usual queue rules. This also works for a session that still has an unanswered question</td></tr>
+        <tr><td>Open in a terminal outside CmdQ</td><td class="def">Open in another terminal, so it can't be sent. Answer in that terminal</td><td class="def">Can't be sent. The card is shown but <b>Send</b> is disabled, so answer in that terminal</td></tr>
+        <tr><td>The working folder can't be verified</td><td class="def">Couldn't verify the session, so it can't be sent. Answer in that terminal</td><td class="def">Can't be sent. Answer in that terminal</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list">
+    <li>CmdQ reads the session again right before sending. If the question was answered elsewhere in the meantime, nothing is sent and the card is removed.</li>
+    <li>If the session is still working, or the terminal closed before sending, the card shows why. Try again shortly.</li>
+    <li>If CmdQ closes the question prompt but can't type the answer, it says "Closed the question prompt but couldn't type the answer. The prompt may be closed, so answer in that terminal." That card can't be sent again, and it says "The question prompt may have closed, so it won't be sent again. Answer in that terminal". You have to answer in that terminal yourself.</li>
+    <li>If the question text, its heading, or an option label contains wording that looks like a usage limit notice, CmdQ slightly changes how that part is spelled before sending. The meaning goes through almost unchanged.</li>
+    <li>If the answer you typed contains wording that looks like a usage limit notice, <b>Send</b> is disabled and the card says "The answer you typed contains wording that looks like a usage limit notice, so it can't be sent. Edit that part and send again." Once you edit that part, you can send it.</li>
+    <li>If an answer to a text question starts with a slash or an exclamation mark, a warning says claude may run it as a command.</li>
+    <li>If the record of a sent answer can't be saved, a warning appears: "Couldn't save the record of this answer. The same question may show up again after the app restarts."</li>
+    <li>Records of sent and dismissed decisions are cleared after 48 hours.</li>
+  </ul>
+
+  <h3>Text question detection</h3>
+  <p>There's no setting to turn it on or off. Sessions that stopped after asking in plain text always reach the inbox, and you clear cards that aren't questions with <b>Dismiss</b>. Closings where claude offers to do something, such as "I'll let you know", aren't treated as questions. A reply is collected even without a question mark when it has a section in the middle asking you to choose or decide, or a hint on how to answer such as <code>Reply with "1a 2b"</code>.</p>
+</section>
+
 <!-- ══ Bookmarks ═══════════════════════════════════════ -->
 <section id="bookmarks">
   <div class="sec-head"><h2>Bookmarks</h2></div>
@@ -1130,6 +1200,7 @@ ol.list li{padding-left:4px}
         <tr><td>Search</td><td><kbd>⌘K</kbd></td><td class="def">Opens or closes the search popup. Works over a terminal or session history</td></tr>
         <tr><td>Bookmarks</td><td><kbd>⇧⌘B</kbd></td><td class="def">Toggles the panel</td></tr>
         <tr><td>Terminals</td><td><kbd>⇧⌘T</kbd></td><td class="def">Opens or closes the background terminal list. With an interactive terminal open, works like <b>Run in background</b></td></tr>
+        <tr><td>Decision inbox</td><td><kbd>⇧⌘C</kbd></td><td class="def">Opens or closes the decision inbox. Does nothing while the badge is hidden because no decisions are waiting</td></tr>
         <tr><td>Switch to Queue · Switch to Schedule</td><td><kbd>⌘1</kbd> · <kbd>⌘2</kbd></td><td class="def">Same as clicking the Queue or Schedule tab in the header. After you save a schedule rule, going back to Queue turns off Show all and shows only that rule's path tab</td></tr>
         <tr><td>Back</td><td><kbd>⌃←</kbd></td><td class="def">List-opened terminal → list. Reply → session history list. Otherwise closes the terminal list or session history. In other terminals the key goes to claude</td></tr>
       </tbody>
@@ -1149,7 +1220,8 @@ ol.list li{padding-left:4px}
   <ul class="list">
     <li>Only while the CmdQ window has focus.</li>
     <li>In a text field, only combinations with <kbd>⌘</kbd>, <kbd>⌥</kbd> or <kbd>⌃</kbd> fire.</li>
-    <li>With a full-screen view open (terminal, history, settings), only Settings, Search, Add snippet and Back work, plus Terminals to close the terminal list.</li>
+    <li>With a full-screen view open (terminal, history, settings), only Settings, Search, Add snippet and Back work. Decision inbox also works over an interactive terminal or session history.</li>
+    <li>Terminals closes the terminal list when it's open. With an interactive terminal open, it puts the terminal in the background like <b>Run in background</b>: a terminal opened from the list goes back to the list, and one opened elsewhere goes back to the main window.</li>
     <li>Search's key goes to CmdQ, not claude, even while an interactive terminal has focus.</li>
     <li>If macOS Mission Control uses <kbd>⌃←</kbd> for "Move left a space", it gets the key first. Assign Back to something else.</li>
   </ul>

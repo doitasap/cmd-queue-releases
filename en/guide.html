@@ -383,6 +383,7 @@ ol.list li{padding-left:4px}
     <li><a href="#queues">Auto queue and To Do</a></li>
     <li><a href="#chain">Chains</a></li>
     <li><a href="#limits">Usage limits and auto-resume</a></li>
+    <li><a href="#schedule">Recurring schedule</a></li>
     <li><a href="#card-actions">Card buttons</a></li>
     <li><a href="#attachments">Attachments</a></li>
     <li><a href="#terminal">Interactive terminal</a></li>
@@ -704,6 +705,133 @@ ol.list li{padding-left:4px}
   </p>
 </section>
 
+<!-- ══ Recurring schedule ════════════════════════════════════ -->
+<section id="schedule">
+  <div class="sec-head">
+    <h2>Recurring schedule</h2>
+    <p>One rule creates a queue item at the times you set. The items it creates run in the same queue, in the same way, as items you add by hand.</p>
+  </div>
+
+  <h3>Overview</h3>
+  <ul class="list">
+    <li>The <b>Queue</b> and <b>Schedule</b> switch in the header changes the screen. The Schedule screen has two views, <b>List</b> and <b>Calendar</b>.</li>
+    <li>It is a free feature, and there is no limit on the number of rules.</li>
+    <li>Times follow this Mac's local time zone.</li>
+    <li>A rule creates its runs while CmdQ is running. Runs that passed while it was off are handled as you choose under Conditions.</li>
+  </ul>
+
+  <h3>Creating a rule</h3>
+  <p>Click <b>New rule</b> to open the <b>New schedule rule</b> editor. The name, command, and path are required.</p>
+  <ul class="list">
+    <li><b>Name</b> and <b>Command</b>. <b>Add step</b> turns the command into a chain. Each step continues in the same session after the previous one finishes.</li>
+    <li><b>Path</b>. <b>Choose path</b> picks the folder.</li>
+    <li><b>Add to</b>. <b>Auto queue</b> runs each created item from the queue right away. <b>To Do</b> only creates the item, and you run it yourself.</li>
+    <li><b>Repeat</b> and <b>Conditions</b> are described below.</li>
+    <li>The editor's <b>Next 5 runs</b> previews the next five times. They are theoretical times with conditions not applied.</li>
+  </ul>
+
+  <h3>Repeat types</h3>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Repeat types and what they do</caption>
+      <thead><tr><th scope="col">Repeat</th><th scope="col">What you pick</th><th scope="col">What happens</th></tr></thead>
+      <tbody>
+        <tr><td><b>Specific dates</b></td><td class="def">Several days in the date picker</td><td class="def">Runs at the set time on each picked day. After the last date, the rule turns off and gets an <b>Ended</b> badge</td></tr>
+        <tr><td><b>Daily</b></td><td class="def">Time</td><td class="def">Runs at that time every day</td></tr>
+        <tr><td><b>Weekly</b></td><td class="def">One or more weekdays and a time</td><td class="def">Runs on each picked weekday</td></tr>
+        <tr><td><b>Monthly</b></td><td class="def">Day of month and a time</td><td class="def">In a month without that day, such as the 31st, it runs on the last day</td></tr>
+        <tr><td><b>Right after reset</b></td><td class="def">Nothing</td><td class="def">Runs every time the 5-hour limit resets on a weekday (Mon–Fri). Holidays are not considered. If the reset time is unknown, it does not run</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list">
+    <li><b>Daily</b>, <b>Weekly</b>, and <b>Monthly</b> can have a <b>Start date</b> and an <b>End date</b>. The default is <b>No end date (repeats forever)</b>. Once the end date passes, the rule turns off and gets an <b>Ended</b> badge.</li>
+    <li>An <b>Ended</b> rule's toggle will not turn on. Change the dates first, then turn it on.</li>
+    <li>The date picker marks the days when the weekly limit resets with a dot.</li>
+  </ul>
+
+  <h3>Conditions</h3>
+  <ul class="list">
+    <li><b>Skip a run when weekly usage is over the limit</b>. The <b>Threshold (%)</b> is 1 to 100, and the default is off. If usage is unknown, the run is not skipped. It runs, and the run history notes <b>Usage unknown</b>.</li>
+    <li><b>If the previous run is still in the queue</b>, choose <b>Skip this run</b> (default) or <b>Add another</b>. In the queue means <b>Queued</b>, <b>Running</b>, or <b>Waiting for reset</b>, and To Do items count too.</li>
+    <li><b>For runs missed while the app was off</b>, choose <b>Run once on launch</b> (default) or <b>Skip</b>. Running once creates only the most recent missed run since the last check. Right after you create, re-enable, or edit a rule, past runs are not backfilled. Even while the app is running, runs are created once per <b>Queue check interval</b>, so a run counts as missed only after the longer of 2 minutes or twice that interval has passed.</li>
+    <li>A rule turns off automatically after 3 consecutive failed runs, and this always applies. The card gets a <b>Turned off after failures</b> badge and a toast says the rule was turned off after 3 consecutive failures. Only runs that end in an error count. A run you stop, a run waiting for reset, and a skipped run neither count nor break the streak, and a success resets it to 0. Turning the rule back on clears the badge and the count. If <b>Desktop notifications</b> is on in Settings, you also get a system notification.</li>
+    <li>A run handed to an interactive terminal, or started interactively from its card and finished, is recorded as <b>Succeeded</b> and resets the failure count to 0.</li>
+  </ul>
+
+  <h3>Completion criteria and exceptions</h3>
+  <p>Both fields in the editor are optional. What you write is appended to the end of the command under a fixed heading. In a chain, it goes on the last step.</p>
+  <ul class="list">
+    <li><b>Completion criteria (optional)</b>: state how to judge whether the result is useful. It is appended under the heading <code>[완료 기준]</code>.</li>
+    <li><b>When data or destination is missing (optional)</b>: appended under the heading <code>[예외 처리]</code>. On a new rule this field is empty, and "If the requested data or destination is missing, do not send it elsewhere or change the scope; state what was missing and stop." shows only as grey hint text (an example). If you leave it empty and save, nothing is appended. When you edit an existing rule, the saved value is shown as it is.</li>
+    <li>The headings are the same in every app language.</li>
+    <li>CmdQ does not judge whether a result met the criteria. You check it yourself with <b>View the response</b> on the run item.</li>
+  </ul>
+
+  <h3>Sessions and attachments</h3>
+  <ul class="list">
+    <li>By default, each run starts a new session.</li>
+    <li>Turn on <b>Continue the last run's session</b> to continue the previous run's session. Context keeps accumulating, so a long-running rule can get heavy. If there is no previous session, the run starts a new one. A chain continues the session of its last step. A continuing rule copies attachments only on its first run.</li>
+    <li>The rule's 📎 attachments are copied to each run item. Editing the rule's attachments does not change items that were already created.</li>
+    <li>Links in a rule's attachments have no <b>Save text</b>. Use it on the copy of the link in a run item instead.</li>
+  </ul>
+
+  <h3>What each control does</h3>
+  <p>These are the rule cards in the list.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Controls on a rule card and what they do</caption>
+      <thead><tr><th scope="col">Control</th><th scope="col">What it does</th></tr></thead>
+      <tbody>
+        <tr><td>Command text</td><td class="def">Opens the full command</td></tr>
+        <tr><td>Path chip</td><td class="def">Copies the path</td></tr>
+        <tr><td>Card body</td><td class="def">Opens the rule editor</td></tr>
+        <tr><td>Toggle</td><td class="def">Turns the rule on or off. An <b>Ended</b> rule will not turn on, and the error appears as a toast</td></tr>
+        <tr><td><b>▶</b> Run now</td><td class="def">Ignores every condition and creates one run item. It also works on a rule that is turned off. The regular schedule is unchanged</td></tr>
+        <tr><td><b>📎</b> Attachments</td><td class="def">Opens the rule's attachment drawer</td></tr>
+        <tr><td><b>⧉</b> Duplicate</td><td class="def">Adds " (copy)" to the name and copies the attachments too. The copy is turned off</td></tr>
+        <tr><td><b>🕘</b> Run history</td><td class="def">Lists the runs, newest first. A row goes to its queue card, and <b>View response</b> and <b>Session history</b> open from it. An item deleted from the queue shows only <b>Deleted</b></td></tr>
+        <tr><td><b>✎</b> Edit</td><td class="def">Opens the rule editor</td></tr>
+        <tr><td><b>🗑</b> Delete</td><td class="def">After a confirmation, deletes the rule with its attachments and run history. Run items already in the queue stay</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list">
+    <li><b>Upcoming runs (7 days)</b>: the list screen shows what is scheduled for the next 7 days, along with limit reset times.</li>
+    <li><b>The ⏰ chip on a queue card</b>: it appears on cards a rule created. Clicking it expands that rule on the Schedule screen. If the rule is already deleted, a toast says "This rule has been deleted".</li>
+    <li><b>Calendar</b>: shows one week starting on Monday, and <b>Previous week</b>, <b>Next week</b>, and <b>This week</b> move around. The legend tells <b>Auto queue</b> runs from <b>To Do</b> runs, and a skipped run is dimmed with <b>Skipped</b>. The <b>5-hour limit reset</b> and <b>Weekly limit reset</b> marks cannot be clicked. A rule set to right after reset draws only the next known reset.</li>
+    <li><b>Run block popover</b>: an upcoming run has <b>Skip this run only</b>. A skipped run is restored with <b>Undo skip</b> in the same popover. <b>Run now</b> and <b>Edit rule</b> are there too. A past run opens <b>Go to queue card</b>, <b>View response</b>, and <b>Session history</b>.</li>
+  </ul>
+
+  <h3>How it differs from Claude Code's built-in scheduling</h3>
+  <p>Claude Code has its own scheduled tasks: cloud scheduled tasks (formerly Routines) and local scheduled tasks in the Desktop app. Both are useful, and the kind of work decides which fits. The table below compares facts only.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">CmdQ schedule compared with Claude Code scheduled tasks</caption>
+      <thead><tr><th scope="col">Item</th><th scope="col">CmdQ schedule</th><th scope="col">Cloud scheduled tasks</th><th scope="col">Desktop local scheduled tasks</th></tr></thead>
+      <tbody>
+        <tr><td><b>Where it runs</b></td><td class="def">The installed Claude Code, in a local folder on this Mac</td><td class="def">Anthropic-managed cloud, from a fresh clone of the repository</td><td class="def">Your computer</td></tr>
+        <tr><td><b>What must be on</b></td><td class="def">CmdQ must be running. Missed runs follow your Conditions setting</td><td class="def">Nothing (runs even when your laptop is closed)</td><td class="def">The app must be open and the computer awake. After a sleep, only the most recently missed run is made up</td></tr>
+        <tr><td><b>Local files and MCP</b></td><td class="def">Uses the local folder and the installed environment as is</td><td class="def">No access to local files. Connectors are chosen per task</td><td class="def">Local files, plus MCP servers from config files and connectors</td></tr>
+        <tr><td><b>How times are set</b></td><td class="def">Specific dates, daily, weekly, monthly, or <b>Right after reset</b>. It knows the 5-hour and weekly reset times and shows them on the calendar</td><td class="def">Hourly, daily, or weekly presets, or a cron expression</td><td class="def">Hourly, daily, weekdays, weekly, manual, or a cron expression</td></tr>
+        <tr><td><b>Handling limits</b></td><td class="def">Skips a run by weekly usage. When a limit hits, the item waits and resumes in the same session after the reset</td><td class="def">At the usage limit, more runs are rejected until the usage window resets (organizations with usage credits on can keep running)</td><td class="def">Not stated in the documentation</td></tr>
+        <tr><td><b>Sharing a queue</b></td><td class="def">Queues alongside items you add by hand and items for other paths</td><td class="def">Each run is an independent session</td><td class="def">Each run starts a fresh session</td></tr>
+        <tr><td><b>Run count limit</b></td><td class="def">CmdQ sets none</td><td class="def">Hourly limits (scheduled runs: 100 per hour per account; Run now and API fires: 30 per hour per task, among others)</td><td class="def">Not stated in the documentation</td></tr>
+        <tr><td><b>Minimum interval</b></td><td class="def">Runs at set times, so there is no repeat by time interval</td><td class="def">1 hour. A cron expression that runs more often is rejected</td><td class="def">1 hour in the form. Asking Claude can set 1 minute</td></tr>
+        <tr><td><b>Usage</b></td><td class="def">The schedule is free. Runs use your own Claude account's usage</td><td class="def">Draws subscription usage like an interactive session</td><td class="def">Not stated in the documentation</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The CmdQ schedule differs in four ways.</p>
+  <ul class="list">
+    <li>A <b>Right after reset</b> cycle: it starts at the moment the 5-hour limit frees up on weekdays.</li>
+    <li>Skipping a run by a limit condition: when weekly usage is over the threshold, that run is skipped.</li>
+    <li>Resuming after the reset when a limit hits: an item that is <b>Waiting for reset</b> continues in the same session.</li>
+    <li>Queuing together with items for other paths: run items use the same queue, so they follow the same concurrent-run and same-path rules as the items you add by hand.</li>
+  </ul>
+  <p>Sources: the Claude Code documentation pages <a href="https://code.claude.com/docs/en/routines" target="_blank" rel="noopener">Automate work with scheduled tasks</a> and <a href="https://code.claude.com/docs/en/desktop-scheduled-tasks" target="_blank" rel="noopener">Schedule recurring tasks in Claude Code Desktop</a>, checked on 2026-11-02. The documentation marks this feature as a research preview and says behavior and limits may change.</p>
+</section>
+
 <!-- ══ Card buttons ════════════════════════════════════ -->
 <section id="card-actions">
   <div class="sec-head">
@@ -977,7 +1105,7 @@ ol.list li{padding-left:4px}
         <tr class="grp"><td colspan="2">Attachments</td></tr>
         <tr><td>Max size per file</td><td class="def">Default 20 MB (1–100). Checked only when you add a file</td></tr>
         <tr class="grp"><td colspan="2">Shortcuts</td></tr>
-        <tr><td>(16 actions)</td><td class="def">See <a href="#shortcuts">Shortcuts</a></td></tr>
+        <tr><td>(18 actions)</td><td class="def">See <a href="#shortcuts">Shortcuts</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -1002,6 +1130,7 @@ ol.list li{padding-left:4px}
         <tr><td>Search</td><td><kbd>⌘K</kbd></td><td class="def">Opens or closes the search popup. Works over a terminal or session history</td></tr>
         <tr><td>Bookmarks</td><td><kbd>⇧⌘B</kbd></td><td class="def">Toggles the panel</td></tr>
         <tr><td>Terminals</td><td><kbd>⇧⌘T</kbd></td><td class="def">Opens or closes the background terminal list. With an interactive terminal open, works like <b>Run in background</b></td></tr>
+        <tr><td>Switch to Queue · Switch to Schedule</td><td><kbd>⌘1</kbd> · <kbd>⌘2</kbd></td><td class="def">Same as clicking the Queue or Schedule tab in the header. After you save a schedule rule, going back to Queue turns off Show all and shows only that rule's path tab</td></tr>
         <tr><td>Back</td><td><kbd>⌃←</kbd></td><td class="def">List-opened terminal → list. Reply → session history list. Otherwise closes the terminal list or session history. In other terminals the key goes to claude</td></tr>
       </tbody>
     </table>

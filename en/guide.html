@@ -568,6 +568,7 @@ ol.list li{padding-left:4px}
     <li>▶ <b>Promote to the auto queue</b> on a To Do card moves it to the end of the auto queue. It starts when its turn comes.</li>
     <li><b>Move to To Do</b> on a waiting or failed auto queue card moves it back.</li>
     <li>Drag a <b>Queued</b> or <b>Waiting for reset</b> card up or down to change the order. Running and finished cards stay put.</li>
+    <li>When two or more auto queue cards target the same session, they are grouped under one card, placed where the first of them to run sits; finished cards ahead of it move into the group. The front card is the running one, otherwise the queued one that runs next, otherwise the most recent. Click <b>N more in session</b> to show the rest below it. Those cards can't be dragged. Dragging the front card moves the whole group and keeps its run order; dragging any other card moves only that card. Either way, the cards you didn't drag keep their run order.</li>
   </ul>
 
   <h3>Status badges</h3>
@@ -968,7 +969,7 @@ ol.list li{padding-left:4px}
     <li><b>Run in background</b> closes the window and leaves claude working. The card shows <b>Terminal running</b>; click it to reattach.</li>
     <li><b>Terminate</b> stops claude and ends the session.</li>
     <li>☆ bookmarks the session, even without a card.</li>
-    <li>🕐 opens this session's question history over the terminal. Pick a question to read its reply; close it (×, Esc or a click outside) to return to the same terminal and keep typing. It reloads on every press. It stays disabled until the session id is known.</li>
+    <li>🕐 opens this session's question history over the terminal. Pick a question to read its reply; close it (×, Esc or a click outside) to return to the same terminal and keep typing. It reloads on every press. It stays disabled until the session id is known. Answers you sent from the decision inbox are in this list too, as questions you typed. A terminal the inbox opened to send an answer has it enabled from the start.</li>
     <li>📎 opens the session's attachments. Add, delete, reorder, edit memos or drop files, as in the drawer. <b>Insert into terminal</b> or <b>Insert all</b> pastes them into claude's input line; you press Enter yourself.</li>
     <li><b>Snippets</b> opens saved commands in two lists, <b>Shared</b> and <b>This path</b>. Pick one to fill the edit box, then <b>Apply</b> to paste and run it. Edits there apply to that run only. <kbd>⇧⌘P</kbd> toggles the panel and jumps to the new-snippet form.</li>
   </ul>
@@ -1017,6 +1018,7 @@ ol.list li{padding-left:4px}
   <ul class="list">
     <li>In session history, check questions (or <b>Select all</b>) and save them as <b>🖼 Image</b> or <b>📄 PDF</b>.</li>
     <li>On a reply, <b>⧉ Copy</b> copies it and <b>← Back</b> (<kbd>⌃←</kbd>) returns to the list.</li>
+    <li>For an answer you sent from the decision inbox, a collapsed <b>Questions answered</b> section sits above the question. Expand it to see the summary, questions and choices of the reply it answered. The same goes for a reply opened from header search. An answer to a single text question carries no marker, so it shows as an ordinary question.</li>
     <li>Run logs are what the response and live log read. Settings controls when they're compressed and deleted. Session history comes from Claude Code's own files, which Claude Code deletes on its own schedule (<a href="#trouble">Troubleshooting</a>).</li>
   </ul>
 
@@ -1050,12 +1052,12 @@ ol.list li{padding-left:4px}
 
   <h3>Queue run questions</h3>
   <ul class="list">
-    <li>The auto queue runs claude headless, so interview question prompts never appear. Queue runs therefore get an instruction to end the reply with a decision block in a fixed format whenever they need a decision from you. A queue run session is one the auto queue has run headless at least once. A session first opened from a queue card in an interactive terminal follows the same rules as any other session.</li>
-    <li>When a reply ends with a decision block, its questions and choices show up in the inbox as they are, and the card is marked <b>Queue question</b>. Choices claude recommends are marked <b>Recommended</b>, but they aren't picked for you, so choose yourself. The summary written before the block is shown on the card too. A card splits up to 10 questions. With more than 10, they are listed in one numbered question that you answer by typing. Several questions or a table asked in plain text are also split up to 10, and beyond that become one question you answer by typing. Interview questions follow the question tool limit of 4.</li>
+    <li>The auto queue runs claude headless, so interview question prompts never appear. Queue runs therefore get an instruction, whenever they need a decision from you, to end the reply by first writing the questions and choices in Markdown and then repeating them in a decision block (JSON) in a fixed format. You can read what is being asked in the response view or an interactive terminal, and the inbox builds the card from the block. A queue run session is one the auto queue has run headless at least once. A session first opened from a queue card in an interactive terminal follows the same rules as any other session.</li>
+    <li>When a reply ends with a decision block, its questions and choices show up in the inbox as they are, and the card is marked <b>Queue question</b>. Choices claude recommends are marked <b>Recommended</b>, but they aren't picked for you, so choose yourself. The summary written before the block is shown on the card too, but only up to the first question line, so each question appears on the card once. A card splits up to 10 questions. With more than 10, they are listed in one numbered question that you answer by typing. Several questions or a table asked in plain text are also split up to 10, and beyond that become one question you answer by typing. Interview questions follow the question tool limit of 4.</li>
     <li>If a queue run ends by asking in plain text without a block, CmdQ still guesses it is a text question and collects it, looking for several questions and recommended marks too. These cards are marked <b>Guess</b>, and a choice that includes (Recommended) is also marked <b>Recommended</b>. Conditional closings such as "let me know if you need anything else" aren't treated as questions.</li>
     <li>When there are several questions, you answer them step by step, as with interviews. For text questions, only the answers are sent, one per line as <code>A1: …</code>, <code>A2: …</code>, without quoting the questions.</li>
     <li>Like text questions, queue questions aren't sent to an interactive terminal. If the session is open in an interactive terminal in CmdQ, the card says "Queue questions aren't sent to an interactive terminal. Answer in that terminal".</li>
-    <li>Session history and the response view don't show the decision block. Only the summary before it remains. If the reply is only a block, or the block is one the inbox can't read, it is shown as is. The live log you watch during a run shows the block as written.</li>
+    <li>Session history and the response view don't show the decision block. Only the summary, questions and choices written before it remain. If the reply is only a block, or the block is one the inbox can't read, it is shown as is. The live log you watch during a run shows the block as written.</li>
   </ul>
 
   <h3>Answering</h3>
@@ -1067,10 +1069,12 @@ ol.list li{padding-left:4px}
     <li>When claude asked several questions at once, each gets a step button, and <b>N questions left</b> shows how many still need an answer.</li>
     <li>An interview can be sent only after every question is answered. Text questions and queue questions can be sent once you answer one of them. Unanswered questions are left out, and the reply ends with a line such as <code>미응답(unanswered): Q2, Q3</code> so claude knows which ones were skipped.</li>
     <li>Once the card can be sent, <b>Will send</b> shows the exact text that goes to claude. Check it, then click <b>Send</b> or press <kbd>⌘Enter</kbd>. A sent card folds into a <b>Sent ✓</b> line and then leaves the list.</li>
+    <li>Cards for sessions that aren't open anywhere also have <b>Send to queue</b> next to <b>Send</b>. Use it to continue in the auto queue without opening a terminal. Hover over it to see "Sends as a resume task · waits in the queue". A queued card folds into a <b>Queued ✓</b> line and then leaves the list. See Where the answer goes below for details.</li>
     <li><b>Later (30 min)</b> puts the card away for 30 minutes. If only snoozed decisions are left, the badge reads <b>0 · later N</b>, and the badge and <kbd>⇧⌘C</kbd> still open the inbox.</li>
     <li><b>Dismiss</b> removes the card without sending anything to claude.</li>
     <li><b>↗ Terminal</b> closes the inbox and opens that session in an interactive terminal. If the auto queue is running the session, CmdQ asks before taking it over.</li>
     <li><b>↩ Decisions N</b> in the interactive terminal header opens the inbox on top of the terminal and leaves the terminal as it is. Choices and text you entered on a card stay there when you close and reopen the inbox.</li>
+    <li>The inbox opens on top of the attachment and schedule drawers, the interactive terminal and session history. Only Settings and About appear above it.</li>
   </ul>
 
   <h3>Where the answer goes</h3>
@@ -1082,7 +1086,8 @@ ol.list li{padding-left:4px}
       <tbody>
         <tr><td>Open in an interactive terminal in CmdQ</td><td class="def">Types straight into the terminal</td><td class="def">For an interview question, closes the question prompt if one is showing and sends your answer to that terminal as a new message</td></tr>
         <tr><td>Open in an interactive terminal in CmdQ, and the question is a text question or a queue question</td><td class="def">Text questions aren't sent to an interactive terminal. Answer in that terminal</td><td class="def">Can't be sent. Answer in that terminal</td></tr>
-        <tr><td>Not open anywhere</td><td class="def">Sends as a resume task · waits in the queue</td><td class="def">Puts a <code>--resume</code> item with your answer at the front of the auto queue and wakes the queue. It runs before the other items that were waiting. While the queue is waiting for a reset, the item waits by the usual queue rules. This also works for a session that still has an unanswered question</td></tr>
+        <tr><td>Not open anywhere</td><td class="def">Opens it in an interactive terminal and sends</td><td class="def">Closes the inbox, opens the session in an interactive terminal (<code>claude --resume</code>) and sends your answer right away as the first input. It doesn't go through the auto queue, so the <b>Auto-queue concurrent runs</b> limit doesn't apply. This also works for a session that still has an unanswered question. You can see the sent answer again with <b>🕐</b> in the terminal header</td></tr>
+        <tr><td>Not open anywhere, and you click <b>Send to queue</b></td><td class="def">Hovering over the button shows "Sends as a resume task · waits in the queue"</td><td class="def">Puts a <code>--resume</code> item with your answer at the front of the auto queue and wakes the queue. It runs before the other items that were waiting. While the queue is waiting for a reset, the item waits by the usual queue rules</td></tr>
         <tr><td>Open in a terminal outside CmdQ</td><td class="def">Open in another terminal, so it can't be sent. Answer in that terminal</td><td class="def">Can't be sent. The card is shown but <b>Send</b> is disabled, so answer in that terminal</td></tr>
         <tr><td>The working folder can't be verified</td><td class="def">Couldn't verify the session, so it can't be sent. Answer in that terminal</td><td class="def">Can't be sent. Answer in that terminal</td></tr>
       </tbody>
@@ -1090,8 +1095,9 @@ ol.list li{padding-left:4px}
   </div>
   <ul class="list">
     <li>CmdQ reads the session again right before sending. If the question was answered elsewhere in the meantime, nothing is sent and the card is removed.</li>
-    <li>If the session is still working, or the terminal closed before sending, the card shows why. Try again shortly.</li>
-    <li>If CmdQ closes the question prompt but can't type the answer, it says "Closed the question prompt but couldn't type the answer. The prompt may be closed, so answer in that terminal." That card can't be sent again, and it says "The question prompt may have closed, so it won't be sent again. Answer in that terminal". You have to answer in that terminal yourself.</li>
+    <li>If the session is still working, or the terminal closed before sending, the card shows why. Try again shortly. If the auto queue started running a session that wasn't open in the meantime, CmdQ doesn't ask to take it over and doesn't send, for the same reason.</li>
+    <li>If the interactive terminal can't be opened, the card says "Couldn't open a terminal, so it wasn't sent. Please try again." If Claude Code isn't installed, it says "Claude Code isn't installed, so no terminal was opened. Install it and send again." instead, and if the first-run notice hasn't been accepted yet, "No terminal was opened because the first-run notice hasn't been accepted. Accept it and send again." In every case the answer isn't marked as sent and isn't queued either.</li>
+    <li>If CmdQ closes the question prompt but can't type the answer, it says "Closed the question prompt but couldn't type the answer. The prompt may be closed, so answer in that terminal." That card can't be sent again, and it says "The question prompt may have closed, so it won't be sent again. Answer in that terminal". You have to answer in that terminal yourself. A card blocked this way stays blocked after the app restarts, and <b>Later (30 min)</b> doesn't work on it. Answer in that terminal, then clear it with <b>Dismiss</b>.</li>
     <li>If the question text, its heading, or an option label contains wording that looks like a usage limit notice, CmdQ slightly changes how that part is spelled before sending. The meaning goes through almost unchanged.</li>
     <li>If the answer you typed contains wording that looks like a usage limit notice, <b>Send</b> is disabled and the card says "The answer you typed contains wording that looks like a usage limit notice, so it can't be sent. Edit that part and send again." Once you edit that part, you can send it.</li>
     <li>If an answer to a text question starts with a slash or an exclamation mark, a warning says claude may run it as a command.</li>

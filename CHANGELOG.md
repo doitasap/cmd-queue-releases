@@ -26,6 +26,7 @@
 
 - 리셋 시각이 잘린 채 다시 그려진 지난 한도 배너 때문에 큐가 멈추고 터미널이 회수되던 문제를 고쳤습니다.
 - 터미널 이름을 편집하는 중에 즐겨찾기 별칭 편집이 함께 열리던 문제를 고쳤습니다.
+- 업데이트 확인에 쓰는 인증서 검증 라이브러리(rustls-webpki)와 루트 인증서 묶음을, 신뢰가 철회된 중간 인증서를 받아들이던 보안 권고가 해소된 버전으로 올렸습니다.
 
 ---
 
@@ -47,6 +48,7 @@
 
 - A previous usage-limit banner redrawn with its reset time cut off no longer stops the queue and reclaims terminals.
 - The bookmark alias editor no longer opens while you are renaming a terminal.
+- The certificate verification library (rustls-webpki) and the bundled root certificates used for update checks are upgraded to versions that resolve advisories about trusting distrusted intermediate certificates.
 
 ## [0.3.0] - 2026-10-16
 

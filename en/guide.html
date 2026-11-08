@@ -384,6 +384,7 @@ ol.list li{padding-left:4px}
     <li><a href="#chain">Chains</a></li>
     <li><a href="#limits">Usage limits and auto-resume</a></li>
     <li><a href="#schedule">Recurring schedule</a></li>
+    <li><a href="#isolation">Isolated runs</a></li>
     <li><a href="#card-actions">Card buttons</a></li>
     <li><a href="#attachments">Attachments</a></li>
     <li><a href="#terminal">Interactive terminal</a></li>
@@ -559,7 +560,7 @@ ol.list li{padding-left:4px}
   <ul class="list">
     <li>Within one path, the auto queue runs one item at a time, top to bottom.</li>
     <li>Different paths run side by side. <b>Auto-queue concurrent runs</b> (default 3) caps how many paths go at once. Runs you start by hand don't count.</li>
-    <li><b>Concurrent runs per path</b> (default 2) caps automatic plus manual runs in one path. At most one of them is automatic. Set it to 1 if your tasks edit files, because two runs touching the same file overwrite each other.</li>
+    <li><b>Concurrent runs per path</b> (default 2) caps automatic plus manual runs in one path. At most one of them is automatic. Set it to 1 if your tasks edit files, because two runs touching the same file overwrite each other, or run the tasks that may overlap as <a href="#isolation">isolated runs</a>.</li>
     <li>Session targets also wait while their session is busy.</li>
   </ul>
 
@@ -833,6 +834,86 @@ ol.list li{padding-left:4px}
     <li>Queuing together with items for other paths: run items use the same queue, so they follow the same concurrent-run and same-path rules as the items you add by hand.</li>
   </ul>
   <p>Sources: the Claude Code documentation pages <a href="https://code.claude.com/docs/en/routines" target="_blank" rel="noopener">Automate work with scheduled tasks</a> and <a href="https://code.claude.com/docs/en/desktop-scheduled-tasks" target="_blank" rel="noopener">Schedule recurring tasks in Claude Code Desktop</a>, checked on 2026-11-02. The documentation marks this feature as a research preview and says behavior and limits may change.</p>
+</section>
+
+<!-- ══ Isolated runs ═══════════════════════════════════ -->
+<section id="isolation">
+  <div class="sec-head">
+    <h2>Isolated runs</h2>
+    <p>When two tasks edit files in the same path at the same time, one set of changes can overwrite the other. An isolated run puts such an item in its own git worktree next to the repository, and when it ends you decide what happens to the result. Nothing is merged automatically. Items that are not isolated run exactly as before.</p>
+  </div>
+
+  <h3>Turning it on</h3>
+  <ul class="list">
+    <li>Turn on the <b>Isolated run</b> toggle on the row below the add bar before you add the item. It is off by default. The row appears only when the target is <b>Path</b> and that folder is a git repository. For session or interactive targets, or a folder that isn't a git repository, the row doesn't appear. With a missing git, a git older than 2.5, or a bare repository, the toggle stays off and the reason appears next to it.</li>
+    <li>When the same path already has a running or queued task, a <b>Run isolated?</b> badge appears next to the toggle. Clicking it turns the toggle on. It is only a suggestion, so you can ignore it and add the item as is.</li>
+    <li>Turn on <b>Always isolate</b> for a path in the <b>Isolated runs</b> section of Settings. The toggle then starts on when you pick that path. If you turn it off before adding, that item does not run isolated. Items that reach that path without the add bar, such as recurring schedule runs, run isolated.</li>
+    <li>A <b>Queued</b> card that hasn't started has an <b>Isolate</b> or <b>Don't isolate</b> button. Running and finished cards can't be changed.</li>
+    <li>Turn on <b>Run isolated by default</b> in a <a href="#schedule">recurring schedule</a> rule and the items that rule creates run isolated.</li>
+    <li>Cards for isolated items carry an <b>Isolated</b> badge.</li>
+  </ul>
+
+  <h3>Worktree folder and branch</h3>
+  <ul class="list">
+    <li>The worktree is created beside the repository folder as <code>../{repository folder}-cmdq-{item number}</code>. For example, item 12 in <code>~/work/app</code> runs in <code>~/work/app-cmdq-12</code>.</li>
+    <li>The branch is named <code>cmdq/item-{item number}</code> and starts from the current HEAD of the original repository.</li>
+    <li>When the run ends, CmdQ commits whatever is left in the worktree as <code>[cmdq] item #number</code>. The <b>Files to copy</b> and the paths in <b>Leave out of auto-commit</b> below are left out of that commit.</li>
+  </ul>
+
+  <h3>Preparing each path</h3>
+  <p>A new worktree has neither the files listed in <code>.gitignore</code> nor installed dependencies. Fill both in per path in the <b>Isolated runs</b> section of Settings. Pick a path from the tabs (folder names) at the top of the section to see only that path's settings; the full path appears on one line under the tabs (shortened from the start when long, shown in full on hover). Folders with the same name get their parent folder's name added. Then click <b>Save</b>.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Per-path isolated run settings</caption>
+      <thead><tr><th scope="col">Setting</th><th scope="col">Example</th><th scope="col">What it does</th></tr></thead>
+      <tbody>
+        <tr><td><b>Always isolate</b></td><td class="def">—</td><td class="def">The add bar toggle starts on. Items that arrive without the add bar, such as recurring schedule runs, run isolated</td></tr>
+        <tr><td><b>Files to copy</b></td><td class="def"><code>.env</code></td><td class="def">One per line, relative to the repository. Copied from the original repository into the worktree before the run. <code>..</code>, absolute paths, and files the repository already tracks are not allowed</td></tr>
+        <tr><td><b>Leave out of auto-commit</b></td><td class="def"><code>.omc/</code></td><td class="def">One per line, relative to the repository. Defaults to <code>.omc/</code>. These paths stay only in the isolated folder and are left out of the end-of-run auto-commit and the changed file count. <code>..</code> and absolute paths are not allowed</td></tr>
+        <tr><td><b>Prepare command</b></td><td class="def"><code>npm ci</code></td><td class="def">Runs in a shell in the worktree before claude starts. If it fails or takes longer than 10 minutes, the item fails and the worktree is removed. If you stop the item while it runs, the command is ended, the worktree is removed, and the item moves back to To Do</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warn" style="margin-top:14px">The prepare command runs as written in the isolated folder every time an item runs. Only enter commands you have checked and trust.</div>
+
+  <h3>After the run</h3>
+  <p>Once an isolated card has a result, an <b>Isolation result</b> strip appears under its command. The strip shows the result state (<b>Awaiting decision</b> at first), how many files changed, and the buttons below, in one row. The changed file count is taken after the run ends and the auto-commit is made. Every button except <b>View diff</b> asks for confirmation.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Isolated result buttons</caption>
+      <thead><tr><th scope="col">Button</th><th scope="col">What it does</th><th scope="col">Watch out</th></tr></thead>
+      <tbody>
+        <tr><td><b>View diff</b></td><td class="def">Opens a window in CmdQ with added and deleted line counts per file first, then the diff text. Click a file name in the table to see only that file's diff; click it again or click <b>All files</b> to see everything</td><td class="def">Long diff text is cut at a size limit. Files after the cut can't be viewed on their own</td></tr>
+        <tr><td><b>Merge</b></td><td class="def">Creates a merge commit on the current branch of the original repository (<code>--no-ff</code>)</td><td class="def">Refused when tracked files in the original repository have uncommitted changes or it is on a commit instead of a branch (detached HEAD). Untracked files are ignored. On a conflict, the merge is cancelled, the result is kept as a branch, and you get a notification</td></tr>
+        <tr><td><b>Discard</b></td><td class="def">Deletes the worktree and the branch</td><td class="def">Can't be undone</td></tr>
+        <tr><td><b>Keep as branch</b></td><td class="def">Deletes only the worktree folder and keeps the <code>cmdq/item-number</code> branch. Leftover changes are committed first</td><td class="def">Merge or delete the branch yourself later</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list">
+    <li>After you choose, the card state changes to <b>Merged</b>, <b>Discarded</b>, <b>Kept as branch</b>, or <b>Conflict</b>.</li>
+    <li>Failed and stopped isolated items keep their worktree too. Check the diff and use the same three buttons.</li>
+    <li>An item that ends without changing any file has its worktree and branch removed right away and shows <b>No changes</b>.</li>
+    <li>The buttons are refused while a task is running in that worktree or an interactive terminal is open there. Try again once it ends.</li>
+    <li>An isolated card's interactive terminal opens inside its worktree. An isolated card that hasn't run yet must run once through the queue before you can open a terminal, and cards already handled as merged, discarded, no changes, or kept as a branch have the terminal button turned off.</li>
+    <li>If tracked files in <b>Files to copy</b> were skipped, the run goes ahead and a notification appears.</li>
+  </ul>
+
+  <h3>Check at startup</h3>
+  <p>An isolated worktree can be left behind if CmdQ quit before you handled it. At startup CmdQ looks for these worktrees and removes only the handled ones without changes. Ones that still have changes, haven't been handled, or have no record in this app stay. Handle the unhandled ones from their cards; only handled ones that still have changes, ones with no record in this app, and ones whose card has no worktree record are counted in a "Leftover isolated worktrees" notification. You can open those folders next to the repository and clean them up yourself.</p>
+
+  <h3>Reverting a regular item</h3>
+  <p>Items that are not isolated can also go back to how things were before they ran. Turn on <b>Save a checkpoint before each run</b> under <b>Queue execution</b> in Settings (off by default), and CmdQ records a git checkpoint (HEAD plus uncommitted changes) right before each path item runs. <b>Revert to before this run</b> on a finished card asks for confirmation, then restores the path to that checkpoint.</p>
+  <ul class="list">
+    <li>Before reverting, the current state is backed up with <code>git stash</code>. The backup name appears in the completion message, and you can find it in <code>git stash list</code> to recover it.</li>
+    <li>Changes made by other tasks in the same path can be reverted too.</li>
+    <li>If untracked files are too many or too large for the checkpoint limit, the item runs without a checkpoint and a notification appears. That item can't be reverted.</li>
+    <li>Reverting is refused while an item in the same repository is running, waiting in the auto queue, waiting for a limit reset, or has an interactive terminal open. While a revert is in progress, new terminals can't be opened for regular (non-isolated) cards that use that repository. Isolated cards and reattaching to a terminal that's already open are not affected.</li>
+    <li>Untracked files that existed before the run are part of the checkpoint and come back with their pre-run contents. Files ignored by <code>.gitignore</code> are left alone.</li>
+    <li>If you switched branches or rewrote history (reset, rebase, etc.) after the checkpoint was saved, nothing is reverted. The confirmation shows how many commits came after the checkpoint, and after reverting they stay under <code>refs/cmdq/revert-backup/…</code> so you can recover them with git.</li>
+    <li>The backup ref holding the pre-revert HEAD is kept even when there was nothing to back up, and its name appears in the completion message. It is never deleted automatically; remove it with <code>git update-ref -d &lt;ref&gt;</code> when you no longer need it.</li>
+    <li>Isolated items don't have this button. Choose <b>Discard</b> to undo their result.</li>
+  </ul>
 </section>
 
 <!-- ══ Card buttons ════════════════════════════════════ -->
@@ -1166,7 +1247,8 @@ ol.list li{padding-left:4px}
         <tr class="grp"><td colspan="2">Queue execution</td></tr>
         <tr><td>Queue check interval</td><td class="def">How often the auto queue looks for work. Default 15 s (5–300)</td></tr>
         <tr><td>Auto-queue concurrent runs</td><td class="def">Auto runs at once across all paths, which is also how many paths run at once. Default 3 (1–20)</td></tr>
-        <tr><td>Concurrent runs per path</td><td class="def">Automatic plus manual runs in one path. Default 2 (1–20). Use 1 for tasks that edit files</td></tr>
+        <tr><td>Concurrent runs per path</td><td class="def">Automatic plus manual runs in one path. Default 2 (1–20). Use 1 for tasks that edit files, or keep overlapping tasks apart with <a href="#isolation">Isolated runs</a></td></tr>
+        <tr><td>Save a checkpoint before each run</td><td class="def">Off by default. Records a git checkpoint before each path item that is not isolated runs, so a finished card can use <b>Revert to before this run</b> (<a href="#isolation">Isolated runs</a>)</td></tr>
         <tr><td>Usage check interval</td><td class="def">Default 60 s (30–3600). The menu bar refreshes on the same interval</td></tr>
         <tr><td>Usage check timeout</td><td class="def">Time limit for one usage check. Default 30 s (5–120)</td></tr>
         <tr class="grp"><td colspan="2">Logs</td></tr>
@@ -1182,6 +1264,8 @@ ol.list li{padding-left:4px}
         <tr><td>Max size per file</td><td class="def">Default 20 MB (1–100). Checked only when you add a file</td></tr>
         <tr class="grp"><td colspan="2">Shortcuts</td></tr>
         <tr><td>(18 actions)</td><td class="def">See <a href="#shortcuts">Shortcuts</a></td></tr>
+        <tr class="grp"><td colspan="2">Isolated runs</td></tr>
+        <tr><td>(per path)</td><td class="def"><b>Always isolate</b>, <b>Files to copy</b>, and <b>Prepare command</b> for each path, saved with that row's <b>Save</b>. Stored per path in the app data, not in <code>config.toml</code> (<a href="#isolation">Isolated runs</a>)</td></tr>
       </tbody>
     </table>
   </div>
@@ -1269,7 +1353,7 @@ ol.list li{padding-left:4px}
         <tr><td>CmdQ says it can't find the CLI</td><td class="def">Run <code>which claude</code> in Terminal</td><td class="def">Put that path in <b>claude executable</b>, then click <b>Check again</b> or <b>Check</b></td></tr>
         <tr><td>A task can't find <code>node</code> or another tool</td><td class="def">Your login shell's <code>PATH</code></td><td class="def">Add the folder to <code>claude.extra_paths</code> (<a href="#config-toml">config.toml</a>)</td></tr>
         <tr><td>An item sits at “Waiting · the session is in use”</td><td class="def">The toast names the holder: a CmdQ terminal, another queue item, or a terminal or background agent outside CmdQ</td><td class="def">Close that terminal or let the other task finish. After repeated refusals the item fails; <b>Re-run</b> it then</td></tr>
-        <tr><td>Notification: two runs edited the same file</td><td class="def">One set of changes may be gone</td><td class="def">Open an interactive terminal in that path and redo both, one after the other. Set <b>Concurrent runs per path</b> to 1 to avoid it</td></tr>
+        <tr><td>Notification: two runs edited the same file</td><td class="def">One set of changes may be gone</td><td class="def">Open an interactive terminal in that path and redo both, one after the other. Set <b>Concurrent runs per path</b> to 1 or turn on <a href="#isolation">Isolated run</a> to avoid it</td></tr>
         <tr><td>Failure reason is "Stopped: no output for 30 minutes"</td><td class="def">claude printed nothing for that long, e.g. a command waited for input or hung</td><td class="def">Split the work into a chain, or run it in an interactive terminal</td></tr>
         <tr><td>Failure reason is "Stopped: exceeded the 6-hour maximum run time"</td><td class="def">Output kept coming, but the whole run took more than 6 hours</td><td class="def">Split the work into a chain</td></tr>
         <tr><td>Failure reason is "Stopped: time limit exceeded"</td><td class="def">A record from an earlier version, which stopped runs at a total time limit after start (30 minutes by default). This version judges by the two rules above</td><td class="def">No action needed. Running it again applies the new rules</td></tr>

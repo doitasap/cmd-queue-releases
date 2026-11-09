@@ -387,6 +387,7 @@ ol.list li{padding-left:4px}
     <li><a href="#isolation">Isolated runs</a></li>
     <li><a href="#card-actions">Card buttons</a></li>
     <li><a href="#attachments">Attachments</a></li>
+    <li><a href="#materials">Project materials</a></li>
     <li><a href="#terminal">Interactive terminal</a></li>
     <li><a href="#history">Progress and history</a></li>
     <li><a href="#decisions">Decision inbox</a></li>
@@ -993,6 +994,7 @@ ol.list li{padding-left:4px}
       <thead><tr><th scope="col">Limit</th><th scope="col">Value</th></tr></thead>
       <tbody>
         <tr><td>Attachments per session</td><td class="def">10</td></tr>
+        <tr><td>Materials per project</td><td class="def">100 (<a href="#materials">Project materials</a>)</td></tr>
         <tr><td>Size per file</td><td class="def">20 MB by default, up to 100 MB (<b>Max size per file</b>). The error has a <b>Change in settings</b> button</td></tr>
         <tr><td>Text preview</td><td class="def">2 MB</td></tr>
         <tr><td>Expanded command</td><td class="def">120 KB. Blocks past that are left out with a note</td></tr>
@@ -1010,6 +1012,146 @@ ol.list li{padding-left:4px}
   <p>
     Interactive terminals don't expand markers. In a terminal, use 📎 in the header to paste attachments into the input line (<a href="#terminal">Interactive terminal</a>).
   </p>
+</section>
+<!-- ══ Project materials ═══════════════════════════════ -->
+<section id="materials">
+  <div class="sec-head">
+    <h2>Project materials</h2>
+    <p>Keep documents, folders, memos and links for each project tab (path), and let claude answer or work from them. Attachments belong to a session; materials belong to the tab path, so every command and terminal on that path shares them.</p>
+  </div>
+  <div class="callout">
+    <p>This feature is a Pro candidate and carries the <b>Pro Preview</b> badge. Until the official 1.0.0 release, it's free for everyone.</p>
+  </div>
+
+  <h3>Collecting materials</h3>
+  <ul class="list">
+    <li>The materials bar for the active tab sits at the right end of the scope bar above the queues. It shows the tab name, the number of materials and, when something awaits review, an <b>N awaiting review</b> pill. Project tabs show only the name and ×.</li>
+    <li>Click <b>Materials</b> (⇧⌘M) in the materials bar to open the materials drawer for that path on the <b>Materials</b> tab. The drawer sits on the right without covering the queues, with the <b>Pro Preview</b> badge next to its title. Switch with the <b>Chat</b> and <b>Materials</b> tabs at the top.</li>
+    <li>Add materials from the single <b>+ Add ▾</b> menu. You get the same <b>File</b>, <b>Link</b> and <b>Memo</b> as attachments, plus <b>+ Folder</b>.</li>
+    <li>The list is grouped into memos, files, folders and links. Click a group header to collapse it. Materials changed without approval carry an <b>Awaiting review</b> pill, and materials without a summary carry <b>No summary</b>.</li>
+    <li>Two tabs share materials only when their paths match exactly. A trailing <code>/</code> is ignored. A tab on a subfolder, or another worktree of the same repository, has its own materials.</li>
+    <li>Closing a tab keeps its materials, and they come back when you open a tab on the same path. You delete materials only from the materials view.</li>
+    <li>A project can have up to 100 materials. A folder counts as 1, however many files it holds.</li>
+    <li>Project memos are also saved as files under <code>memos/</code> in the materials folder, so claude can read them. The memo in the materials view is the source; when you edit a memo, CmdQ updates its file to match.</li>
+  </ul>
+
+  <h3>Folder materials</h3>
+  <ul class="list">
+    <li>Under <b>+ Add ▾</b> → <b>+ Folder</b>, type exclude patterns (optional) and pick a folder with <b>Choose folder</b>. CmdQ copies the folder, so the original is never touched.</li>
+    <li>Symbolic links are skipped, not followed. <code>.git</code>, <code>node_modules</code>, <code>target</code>, <code>dist</code>, <code>build</code>, <code>.DS_Store</code>, <code>.venv</code> and <code>__pycache__</code> are always left out, at any depth.</li>
+    <li>Exclude patterns use gitignore syntax, for example <code>*.log</code> or <code>build/</code>.</li>
+    <li>A copy can be up to 500 MB after exclusions. A larger folder is stopped before copying starts, and CmdQ asks you to add exclude patterns or add the folder in parts.</li>
+    <li>When the original changes, open the folder material and click <b>Re-import</b>. CmdQ then reports how many files changed, were added and were removed.</li>
+    <li>CmdQ remembers the exclude patterns you typed when adding the folder and applies them again on re-import. If you typed none, only the default exclusions apply.</li>
+    <li>If adding a folder skipped symbolic links or files it couldn't read, CmdQ tells you how many, for example "Folder added. Skipped N link(s) and N unreadable file(s)."</li>
+  </ul>
+
+  <h3>Links and linked subpages</h3>
+  <ul class="list">
+    <li>Like attachments, link materials open in the in-app web view with your sign-in, and page text is saved only when you ask (<a href="#attachments">Attachments</a>). Text saved with <b>Save text</b> in the link's web view also goes into the materials folder, where claude reads it.</li>
+    <li>Turn on <b>Also save linked subpages</b> when adding a link, and CmdQ follows links on the same origin (same scheme, host and port), nearest first, until no new links turn up. There's no depth or page limit, and pages load one at a time.</li>
+    <li>Collecting needs the link's web view, so when you start, CmdQ opens the link in the web view first and then begins.</li>
+    <li>Only one subpage collection runs at a time across the app. If you start one, or add an other-site link to a finished collection to run it again, while another is running, you're told to start again after it finishes or you stop it.</li>
+    <li>While collecting, you see pages saved and queued and the time elapsed. <b>Stop</b> ends it. Links whose address contains words such as logout, signout, delete, remove, approve, reject, unsubscribe, cancel, reset, archive, publish, checkout or purchase can change state, so they aren't followed. When in doubt CmdQ leaves a link out, so ordinary addresses such as <code>/blog/archive</code> can be skipped too.</li>
+    <li>A collection that starts from a public address doesn't follow links to <code>localhost</code>, private IPs (<code>10.x</code>, <code>192.168.x</code> and so on) or link-local addresses. A collection that starts from an internal address has no such limit. CmdQ looks only at the address as written, so it can't catch a public name that resolves to a private IP.</li>
+    <li>If you close the materials view or switch to another project's materials while collecting, collecting stops. The received pages are kept, and if you reopen that project's materials view before restarting the app, <b>Choose pages to save</b> comes back.</li>
+    <li>When collecting ends or stops, <b>Choose pages to save</b> shows the received pages as a tree. Uncheck the ones you don't want and click <b>Save chosen pages</b>. <b>Close without saving</b> keeps nothing.</li>
+    <li>If you leave a stopped collection (including one stopped by closing or switching the materials view) without saving or closing it, its received pages are cleared when the next collection starts, once 10 minutes have passed since it stopped. After that it can't be reopened.</li>
+    <li>Links to other sites are listed separately, and only the ones you pick are collected with <b>Collect</b>. Each picked link is followed to the end within its own origin, by the same rules.</li>
+    <li>If <b>Collect</b> on an other-site link doesn't start collecting (the collection was stopped or ended by an error or limit, or the link was already added), the view doesn't switch to collecting and you see "Collection did not start from this link."</li>
+    <li>The copy of one link material can be up to 500 MB. At that size, collecting stops and shows the pages received so far.</li>
+    <li>There's no depth or page limit, but separate limits protect resources. When one collection has queued or visited 5,000 addresses, it stops and shows the pages received so far. This shows a different notice from the 500MB size limit (&ldquo;Stopped at the address limit of 5,000. Review the pages received so far&rdquo;). Addresses longer than 2,048 characters aren't followed, and at most 500 other-site link candidates are listed.</li>
+    <li>If adding an other-site link to a finished collection hits this address limit, you see &ldquo;The address count limit (5,000) was reached, so this link cannot be added. Review the pages received so far&rdquo; and the pages received so far are shown.</li>
+    <li>You can <b>Collect</b> only other-site links that turned up during collecting and are on the list.</li>
+    <li>Open a link material and click <b>Save again</b> to collect from the first link again. CmdQ compares it with the last save and shows how many pages changed, are new and were removed. Saving replaces all previously saved subpages with the newly chosen ones, and pages missing this time are dropped. If saving fails, the last save stays as it was. CmdQ never re-collects on its own.</li>
+  </ul>
+
+  <h3>index.md and summaries</h3>
+  <ul class="list">
+    <li><code>index.md</code> at the top of the materials folder is the index. CmdQ fills in each material's title, type, source and saved date. Material text doesn't go into it.</li>
+    <li>Select a material to open <b>Edit index</b>. Type a summary (up to 2 lines, 200 characters each) and keywords (comma-separated), then click <b>Save</b>.</li>
+    <li>Keywords: up to 10, each up to 40 characters, with no commas.</li>
+    <li><b>Ask about this</b> in the index editor switches to the <b>Chat</b> tab and puts a question draft that starts with the material's title in the input box.</li>
+    <li><b>Make summary</b> runs claude once, headless, to fill in the summary and keywords. It works on memos and links as well as files and folders. claude gets read-only tools (Read, Grep, Glob), runs in the materials folder and is blocked from reading files outside it. It runs only when you click and uses your usage limit.</li>
+  </ul>
+
+  <h3>Ask materials (chat)</h3>
+  <ul class="list">
+    <li>Click <b>Ask materials</b> (⇧⌘L) in the materials bar to open the materials drawer on the <b>Chat</b> tab. It is not an interactive terminal and runs no commands. claude answers only from this project's materials.</li>
+    <li>Type a question in the box at the bottom and click <b>Send</b>. Enter sends and Shift+Enter adds a new line. On the first screen, click an example question to fill the box.</li>
+    <li>While you wait, the files claude read and the words it searched appear as steps, and <b>Stop</b> ends the answer. You can send the next question once the answer is done.</li>
+    <li>claude reads <code>index.md</code> first and opens only the files it needs. Below each answer, <b>Sources</b> chips show the file and section heading it used, and for a saved link, the original URL and saved date. Click a chip to show the excerpt in place, and <b>Open in materials →</b> to open it in the viewer on the Materials tab.</li>
+    <li>If the materials don't have the answer, claude doesn't guess and answers <b>Not in materials</b>. Reply with what you know and claude leaves a new memo suggestion; check it right away with <b>Open decision inbox</b> on the "N material proposals" notice.</li>
+    <li>claude doesn't edit the materials. Anything to fix is left as a suggestion file (<a href="#decisions-materials">Material suggestions in the decision inbox</a>).</li>
+    <li>If there are changes waiting for review (<a href="#materials">Materials changed without approval</a>), a notice appears at the top of the Chat tab and claude is told so as well. <b>Review in decision inbox</b> opens the decision inbox.</li>
+    <li>Chats stay per project while the app runs. Closing and reopening the drawer keeps them, and restarting the app clears them. <b>New chat</b> closes the current chat and starts over. If the same error happens twice in a row, <b>Ask again in a new chat</b> appears.</li>
+    <li>Click <b>Continue in queue</b> under an answer to turn the chat up to that answer into a new queue item, or <b>Chat to queue</b> at the top of the chat tab to use the whole chat. A small panel opens above the input box. Write a follow-up instruction or pick a template, choose <b>To Do queue</b> or <b>Auto queue</b>, and click <b>Send</b>. The queue you chose stays selected next time.</li>
+    <li>The new item's command starts with <code>[자료] follow-up</code>, followed by the finished questions, answers, and sources as data. It is a new item, not a resumed chat session, so the queue instructions, permissions, and linked modules are attached as usual. <code>[첨부]</code> and <code>[자료]</code> inside the chat are changed to full-width brackets so they are not expanded. Up to 20,000 characters of context are included; beyond that the oldest questions are dropped and "(N earlier exchanges omitted)" is noted. Expand <b>Context preview</b> to see everything that will be sent and its length.</li>
+    <li>In <b>Manage templates</b> you add, edit, delete, and reorder follow-up templates, shared or for this project only, the same way as snippets. Use <code>{answer}</code>, <code>{question}</code>, or <code>{sources}</code> in a template to point to that answer, question, or its sources in the earlier chat block when sending (for example, "A3 in the earlier chat below"). The text itself stays in that block and is not placed in the instruction line. With no templates, only example phrases are shown, and clicking one does not save it. <b>View in queue</b> in the notice takes you to the new card.</li>
+    <li>Each question runs claude once, headless, so it uses your usage limit. At the limit a notice appears above the input box, and you can keep asking in the same chat after the reset. The limit applies to the whole account, so the auto queue also starts no new tasks until the reset. Open interactive terminals are reclaimed too, the same as when a queued task hits the limit, and reopen the same way after the reset.</li>
+  </ul>
+
+  <h3 id="materials-links">Linked modules</h3>
+  <ul class="list">
+    <li>Materials stay separate per path. A project split into several modules is joined with <b>linked modules</b>, and the linked modules' materials are attached to <b>Ask materials</b> and to <code>[자료]</code> in queued commands too. Materials folders are not shared.</li>
+    <li>When you open the materials drawer, the app only reads that path's IDE and build tool settings (<code>.idea/modules.xml</code>, <code>settings.gradle</code>, <code>pom.xml</code>, <code>package.json</code> workspaces, <code>pnpm-workspace.yaml</code>, <code>Cargo.toml</code> workspace, <code>go.work</code>) to find modules. A module is suggested only when its path is <b>exactly the same as another tab path that has materials</b>. After editing a settings file, click <b>Detect again</b>.</li>
+    <li>Detected modules are not attached right away. They appear under <b>Link suggestions</b> in the <b>Linked modules</b> group with their name, path and how they were found, and are attached to questions and <code>[자료]</code> only after you click <b>Link</b>. An <b>Ignore</b>d suggestion does not come back when detected again. While suggestions wait for review, the materials bar shows an <b>N link suggestions</b> pill that opens the materials list.</li>
+    <li>The <b>Linked modules</b> group under the <b>Materials</b> tab shows each module's name, path, how it was found (IDE, Gradle, …) and number of materials. A link removed with <b>Unlink</b> is not restored even if it is detected again. <b>+ Link module</b> links another tab path that has materials by hand.</li>
+    <li>Links are followed both ways, including modules linked further away. Up to 5 nearest modules are attached by default; the rest are shown as "Only M of N linked modules are attached" with an <b>Over the limit</b> pill. Change the number in Settings → <b>Materials</b> → <b>Max linked modules to attach</b> (0–20, 0 turns it off); it applies right away.</li>
+    <li>The materials bar shows <b>M linked modules</b> (<b>M/total</b> at the limit), and the Chat tab's context line tells how many linked modules are used. Source chips from a linked module start with the module name (<code>billing · docs/refund.md › Policy</code>). <b>Open in materials</b> on such a chip opens that module's materials list and selects the material. A module without a materials folder yet shows a <b>No materials folder</b> pill and is neither attached nor counted.</li>
+    <li>claude doesn't edit a linked module's materials either. Suggestions go into that module's suggestion files and appear in the decision inbox as <code>module name · title</code> cards even when that module's tab is closed. The materials bar counts only this project's pending reviews; a linked module's are announced in a Chat tab banner with the module name. claude is also told which linked modules have pending reviews so it does not take their materials at face value.</li>
+  </ul>
+
+  <h3>[자료] in queued commands</h3>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Materials marker</caption>
+      <thead><tr><th scope="col">In the command</th><th scope="col">What claude gets at run time</th></tr></thead>
+      <tbody>
+        <tr><td><code>[자료]</code></td><td class="def">The path's materials folder (<code>--add-dir</code>) and the path of <code>index.md</code>. Material text isn't expanded</td></tr>
+        <tr><td><code>[자료]</code> and <code>[첨부]</code></td><td class="def">Both the materials folder and the attachments</td></tr>
+        <tr><td>No marker</td><td class="def">Nothing extra</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list">
+    <li>The marker is <code>[자료]</code> only, and like <code>[첨부]</code> it's Korean in every UI language. There's no numbered form such as <code>[자료:3]</code>. Writing it several times expands it once.</li>
+    <li>If the path has no materials folder yet, <code>[자료]</code> stays as plain text.</li>
+    <li>When a run resumes after a limit, or you reopen that card in an interactive terminal, the materials folder stays attached.</li>
+    <li>A new interactive terminal opened from the add bar can't expand <code>[자료]</code>, so if the command contains <code>[자료]</code>, CmdQ doesn't open it and shows "The [자료] materials marker is not expanded in an interactive session. Remove the marker or add it as a command". Use <b>Ask materials</b> to ask questions grounded in the materials.</li>
+  </ul>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Project materials and usage limits</caption>
+      <thead><tr><th scope="col">Action</th><th scope="col">Usage limit</th></tr></thead>
+      <tbody>
+        <tr><td><b>Ask materials</b>, <b>Make summary</b>, queued runs with <code>[자료]</code></td><td class="def">Used</td></tr>
+        <tr><td>Adding or deleting materials, editing the index, re-importing, collecting links, approving or rejecting suggestions</td><td class="def">Not used (claude doesn't run)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Suggestions and approval</h3>
+  <p>claude doesn't edit materials directly. It writes suggestion files to <code>_proposals/</code> in the materials folder, and CmdQ tells it to write at most 3 per run. Each suggestion shows up in the decision inbox as a <b>Material suggestion</b> card, and nothing in the materials or <code>index.md</code> changes until you approve. Details are in <a href="#decisions-materials">Material suggestions in the decision inbox</a>.</p>
+
+  <h3>Materials changed without approval</h3>
+  <div class="callout warn">
+    <p>Queued runs start claude with --dangerously-skip-permissions, so claude can ignore its instructions and edit files in the materials folder. CmdQ can't prevent this; it finds and reports such changes afterward.</p>
+  </div>
+  <ul class="list">
+    <li>CmdQ keeps a hash and a copy of the approved content of every material file. The copies sit outside the materials folder, where claude can't open them.</li>
+    <li>CmdQ compares the materials folder when a queued run with <code>[자료]</code> ends (headless, or an interactive terminal opened from that card), when an <b>Ask materials</b> answer finishes, and when the app starts. Terminals reclaimed by a usage limit, and terminals that end because you delete their card, are also compared right when they end. Deleting a running headless <code>[자료]</code> card still compares the folder when the run ends.</li>
+    <li>CmdQ also compares the materials folder before it changes materials itself (adding, deleting or editing materials, re-importing, saving a collection, approving a suggestion). So if you change materials while a run is going, files claude edited are put up for review instead of being overwritten by CmdQ. Approving a suggestion also compares first, including the <code>index.md</code> CmdQ has not written yet, so an index that claude edited directly is put up for review.</li>
+    <li>If a file changed outside <code>_proposals/</code> (edited, added or deleted, including direct edits to <code>index.md</code>), a <b>Material changed without approval</b> card appears in the decision inbox. Each file shows <b>Changed by</b> and <b>Changes</b>.</li>
+    <li>Comparisons and CmdQ's own changes run one at a time per project. If they overlap in the same project, the later one waits for the earlier one to finish.</li>
+    <li>When comparing, a file whose size and modified time match the last approved state isn't read again and counts as unchanged. So a file whose content changed while its size and modified time stayed the same isn't caught by this comparison.</li>
+    <li>A card for a large or binary file shows only the size instead of the changes, but the card is tied to the file's content at that moment. If the file changes again after you saw the card, Revert and Keep aren't applied and the card comes back with the current content.</li>
+    <li>A file that can't be read or is too large (over 256 MB) is marked <b>Cannot check (unreadable or too large)</b>, and the other files are still compared.</li>
+    <li>Pick <b>Revert</b> or <b>Keep</b> for each file. Revert restores the last approved content and deletes added files. Keep accepts the current content as approved. Keeping a memo file under <code>memos/</code> also changes that memo's content to the file's content. Keeping the deletion of a memo file removes that memo from the materials. CmdQ never picks for you.</li>
+    <li>If the memo changed in CmdQ in the meantime (a memo edit or an approved append suggestion), keeping its memo file is refused with "The memo changed in the meantime, so this can't be kept. Choose revert or check the memo."</li>
+    <li>Until you pick, the file stays <b>Waiting for you</b> and the queue keeps running. In the meantime, runs with <code>[자료]</code> and <b>Ask materials</b> also get a line saying there are changes awaiting review.</li>
+    <li>CmdQ doesn't overwrite a file waiting for review (including <code>index.md</code> and memo files) until you pick Revert or Keep. While <code>index.md</code> is waiting, index updates are put off, and the index is rebuilt after you pick.</li>
+  </ul>
 </section>
 
 <!-- ══ Interactive terminal ════════════════════════════ -->
@@ -1188,6 +1330,32 @@ ol.list li{padding-left:4px}
 
   <h3>Text question detection</h3>
   <p>There's no setting to turn it on or off. Sessions that stopped after asking in plain text always reach the inbox, and you clear cards that aren't questions with <b>Dismiss</b>. Closings where claude offers to do something, such as "I'll let you know", aren't treated as questions. A reply is collected even without a question mark when it has a section in the middle asking you to choose or decide, or a hint on how to answer such as <code>Reply with "1a 2b"</code>.</p>
+  <h3 id="decisions-materials">Material suggestions</h3>
+  <p>Suggestions claude leaves from <b>Ask materials</b> or a queued <code>[자료]</code> run (<a href="#materials">Project materials</a>) appear as <b>Material suggestion</b> cards. A card shows <b>Material</b>, <b>Suggestion</b>, <b>Why</b>, <b>Based on</b> and <b>What will change</b>.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Material suggestion types</caption>
+      <thead><tr><th scope="col">Suggestion</th><th scope="col">When it appears</th><th scope="col">If you approve</th></tr></thead>
+      <tbody>
+        <tr><td><b>Add to memo</b> (<code>append</code>)</td><td class="def">There's something to add to a memo material. Only memo materials can get it</td><td class="def">Added to the end of that memo under a dated heading</td></tr>
+        <tr><td><b>New memo</b> (<code>new</code>)</td><td class="def">claude learned something the materials don't have, for example what you told it after a <code>자료에 없음</code> reply</td><td class="def">A new memo material is created. Not applied if the project is at the material limit</td></tr>
+        <tr><td><b>Index update</b> (<code>index</code>)</td><td class="def">A summary or keywords in <code>index.md</code> are wrong</td><td class="def">That material's summary and keywords change</td></tr>
+        <tr><td><b>Original needs updating</b> (<code>source-outdated</code>)</td><td class="def">A copied file, folder or link is older than the original. It can point to a single file inside a folder or a single subpage of a link</td><td class="def">CmdQ doesn't edit its copy. Update the original yourself, then re-import or save again</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list">
+    <li><b>Approve</b> applies the content as shown. <b>Edit and approve</b> lets you change <b>Text to apply</b> first, then apply it with <b>Approve my edits</b>.</li>
+    <li><b>Original needs updating</b> cards have <b>Got it</b> instead of approve.</li>
+    <li><b>Reject</b> applies nothing and records the rejection. When a suggestion for the same material and type comes back, its card shows <b>You rejected this before</b>.</li>
+    <li><b>Later (30 min)</b> hides the card for 30 minutes.</li>
+    <li>Suggestions with the same material, type and content are combined into one card marked <b>N suggestions combined</b>. Suggestions with different content get separate cards even when the material and type match. <b>Index update</b> suggestions get a card for each entry they change, and <b>New memo</b> suggestions are never combined.</li>
+    <li>Approving a combined card applies one of them, and the others with the same content are handled with it. Rejecting also handles every suggestion in the group.</li>
+    <li>If a suggestion file or its group changed after you saw the card, approve and reject aren't applied. The card is cleared and comes back with the current content. The same goes for <b>Revert</b> and <b>Keep</b> on a <b>Material changed without approval</b> card when the file changed again after you saw it. Check the refreshed card, then choose.</li>
+    <li>A suggestion in the wrong format can't be approved, and only its raw text is shown. Clear it with <b>Dismiss</b> or <b>Later (30 min)</b>.</li>
+    <li>Handled suggestion files move to <code>_proposals/_done/</code>. After a change is applied, <code>index.md</code> is rewritten.</li>
+    <li><b>Material changed without approval</b> cards appear in the same inbox (Materials changed without approval, under <a href="#materials">Project materials</a>). Keeping the deletion of a memo file removes that memo, and keeping a memo file is refused if the memo changed in CmdQ in the meantime.</li>
+  </ul>
 </section>
 
 <!-- ══ Bookmarks ═══════════════════════════════════════ -->

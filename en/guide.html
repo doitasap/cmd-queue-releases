@@ -731,6 +731,7 @@ ol.list li{padding-left:4px}
     <li><b>Name</b> and <b>Command</b>. <b>Add step</b> turns the command into a chain. Each step continues in the same session after the previous one finishes.</li>
     <li><b>Path</b>. <b>Choose path</b> picks the folder.</li>
     <li><b>Add to</b>. <b>Auto queue</b> runs each created item from the queue right away. <b>To Do</b> only creates the item, and you run it yourself.</li>
+    <li><b>Alert when done 🔔</b>. Applies to cards this rule creates (recurring runs, <b>Run now</b>, and later chain steps). You can still change each card with its own 🔔, and changing the rule later does not change cards it already made. If unset, it shows <b>Follows default (on now)</b> or <b>Follows default (off now)</b> and follows <b>🔔 on new cards</b>. Click it to set <b>On</b> or <b>Off</b>, and <b>Use default</b> to go back.</li>
     <li><b>Repeat</b> and <b>Conditions</b> are described below.</li>
     <li>The editor's <b>Next 5 runs</b> previews the next five times. They are theoretical times with conditions not applied.</li>
   </ul>
@@ -760,7 +761,7 @@ ol.list li{padding-left:4px}
     <li><b>Skip a run when weekly usage is over the limit</b>. The <b>Threshold (%)</b> is 1 to 100, and the default is off. If usage is unknown, the run is not skipped. It runs, and the run history notes <b>Usage unknown</b>.</li>
     <li><b>If the previous run is still in the queue</b>, choose <b>Skip this run</b> (default) or <b>Add another</b>. In the queue means <b>Queued</b>, <b>Running</b>, or <b>Waiting for reset</b>, and To Do items count too.</li>
     <li><b>For runs missed while the app was off</b>, choose <b>Run once on launch</b> (default) or <b>Skip</b>. Running once creates only the most recent missed run since the last check. Right after you create, re-enable, or edit a rule, past runs are not backfilled. Even while the app is running, runs are created once per <b>Queue check interval</b>, so a run counts as missed only after the longer of 2 minutes or twice that interval has passed.</li>
-    <li>A rule turns off automatically after 3 consecutive failed runs, and this always applies. The card gets a <b>Turned off after failures</b> badge and a toast says the rule was turned off after 3 consecutive failures. Only runs that end in an error count. A run you stop, a run waiting for reset, and a skipped run neither count nor break the streak, and a success resets it to 0. Turning the rule back on clears the badge and the count. If <b>Desktop notifications</b> is on in Settings, you also get a system notification.</li>
+    <li>A rule turns off automatically after 3 consecutive failed runs, and this always applies. The card gets a <b>Turned off after failures</b> badge and a toast says the rule was turned off after 3 consecutive failures. Only runs that end in an error count. A run you stop, a run waiting for reset, and a skipped run neither count nor break the streak, and a success resets it to 0. Turning the rule back on clears the badge and the count. Unless <b>Notification style</b> is set to <b>Off</b> in Settings, you also get a system notification. This one doesn't depend on the card's 🔔.</li>
     <li>A run handed to an interactive terminal, or started interactively from its card and finished, is recorded as <b>Succeeded</b> and resets the failure count to 0.</li>
   </ul>
 
@@ -1217,7 +1218,7 @@ ol.list li{padding-left:4px}
 
   <h3>While you work</h3>
   <ul class="list">
-    <li>When output stops for 8 seconds, you get a <b>Waiting for input</b> notification. It isn't sent while you're looking at the window. Change or turn off the delay with <b>Interactive input-wait alert</b>.</li>
+    <li>When output stops for 8 seconds, you get a <b>Waiting for input</b> notification, but only for terminals with 🔔 on in the terminal header. A terminal opened from a queue card follows that card's 🔔. It isn't sent while you're looking at that terminal in the main window. Change or turn off the delay with <b>Interactive input-wait alert</b> (<a href="#notify">Notifications</a>).</li>
     <li><kbd>⌘</kbd>+click a URL to open it in your browser.</li>
     <li>Mod panels take mouse clicks only with claude's fullscreen renderer: run <code>/tui fullscreen</code> in claude, or start it with <code>CLAUDE_CODE_NO_FLICKER=1</code>. With the default renderer, claude ignores the mouse.</li>
     <li>Emoji count as two cells, as in claude, so tables and panels stay aligned. For a wider terminal, set <b>Terminal window width</b> to <b>Full width</b>.</li>
@@ -1273,6 +1274,7 @@ ol.list li{padding-left:4px}
     <li>Interview questions, where claude shows a list of choices (AskUserQuestion). These cards are marked <b>Interview</b>. claude opened in an interactive terminal in CmdQ gets an instruction to ask with this question tool, not in plain text, when it needs a decision from you.</li>
     <li>Questions claude asked in plain text before stopping are always collected too, including questions that ask what you want, such as "What can I help you with?". These cards are marked <b>Text</b> and <b>Guess</b> and show the end of claude's last reply. CmdQ looks at the shape of the whole reply, not only its last line, so requests to choose or decide are caught even without a question mark, such as a "Decisions needed" section in the middle, a list of options, or a note on how to reply. Replies in English and Korean are both checked. Detection is still a guess, so some cards may not be real questions. Clear those with <b>Dismiss</b>.</li>
     <li>CmdQ checks every 15 seconds and looks at every session changed in the last 24 hours. Sessions you didn't open in CmdQ show up as cards too.</li>
+    <li>New decision requests trigger a notification. Requests already waiting when CmdQ starts, material suggestions, and changed-material cards don't. Card 🔔 doesn't apply here; the <b>Decision requests</b> setting does (<a href="#notify">Notifications</a>).</li>
     <li>Sessions the auto queue ran are checked with broader rules. See Queue run questions below.</li>
   </ul>
 
@@ -1409,9 +1411,17 @@ ol.list li{padding-left:4px}
         <tr><td>Language</td><td class="def">Follow System · 한국어 · English</td></tr>
         <tr><td>Theme</td><td class="def">Dark (default) · Light</td></tr>
         <tr><td>Terminal window width</td><td class="def">Default (up to 1000px) · Full width. Applies to an open terminal right away</td></tr>
-        <tr><td>Desktop notifications</td><td class="def">On by default. Notifies when an item finishes, a limit is reached, a run fails, or a terminal waits for input</td></tr>
-        <tr><td>Interactive input-wait alert</td><td class="def">Seconds of silence before the input-wait notification. Default 8, 0 turns it off</td></tr>
         <tr><td>Start at login</td><td class="def">Starts CmdQ in the menu bar when you log in so the auto queue keeps going</td></tr>
+        <tr class="grp"><td colspan="2">Notifications</td></tr>
+        <tr><td>Notification style</td><td class="def">How you're notified: <b>Off</b> · <b>System only</b> (default) · <b>Popup</b> · <b>Top widget</b> · <b>Popup + widget</b>. <b>Off</b> silences everything, including decision requests (<a href="#notify">Notifications</a>)</td></tr>
+        <tr><td>Decision requests</td><td class="def">On by default. Alerts when a new decision request arrives. Card 🔔 doesn't apply</td></tr>
+        <tr><td>Queue item done</td><td class="def">On by default. Alerts when a queue item with 🔔 on finishes</td></tr>
+        <tr><td>Input-wait alerts</td><td class="def">On by default. Alerts when an interactive terminal with 🔔 on waits for input</td></tr>
+        <tr><td>Failures &amp; limits</td><td class="def">On by default. Alerts when a 🔔 item fails or waits for a reset. Off mutes these even with 🔔 on</td></tr>
+        <tr><td>🔔 on new cards</td><td class="def">Off by default. When on, new cards start with 🔔 on. Runs from repeat rules that leave their own 🔔 unset follow this too</td></tr>
+        <tr><td>Popup auto-close</td><td class="def">Closes popup and widget cards after this many seconds. Default 0, which keeps them open (0–3600)</td></tr>
+        <tr><td>Show on</td><td class="def">Which display shows the popup and widget: <b>Main display</b> (default) · <b>Display with cursor</b></td></tr>
+        <tr><td>Interactive input-wait alert</td><td class="def">Seconds of silence before the input-wait notification. Default 8, 0 turns it off</td></tr>
         <tr class="grp"><td colspan="2">Running claude</td></tr>
         <tr><td>claude executable</td><td class="def">Empty: <code>$HOME/.local/bin/claude</code>, then <code>PATH</code></td></tr>
         <tr><td>Claude config folder ↻</td><td class="def">Empty: <code>CLAUDE_CONFIG_DIR</code> from your login shell, or <code>$HOME/.claude</code>. Absolute paths only</td></tr>
@@ -1441,6 +1451,21 @@ ol.list li{padding-left:4px}
       </tbody>
     </table>
   </div>
+
+  <h3 id="notify">Notifications</h3>
+  <p>Notifications arrive the way you pick in Settings › <b>Notifications</b> › <b>Notification style</b>. <b>System only</b> shows macOS notification banners. <b>Popup</b> opens a window in the top-right corner with cards stacked in a list, and <b>Top widget</b> shows a band at the top center of the screen. With <b>Popup + widget</b>, the same alert shows in both.</p>
+  <ul class="list">
+    <li><b>What gets an alert</b>: Done, failed, waiting-for-reset, and waiting-for-input alerts come only from cards and terminals with 🔔 on, and that includes system banners. Turn 🔔 on or off with the 🔔 button on a card or in an interactive terminal's header. For a terminal opened from a card, the card's 🔔 changes too. If you turn on <b>Alert</b> in the add bar before adding, the card starts with 🔔 on. Cards with 🔔 on show a <b>🔔 Alert</b> badge. Decision requests don't use 🔔; they follow <b>Decision requests</b>.</li>
+    <li><b>Where 🔔 carries over</b>: the next step in a chain inherits 🔔 from the step before. Runs created by a repeat rule (including <b>Run now</b>) follow the rule's <b>Alert when done 🔔</b>, or <b>🔔 on new cards</b> if the rule leaves it unset. You can still change each created card with its own 🔔. An item that resumes a session after you answer in the decision inbox inherits that session's 🔔: the session's own 🔔 if you turned it on or off, otherwise the session's last card 🔔, otherwise <b>🔔 on new cards</b>. An interactive terminal without a card also follows <b>🔔 on new cards</b> until you turn its 🔔 on or off.</li>
+    <li><b>Alerts that always come</b>: reclaiming terminals at a limit, the alert that two runs changed the same file, rules turned off after failures, app updates, and isolated-run notices arrive as system banners whatever the 🔔 and per-event settings, unless the style is <b>Off</b>.</li>
+    <li><b>Popup and widget styles</b>: done, input-wait, and decision alerts go only to the popup or widget, not to system banners. If the popup or widget can't be shown, a system banner is sent instead.</li>
+    <li><b>Alert titles</b>: if you gave a terminal a name, the alert title shows that name instead of the path. Renaming applies from the next alert on, and cards already shown stay as they are.</li>
+    <li><b>Card buttons</b>: <b>Go to terminal</b> opens that item's or session's terminal in the main window. It takes the same path as running a card interactively, so it attaches to a live terminal or resumes the same session if it has ended. Decision cards have <b>Answer in decision inbox</b>. <b>Hide</b> clears only that card.</li>
+    <li><b>Widget</b>: the band shows the pending count and the latest alert, with the card list below. <b>Collapse</b> leaves only the count, and clicking the count expands it again. <b>Hide all</b> clears every card in both the popup and the widget.</li>
+    <li><b>Hidden cards</b>: a hidden alert doesn't come back for the same event. CmdQ keeps this in memory only, so it resets when you restart the app. Cards for decisions answered elsewhere or cleared in the decision inbox, and cards for a session where you started new input, close on their own.</li>
+    <li><b>While you're looking</b>: if the main window is in front and you have that terminal open, its done, input-wait, and decision alerts aren't sent.</li>
+    <li><b>First launch after updating</b>: earlier versions alerted on every finished card, but new cards now start with 🔔 off. Existing users see a one-time "Per-card completion alerts" notice on first launch. <b>Turn on 🔔 for new cards</b> makes every new card alert as before, and <b>Keep as is</b> leaves your settings alone. The notice doesn't show if <b>Notification style</b> is <b>Off</b>, or on a fresh install.</li>
+  </ul>
 </section>
 
 <!-- ══ Shortcuts ═══════════════════════════════════════ -->

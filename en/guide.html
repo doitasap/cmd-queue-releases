@@ -1211,7 +1211,7 @@ ol.list li{padding-left:4px}
     Clear the name and confirm to go back to the original title. The name stays after you restart the app.
     It changes only the displayed title; the queue card's command, the bookmark alias and the path shown stay the same.
     <b>Terminate all</b> asks for a second click.
-    A terminal opened from the list returns to the list with <kbd>⌃←</kbd>.
+    A terminal opened from the list returns to the list with <kbd>⌃←</kbd>. <kbd>⌃→</kbd> takes you back to that terminal.
     Pressing <kbd>⇧⌘T</kbd> while an interactive terminal is open works like <b>Run in background</b>: a terminal opened from the list goes back to the list, and one opened from a card or the add bar goes back to the main window. It does nothing while another window, such as Settings, is open over the terminal.
   </p>
 
@@ -1465,6 +1465,7 @@ ol.list li{padding-left:4px}
         <tr><td>Decision inbox</td><td><kbd>⇧⌘C</kbd></td><td class="def">Opens or closes the decision inbox. Does nothing while the badge is hidden because no decisions are waiting</td></tr>
         <tr><td>Switch to Queue · Switch to Schedule</td><td><kbd>⌘1</kbd> · <kbd>⌘2</kbd></td><td class="def">Same as clicking the Queue or Schedule tab in the header. After you save a schedule rule, going back to Queue turns off Show all and shows only that rule's path tab</td></tr>
         <tr><td>Back</td><td><kbd>⌃←</kbd></td><td class="def">List-opened terminal → list. Reply → session history list. Otherwise closes the terminal list or session history. In other terminals the key goes to claude</td></tr>
+        <tr><td>Forward</td><td><kbd>⌃→</kbd></td><td class="def">Reopens the screen you left with Back, as it was before you pressed Back: the list-opened terminal, the session history reply or the closed list. Press it as many times as you pressed Back to retrace them in order</td></tr>
       </tbody>
     </table>
   </div>
@@ -1482,10 +1483,12 @@ ol.list li{padding-left:4px}
   <ul class="list">
     <li>Only while the CmdQ window has focus.</li>
     <li>In a text field, only combinations with <kbd>⌘</kbd>, <kbd>⌥</kbd> or <kbd>⌃</kbd> fire.</li>
-    <li>With a full-screen view open (terminal, history, settings), only Settings, Search, Add snippet and Back work. Decision inbox also works over an interactive terminal or session history.</li>
+    <li>With a full-screen view open (terminal, history, settings), only Settings, Search, Add snippet, Back and Forward work. Decision inbox also works over an interactive terminal or session history.</li>
     <li>Terminals closes the terminal list when it's open. With an interactive terminal open, it puts the terminal in the background like <b>Run in background</b>: a terminal opened from the list goes back to the list, and one opened elsewhere goes back to the main window.</li>
     <li>Search's key goes to CmdQ, not claude, even while an interactive terminal has focus.</li>
+    <li>Forward only works when you press it right after Back. Pressing any other key in between (typing in the shell or the command box, Esc, another shortcut) clears the Forward history, and in an interactive terminal <kbd>⌃→</kbd> then goes to the terminal, so word movement still works. The same happens when there's nothing to reopen or the terminal has ended. Closing a window or clicking a tab with the mouse keeps the history.</li>
     <li>If macOS Mission Control uses <kbd>⌃←</kbd> for "Move left a space", it gets the key first. Assign Back to something else.</li>
+    <li>The same goes for <kbd>⌃→</kbd> and "Move right a space": if it's on, macOS gets the key first. Assign Forward to something else.</li>
   </ul>
 </section>
 

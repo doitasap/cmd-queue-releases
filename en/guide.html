@@ -1004,6 +1004,9 @@ ol.list li{padding-left:4px}
     </table>
   </div>
 
+  <h3>Bulk delete and display names</h3>
+  <p>The card and session attachment drawers also have <b>Select</b> in the list header, so you can pick several attachments and delete them at once (it works like bulk delete in <a href="#materials">Project materials</a>). Use ✎ on a row to change its display name (alias). It starts as the name you registered; Enter or moving focus saves it, and <code>Esc</code> cancels. An empty name isn't saved.</p>
+
   <h3>Lifetime</h3>
   <p>
     CmdQ stores copies. Your original files stay where they are.
@@ -1365,13 +1368,13 @@ ol.list li{padding-left:4px}
         <tr><td><b>Add to memo</b> (<code>append</code>)</td><td class="def">There's something to add to a memo material. Only memo materials can get it</td><td class="def">Added to the end of that memo under a dated heading</td></tr>
         <tr><td><b>New memo</b> (<code>new</code>)</td><td class="def">claude learned something the materials don't have, for example what you told it after a <code>자료에 없음</code> reply</td><td class="def">A new memo material is created. Not applied if the project is at the material limit</td></tr>
         <tr><td><b>Index update</b> (<code>index</code>)</td><td class="def">A summary or keywords in <code>index.md</code> are wrong</td><td class="def">That material's summary and keywords change</td></tr>
-        <tr><td><b>Original needs updating</b> (<code>source-outdated</code>)</td><td class="def">A copied file, folder or link is older than the original. It can point to a single file inside a folder or a single subpage of a link</td><td class="def">CmdQ doesn't edit its copy. Update the original yourself, then re-import or save again</td></tr>
+        <tr><td><b>Original needs updating</b> (<code>source-outdated</code>)</td><td class="def">A copied file, folder or link is older than the original. It can point to a single file inside a folder or a single subpage of a link</td><td class="def">The change is kept as a dated section in the memo material <b>Correction: (material title)</b>. The memo is created if it doesn't exist and appended to if it does. CmdQ doesn't change its copy or the original, so update the original yourself, then re-import or save again</td></tr>
       </tbody>
     </table>
   </div>
   <ul class="list">
     <li><b>Approve</b> applies the content as shown. <b>Edit and approve</b> lets you change <b>Text to apply</b> first, then apply it with <b>Approve my edits</b>.</li>
-    <li><b>Original needs updating</b> cards have <b>Got it</b> instead of approve.</li>
+    <li><b>Original needs updating</b> cards offer <b>Approve</b>, <b>Edit and approve</b> and <b>Reject</b> like other suggestions. If the target material can't be found, the suggestion's target path becomes the memo title. At the material limit, no new correction memo is created.</li>
     <li><b>Reject</b> applies nothing and records the rejection. When a suggestion for the same material and type comes back, its card shows <b>You rejected this before</b>.</li>
     <li><b>Later (30 min)</b> hides the card for 30 minutes.</li>
     <li>Suggestions with the same material, type and content are combined into one card marked <b>N suggestions combined</b>. Suggestions with different content get separate cards even when the material and type match. <b>Index update</b> suggestions get a card for each entry they change, and <b>New memo</b> suggestions are never combined.</li>
@@ -1475,7 +1478,7 @@ ol.list li{padding-left:4px}
   <h3 id="notify">Notifications</h3>
   <p>Notifications arrive the way you pick in Settings › <b>Notifications</b> › <b>Notification style</b>. <b>System only</b> shows macOS notification banners. <b>Popup</b> opens a window in the top-right corner with cards stacked in a list, and <b>Top widget</b> shows a band at the top center of the screen. With <b>Popup + widget</b>, the same alert shows in both.</p>
   <ul class="list">
-    <li><b>What gets an alert</b>: Done, failed, waiting-for-reset, and waiting-for-input alerts come only from cards and terminals with 🔔 on, and that includes system banners. Turn 🔔 on or off with the 🔔 button on a card or in an interactive terminal's header. For a terminal opened from a card, the card's 🔔 changes too. New cards start with the 🔔 default from Settings. Cards with 🔔 on show a <b>🔔 Alert</b> badge. Decision requests don't use 🔔; they follow <b>Decision requests</b>.</li>
+    <li><b>What gets an alert</b>: Done, failed, waiting-for-reset, and waiting-for-input alerts come only from cards and terminals with 🔔 on, and that includes system banners. Turn 🔔 on or off with the 🔔 button on a card or in an interactive terminal's header. For a terminal opened from a card, the card's 🔔 changes too. New cards start with the 🔔 default from Settings. A card's 🔔 button shows whether it is on (pressed state). Decision requests don't use 🔔; they follow <b>Decision requests</b>.</li>
     <li><b>Where 🔔 carries over</b>: the next step in a chain inherits 🔔 from the step before. Runs created by a repeat rule (including <b>Run now</b>) follow the rule's <b>Alert when done 🔔</b>, or <b>🔔 on new cards</b> if the rule leaves it unset. You can still change each created card with its own 🔔. An item that resumes a session after you answer in the decision inbox inherits that session's 🔔: the session's own 🔔 if you turned it on or off, otherwise the session's last card 🔔, otherwise <b>🔔 on new cards</b>. An interactive terminal without a card also follows <b>🔔 on new cards</b> until you turn its 🔔 on or off.</li>
     <li><b>Alerts that always come</b>: reclaiming terminals at a limit, the alert that two runs changed the same file, rules turned off after failures, app updates, and isolated-run notices arrive as system banners whatever the 🔔 and per-event settings, unless the style is <b>Off</b>.</li>
     <li><b>Popup and widget styles</b>: done, input-wait, and decision alerts go only to the popup or widget, not to system banners. If the popup or widget can't be shown, a system banner is sent instead.</li>

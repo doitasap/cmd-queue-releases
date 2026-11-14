@@ -733,7 +733,7 @@ ol.list li{padding-left:4px}
     <li><b>Add to</b>. <b>Auto queue</b> runs each created item from the queue right away. <b>To Do</b> only creates the item, and you run it yourself.</li>
     <li><b>Alert when done 🔔</b>. Applies to cards this rule creates (recurring runs, <b>Run now</b>, and later chain steps). You can still change each card with its own 🔔, and changing the rule later does not change cards it already made. If unset, it shows <b>Follows default (on now)</b> or <b>Follows default (off now)</b> and follows <b>🔔 on new cards</b>. Click it to set <b>On</b> or <b>Off</b>, and <b>Use default</b> to go back.</li>
     <li><b>Repeat</b> and <b>Conditions</b> are described below.</li>
-    <li>The editor's <b>Next 5 runs</b> previews the next five times. They are theoretical times with conditions not applied.</li>
+    <li>The editor's <b>Next 5 runs</b> previews the next five times. They are theoretical times with conditions not applied. A <b>git ref update</b> rule has no fixed time, so there is nothing to preview.</li>
   </ul>
 
   <h3>Repeat types</h3>
@@ -747,6 +747,7 @@ ol.list li{padding-left:4px}
         <tr><td><b>Weekly</b></td><td class="def">One or more weekdays and a time</td><td class="def">Runs on each picked weekday</td></tr>
         <tr><td><b>Monthly</b></td><td class="def">Day of month and a time</td><td class="def">In a month without that day, such as the 31st, it runs on the last day</td></tr>
         <tr><td><b>Right after reset</b></td><td class="def">Nothing</td><td class="def">Runs every time the 5-hour limit resets on a weekday (Mon–Fri). Holidays are not considered. If the reset time is unknown, it does not run</td></tr>
+        <tr><td><b>git ref update</b></td><td class="def"><b>git ref</b> (default <code>develop</code>) and <b>Only when there is a PR merge commit</b></td><td class="def">Has no fixed time; runs when that ref moves forward. See <a href="#schedule-gitref">git ref update</a> below</td></tr>
       </tbody>
     </table>
   </div>
@@ -754,6 +755,72 @@ ol.list li{padding-left:4px}
     <li><b>Daily</b>, <b>Weekly</b>, and <b>Monthly</b> can have a <b>Start date</b> and an <b>End date</b>. The default is <b>No end date (repeats forever)</b>. Once the end date passes, the rule turns off and gets an <b>Ended</b> badge.</li>
     <li>An <b>Ended</b> rule's toggle will not turn on. Change the dates first, then turn it on.</li>
     <li>The date picker marks the days when the weekly limit resets with a dot.</li>
+  </ul>
+
+  <h3 id="schedule-gitref">git ref update</h3>
+  <p>Choose <b>git ref update</b> under <b>Repeat</b> and the rule watches a repository ref instead of a clock. It creates a run only when the commit the ref points to has moved forward. The default ref is <code>develop</code>.</p>
+  <ul class="list">
+    <li><b>Base commit</b>. When you create the rule, change its repeat type, turn it back on, or first check a duplicated rule, the current value is only recorded as the base and no run is created. Past history never becomes a run.</li>
+    <li>A run is created only when the ref <b>moved forward</b>. If the ref changed several times while the app was off, everything from the base to the latest commit becomes one run. Creating a run moves the base to the latest commit.</li>
+    <li>If the ref was <b>rewound</b>, or the change does not match the <b>Only when there is a PR merge commit</b> filter, no run is created and only the base moves.</li>
+    <li>If the ref is missing, the repository reports an error, or git does not answer in time, that check is skipped and the reason shows in the last result on the rule card (<b>Ref not found</b>, <b>Repository error</b>, <b>git timed out</b>). These do not count as consecutive failures, so the rule is not turned off automatically.</li>
+    <li>If the previous run is still in the queue (even when the <b>If the previous run is still in the queue</b> condition is <b>Skip this run</b>), no new run is created and the base stays put. Once the previous run ends, the next check creates one run from the base to the latest commit.</li>
+    <li>If the <b>Skip a run when weekly usage is over the limit</b> condition applies, one skipped run is recorded in the run history and the base moves. That range is not processed again.</li>
+    <li>Each run in the run history shows the range it covered, like <b>Range 1a2b3c4..5d6e7f8</b>.</li>
+    <li><b>▶</b> Run now runs from the base to the current ref and does not move the base, so automatic detection is unaffected. If there is no base yet, the current commit is the starting point.</li>
+  </ul>
+
+  <h4>Only local refs are compared</h4>
+  <ul class="list">
+    <li>CmdQ does not run <code>git fetch</code> and compares only the refs on this Mac. To follow the remote repository, enter something like <code>origin/develop</code> in <b>git ref</b>; changes are detected when you fetch yourself.</li>
+    <li>CmdQ installs no hooks or files in your repository. On each check it reads the commit the ref points to and compares it with the base.</li>
+  </ul>
+
+  <h4>Only when there is a PR merge commit</h4>
+  <p>When on, a run is created only if the new range contains a merge commit (a commit with two parents) or a commit title with <code>(#number)</code> or <code>Merge pull request</code>. The check has limits.</p>
+  <ul class="list">
+    <li>Squash merges and rebase merges leave no merge commit. Unless the title has one of the patterns above, they are not detected.</li>
+    <li>CmdQ does not ask GitHub for PR information; it looks only at the commit history.</li>
+  </ul>
+
+  <h4>Instruction variables</h4>
+  <p>In a git ref rule, these variables are replaced on every run, in every step of the command chain and in the <b>Completion criteria (optional)</b> and <b>When data or destination is missing (optional)</b> text.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Instruction variables and what they become</caption>
+      <thead><tr><th scope="col">Variable</th><th scope="col">Replaced with</th></tr></thead>
+      <tbody>
+        <tr><td><code>{{OLD}}</code></td><td class="def">The base commit (short hash)</td></tr>
+        <tr><td><code>{{NEW}}</code></td><td class="def">The latest commit (short hash)</td></tr>
+        <tr><td><code>{{REF}}</code></td><td class="def">The name of the ref being watched</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="schedule-materials-only">Write to materials folder only</h3>
+  <p>When you turn on <b>Write to materials folder only</b> in the rule editor, items this rule creates can write only to the project's materials folder. It works with every repeat type and applies to every step of a chain. A rule with it on gets a <b>Materials folder only</b> badge on its card.</p>
+  <ul class="list">
+    <li><b>Allowed</b>: reading repository files (Read, Grep, Glob), read-only git commands (<code>diff</code>, <code>log</code>, <code>show</code>, <code>rev-parse</code>, <code>cat-file</code>, <code>merge-base</code>, <code>ls-tree</code>), and writing files inside the materials folder.</li>
+    <li><b>Denied</b>: editing repository files, git write commands such as <code>commit</code>, <code>push</code>, and <code>checkout</code>, options that make a read-only git command write a file such as <code>git diff --output</code>, and your own MCP and plugin tools.</li>
+    <li>These runs do not use your permission settings. They run in <code>dontAsk</code> mode, so only what is explicitly allowed gets through, and a denied attempt fails without a prompt.</li>
+    <li>If materials change, the run waits for your <b>Keep</b> or <b>Revert</b> confirmation even without a <code>[자료]</code> marker.</li>
+    <li><b>The restriction does not apply when you open the item in an interactive terminal.</b> An item opened in an interactive terminal runs with your own permission settings. The restriction covers only items the queue runs directly.</li>
+    <li>The restriction is saved on the items when a run is created. If you later turn the option off or delete the rule, run items already created stay restricted, including retries and continued sessions. Turning the option on also applies it to items created before.</li>
+    <li>These runs start with <code>--safe-mode</code>, so project and user <code>CLAUDE.md</code> files, skills, and hooks are not loaded. Put the instructions you need in the command itself.</li>
+    <li>In these runs the <code>[자료]</code> block carries edit rules instead of the "materials are read-only" rules. Memos and copied files that are not references may be fixed with the smallest change to sentences, numbers, or base commits that no longer match. Saved link copies and references only get proposals in <code>_proposals/</code>.</li>
+    <li>If write access to the materials folder can't be set up (a material path has a character that can't go into a permission rule, or reference materials can't be read), the run goes ahead without write access and the run history notes <b>Ran without write access to the materials folder (check material paths and reference materials)</b>.</li>
+    <li>Limit: when a read-only git command was given a path outside the repository and the materials folder (including the target of a symlink inside the repository), claude refused it (measured with claude 2.1.323). This protection is claude's own path check, not a rule CmdQ adds, so it may change with claude. External diff and textconv commands set in the repository config are blocked only when turned on by a flag.</li>
+  </ul>
+
+  <h4>The materials check box on the Materials tab</h4>
+  <p>Turn on materials checks from one box above the list on the <b>Materials</b> tab of the project materials drawer. The card attachment drawer has no such box.</p>
+  <ul class="list">
+    <li>Turn on <b>Check materials automatically when code changes</b> and, when the chosen branch moves forward, an unattended run edits only the materials folder. If this project has no check rule, the app creates a <b>Materials check · project name</b> rule (<b>git ref update</b>, <b>Write to materials folder only</b>, and a <code>[자료]</code> review instruction); if it has one, the app turns it on. Turning the switch off only turns the rule off; it is not deleted.</li>
+    <li>The check rule is a rule for this project path whose recurrence is <b>git ref update</b> with <b>Write to materials folder only</b> on. If there are several, the one that is on wins, then the one created first.</li>
+    <li>Pick the <b>Branch</b> from this repository's local branches. It starts at the check rule's ref, otherwise <code>develop</code>, otherwise the first branch. If the list cannot be read, type it in. Changing the branch while the switch is on changes only the rule's ref.</li>
+    <li>Open <b>Reference documents (do not edit)</b> and tick a material to give it a <b>Reference</b> mark. In review runs, writes to it are denied by permission and it is read only as evidence. It is also marked as a reference in the <code>[자료]</code> block and in <code>index.md</code>, and its row in the materials list keeps a <b>Reference</b> badge.</li>
+    <li>Edit details such as the command and conditions in the schedule editor opened from <b>More in Schedule</b>. Turning the box on or changing the branch keeps the command and options you edited there.</li>
+    <li>What the permission blocks depends on the kind of material: the memo file for a memo, the copy in the materials folder for a file, the whole copied folder for a folder (creating new files included), and the saved copy and sub-page folder for a link. Original files and folders are outside the materials folder, so they are never writable here.</li>
   </ul>
 
   <h3>Conditions</h3>

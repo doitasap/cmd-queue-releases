@@ -628,6 +628,73 @@ ol.list li{padding-left:4px}
     <p class="more"><a href="guide.html#bookmarks">Details →</a></p>
   </div>
 </section>
+
+<!-- ══ Recurring schedules ═══════════════════════════ -->
+<section id="schedule">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Recurring schedules</h2>
+    </div>
+    <div class="card">
+      <p>
+        Turn routine work, like a morning build check, into a rule. At the time you set, the rule adds a task to the queue, and that task runs like any task you added yourself.
+        A rule can also run right after your usage limit resets, or whenever a branch gets new commits.
+      </p>
+    </div>
+    <p class="more"><a href="guide.html#schedule">Details →</a></p>
+  </div>
+</section>
+
+<!-- ══ Isolated runs ═════════════════════════════════ -->
+<section id="isolation">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Isolated runs</h2>
+    </div>
+    <div class="card">
+      <p>
+        Two tasks editing files in the same repository at once can overwrite each other.
+        Turn on <b>Isolated run</b> below the add bar before you add a task, and it runs in a separate git worktree next to the repository.
+        Nothing is merged for you. When the task finishes, you decide whether to merge it or keep it as a branch.
+      </p>
+    </div>
+    <p class="more"><a href="guide.html#isolation">Details →</a></p>
+  </div>
+</section>
+
+<!-- ══ Project materials ═════════════════════════════ -->
+<section id="materials">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Project materials</h2>
+    </div>
+    <div class="card">
+      <p>
+        Collect documents, folders, links, and notes for each project, and open them with <code>⇧⌘M</code>.
+        Ask a question and claude answers from those materials, citing its sources. Put <code>[자료]</code> (Korean in every language, like <code>[첨부]</code>) in a command and a queued task reads them before it starts.
+        claude never edits the materials itself. It suggests changes, and nothing changes until you approve.
+      </p>
+    </div>
+    <p class="more"><a href="guide.html#materials">Details →</a></p>
+  </div>
+</section>
+
+<!-- ══ Decision inbox and notifications ══════════════ -->
+<section id="decisions">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Decision inbox and notifications</h2>
+    </div>
+    <div class="card">
+      <p>
+        When claude stops in any session to wait for your answer, the question lands in the decision inbox (<code>⇧⌘C</code>).
+        Answer it there instead of opening each terminal, and the session picks up again in the queue.
+        For tasks with <b>🔔</b> on, a popup in the corner of the screen or a widget at the top tells you when they finish or need input.
+      </p>
+    </div>
+    <p class="more"><a href="guide.html#decisions">Details →</a></p>
+  </div>
+</section>
 </div>
 
 <div class="panel" data-panel="config">
@@ -718,6 +785,7 @@ ol.list li{padding-left:4px}
           <li><b>Runs the official Claude Code CLI installed on your computer</b></li>
           <li>Schedules and orders tasks across your projects</li>
           <li>Checks for new versions, downloading release information only</li>
+          <li>Opens links you add as materials or attachments in a built-in webview, and saves page text to the materials folder on your Mac when you ask (a crawl that starts from a public address doesn't follow links to private addresses)</li>
           <li>Only if you choose <b>Connect</b> when asked on first launch, points <code>statusLine</code> in <code>~/.claude/settings.json</code> to a wrapper that reads usage (your existing statusline display stays; <b>Later</b> leaves the file alone)</li>
         </ul>
       </div>
@@ -730,7 +798,7 @@ ol.list li{padding-left:4px}
       </div>
     </div>
     <div class="callout">
-      Authentication, network traffic, and Claude calls are all <b>handled by the official Claude Code CLI</b>. CmdQ only decides when and in what order to run it.
+      Authentication and Claude calls are all <b>handled by the official Claude Code CLI</b>. The only network requests CmdQ makes itself are the update check and fetching links you added, through the webview. Beyond that, it only decides when and in what order to run the CLI.
     </div>
   </div>
 </section>

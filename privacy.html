@@ -141,14 +141,14 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
 <section>
   <div class="wrap">
     <h2>네트워크 통신</h2>
-    <p>CmdQ가 직접 보내는 요청은 <b>업데이트 확인 한 가지</b>입니다.</p>
+    <p>CmdQ가 직접 보내는 요청은 <b>업데이트 확인</b>과 사용자가 자료나 첨부로 넣은 링크를 앱 안 웹뷰로 여는 요청(아래 「웹뷰 수집과 로그인」)입니다.</p>
     <dl class="kv">
       <dt>요청 대상</dt><dd>github.com (릴리스 정보)</dd>
       <dt>보내는 내용</dt><dd>없음 — 파일을 내려받기만 합니다</dd>
       <dt>목적</dt><dd>새 버전 존재 여부 확인</dd>
     </dl>
     <div class="callout">
-      이 요청에는 <b>사용자를 식별할 수 있는 정보가 담기지 않습니다.</b> 공개된 릴리스 정보
+      업데이트 확인 요청에는 <b>사용자를 식별할 수 있는 정보가 담기지 않습니다.</b> 공개된 릴리스 정보
       파일을 내려받아 현재 버전과 비교할 뿐이며, 사용 기록이나 작업 내용은 포함되지 않습니다.
       내려받은 업데이트는 서명을 검증한 뒤에만 설치합니다.
     </div>
@@ -175,7 +175,7 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
     <p style="margin-top:14px">
       수집 전용 <code>claude -p</code>는 사용자의 훅과 CLAUDE.md를 불러옵니다. 훅과 CLAUDE.md를 끄는 옵션이 MCP도 함께 끄기 때문입니다.
       이를 줄이려고 저장소 밖 빈 작업 폴더에서 실행하고, 모델의 답이 아니라 도구가 돌려준 원문만 저장합니다. 페이지마다 claude를 한 번 실행하므로
-      페이지 수만큼 실행 비용과 시간이 듭니다. 기존의 자료 질문 대화와 요약 실행은 계속 사용자 MCP를 쓰지 못하게 막습니다.
+      페이지 수만큼 실행 비용과 시간이 듭니다. 요약 실행은 계속 사용자 MCP를 쓰지 못하게 막습니다. 자료 질문 대화도 기본으로 막고, 대화에서 <b>MCP 도 함께 묻기</b>를 켠 경우에만 그 서비스(지금은 GitHub)의 읽기 도구를 씁니다.
     </p>
     <h3 style="margin-top:22px">웹뷰 수집과 로그인</h3>
     <p>

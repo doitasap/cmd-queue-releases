@@ -6,46 +6,77 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-16
+
 ### 추가
-- 성공한 스케줄 회차의 카드를 지우는 「완료 후 카드」 옵션과 경로별 정리 규칙을 더한다. 경로 규칙은 지울 카드를 미리 보고 확인해야 적용되고, 실행 기록에 「정리 기록」 탭을 둔다 (8a24702)
-- 연결 모듈을 「폴더 고르기」로 잇고(열린 탭 여러 개도 한 번에), 자료가 아직 없는 폴더도 연결하며, 모듈마다 붙임을 끄고 켠다. 경로가 없는 모듈은 붙이지 않고, 끊었던 모듈을 다시 연결하면 꺼 둠 설정을 지우고 붙음으로 시작한다 (#192)
-- 연결 탭에서 연결 모듈을 목록과 그래프로 바꿔 보고, 그래프에서 탭을 열거나 연결을 끊는다 (#192)
-- MCP 서버로 하위 본문과 본문 안 링크를 재귀로 수집한다. 지금은 GitHub 이슈·PR·파일 주소만 지원하고, 깊이는 기본 3(1~10)이며, 페이지마다 claude 를 실행한다 (#192)
-- 웹뷰 수집이 로그인 화면으로 넘어가면 멈추고, 같은 웹뷰에서 로그인한 뒤 이어 받는다 (#192)
-- 연결 폴더 루트의 CLAUDE.md·AGENTS.md·README.md 사본을 질문·`[자료]` 실행·자료 대화에 문서 경로로 붙인다 (#192)
-- 연결 그래프에 관계 종류·방향 화살표와 노드 역할을 그리고, 빌드 도구에서 알 수 있는 의존 관계를 자동으로 채운다 (#192)
-- 충돌 위험 항목을 git worktree 에서 격리 실행하고 결과를 병합·버리기·브랜치로 남기기로 처리한다 (8862af7)
-- 자료 대화를 저장해 앱을 다시 띄워도 이어 묻고, 결정함 처리 결과를 다음 질문에 알린다 (8ee8d37)
-- 자료 드로어를 대화·자료·연결 세 탭으로 나누고 큐 작성 화면을 대화 자리에 띄운다 (20f7e8c)
-- 결정 요청과 🔔 켠 카드의 완료를 데스크톱 팝업·상단 위젯으로 알린다 (6a8ddb2)
-- 뒤로로 빠져나온 화면을 ⌃→ 로 다시 여는 앞으로 단축키를 추가한다 (aa785f8)
-- 자료 여러 개를 프로젝트 잠금 한 번과 목차 갱신 한 번으로 지우는 일괄 삭제 커맨드를 추가한다 (88b25d0)
-- 자료 목록에 선택 모드를 두어 여러 자료를 골라 한 번에 지운다 (8f29e32)
-- 자료 대화에 「MCP 도 함께 묻기」를 더한다. MCP 서버가 연결된 프로젝트에서 켠 대화만 그 서버의 읽기 도구로 원본에도 묻고, 답의 근거를 「자료」와 「원본(MCP)」로 나눠 보인다. 쓰기 도구·다른 MCP 서버·저장소 파일 읽기는 막는다. 지금은 GitHub 서버만 지원한다 (#205)
-- MCP 로 수집한 페이지에 「원본과 대조」를 더한다. 그 페이지만 다시 받아 줄 번호와 바뀐 단어를 보여 주고, 저장본을 바꾸거나 원본 갱신 필요 제안으로 남긴다 (#205)
+
+- 큐 항목을 격리 실행할 수 있습니다. 추가바 아래 줄의 「격리 실행」을 켜면 그 항목을 별도 git worktree 에서 돌리고, 끝나면 병합·버리기·브랜치로 남기기 중에서 고릅니다. git 저장소가 아닌 경로에서는 이 토글이 보이지 않습니다.
+- 스케줄 규칙의 「완료 후 카드」로 성공한 회차의 카드를 큐에서 지울 수 있습니다. 경로별 기본 규칙은 설정 › 스케줄 카드 정리에서 경로마다 탭을 나눠 정하고, 지울 카드를 미리 보고 확인해야 적용됩니다. 지운 내역은 실행 기록의 「정리 기록」 탭에 남습니다.
+- 자료 드로어가 대화·자료·연결 세 탭으로 나뉘었고, 큐 작성 화면은 대화 탭 자리에 뜹니다.
+- 자료 대화가 저장되어 앱을 다시 띄워도 이어서 물을 수 있습니다. 결정함에서 처리한 결과는 다음 질문에 함께 전달됩니다.
+- 자료 대화에서 「MCP 도 함께 묻기」를 켜면 MCP 서버가 연결된 프로젝트에서 그 서버의 읽기 도구로 원본에도 묻습니다. 답의 근거는 「자료」와 「원본(MCP)」로 나눠 보여 줍니다. 쓰기 도구와 다른 MCP 서버, 저장소 파일 읽기는 막혀 있고, 지금은 GitHub 서버만 지원합니다.
+- MCP 서버로 하위 본문과 본문 안 링크를 재귀로 수집합니다. 지금은 GitHub 이슈·PR·파일 주소만 되고, 깊이는 기본 3(1~10)이며 페이지마다 claude 를 한 번씩 실행합니다.
+- MCP 로 수집한 페이지에서 「원본과 대조」를 누르면 그 페이지만 다시 받아 줄 번호와 바뀐 단어를 보여 줍니다. 저장본을 바꾸거나 원본 갱신 필요 제안으로 남길 수 있습니다.
+- 웹뷰 수집이 로그인 화면에 닿으면 멈춥니다. 같은 웹뷰에서 로그인한 뒤 이어 받으면 됩니다.
+- 연결 모듈을 「폴더 고르기」로 직접 잇습니다. 열린 탭 여러 개를 한 번에 고를 수 있고, 자료가 아직 없는 폴더도 연결됩니다. 모듈마다 붙임을 끄고 켤 수 있으며, 경로가 없는 모듈은 붙이지 않습니다. 끊었던 모듈을 다시 연결하면 붙은 상태로 시작합니다.
+- 연결 탭에서 연결 모듈을 목록과 그래프로 바꿔 봅니다. 그래프는 관계 종류와 방향 화살표, 노드 역할을 겹치지 않게 그리고, 빌드 도구에서 알 수 있는 의존 관계는 자동으로 채웁니다. 그래프에서 바로 탭을 열거나 연결을 끊을 수도 있습니다.
+- 연결 폴더 루트의 CLAUDE.md·AGENTS.md·README.md 를 질문과 `[자료]` 실행, 자료 대화에 문서로 붙입니다. 이 사본은 앱 데이터의 `linked-docs/` 에 생깁니다.
+- 자료 목록의 「선택」으로 여러 자료를 골라 한 번에 지웁니다.
+- 결정 요청과 🔔 를 켠 카드의 완료를 데스크톱 팝업이나 상단 위젯으로 알립니다. 알림 방식은 설정 › 알림에서 고릅니다.
+- 「뒤로」로 빠져나온 화면을 「앞으로」 단축키(⌃→)로 다시 엽니다.
 
 ### 변경
-- 데이터베이스가 v38 로 올라간다. 기존 규칙의 「카드 유지」는 「경로 기본값 따름」으로 바뀌며, 경로 규칙이 없거나 꺼져 있으면 예전처럼 카드를 남긴다 (8a24702)
-- 설정 「스케줄 카드 정리」를 경로마다 탭으로 나눈다 (2c82c50)
-- 연결 모듈 개수 상한 설정을 없앤다. 업데이트하면 이전에 상한으로 빠지던 연결 모듈도 모두 붙고, 한 번에 붙는 수는 내부 안전 한도 200개까지다 (#192)
-- 자료 대화가 붙는 연결 모듈의 루트 문서(CLAUDE.md·AGENTS.md·README.md)를 읽을 수 있게 된다. 다른 프로젝트 문서의 사본이 앱 데이터의 `linked-docs/` 에 생긴다 (#192)
-- 데이터베이스가 v33 으로 올라간다. 링크 수집 페이지에 가져온 방법 열을 더하고 연결 관계·노드 역할 표를 만든다 (#192)
-- 경로별 격리 설정의 저장 버튼을 마지막 입력칸 아래로 옮긴다 (c4a6322)
-- 격리 실행 토글을 추가바 아래 줄로 옮기고 git 저장소가 아닌 경로에서는 숨긴다 (8efce22)
-- 결정함 답신 큐 항목을 그 세션을 처음 실행한 경로 카드 아래에 묶는다 (fe29872)
-- 추가바의 알림 체크박스를 없앤다. 새 카드는 설정의 새 카드 🔔 기본값으로 시작하고, 🔔 는 카드·대화형 터미널 머리에서 켜고 끈다 (8499dbb)
-- 자료 수집의 사설 주소 접근을 막고 자료 무결성 검사를 보강한다 (75a846b)
-- 결정함 답신의 기본 전달을 큐로 바꾸고 터미널로 보내기를 보조 버튼으로 뺀다 (96f076f)
-- 자료 이름을 바꾸면 상세 헤더 제목을 웹뷰를 다시 불러오지 않고 새 이름으로 바꾼다 (e2a09c6)
-- 원본 대조 diff 의 떨어진 덩어리 사이에 구분 줄을 넣고 라이트 테마에서 바뀐 단어를 진하게 보인다 (931b482)
-- 연결 그래프의 관계 곡선·화살촉·라벨·범례가 서로 겹치지 않게 한다 (b39c83c)
+
+- 데이터베이스가 v38 로 올라갑니다(v33~v38 마이그레이션). 기존 스케줄 규칙의 「카드 유지」는 「경로 기본값 따름」으로 바뀌지만, 경로 규칙이 없거나 꺼져 있으면 예전처럼 카드를 남기므로 동작은 그대로입니다.
+- 연결 모듈 개수 상한 설정을 없앴습니다. 업데이트하면 그동안 상한 때문에 빠지던 연결 모듈도 모두 붙고, 한 번에 붙는 수는 내부 안전 한도인 200개까지입니다.
+- 결정함 답신은 기본으로 큐로 보내고, 「터미널로 보내기」는 보조 버튼으로 옮겼습니다. 큐로 간 답신은 그 세션을 처음 실행한 경로의 카드 아래에 묶입니다.
+- 추가바의 알림 체크박스를 없앴습니다. 새 카드는 설정의 「새 카드 🔔 기본값」을 따르고, 🔔 는 카드나 대화형 터미널 머리에서 켜고 끕니다.
+- 자료 수집 중 공개 사이트에서 사설 주소로 넘어가는 리다이렉트와 iframe 을 막습니다. 확인 대기 중인 자료 변경이 있으면 링크 다시 저장과 폴더 다시 가져오기를 멈추는 식으로 자료 무결성 검사도 보강했습니다.
+- 자료 이름을 바꾸면 상세 화면 제목이 웹뷰를 다시 불러오지 않고 바로 바뀝니다.
 
 ### 수정
-- 본문이 sandbox iframe 안에만 있는 링크(Drop)도 본문 저장·웹뷰 수집이 되게 한다. iframe 문서로 한 번 옮겨 읽고, 그 주소의 토큰은 기록·표시에 남기지 않는다 (13a7c5d)
-- 자료 대화·결정함의 경미한 화면 문제 다섯 가지를 고친다 (c310d9c)
-- 저장된 자료 대화를 읽지 못하면 새 질문이 대화 전체를 덮어쓰던 문제를 고친다. 원문을 앱 데이터의 `ask-chat-backup/` 에 옮긴 뒤 저장한다 (#205)
-- 결정함에서 정정 제안을 승인해도 열려 있던 자료 화면에 옛 본문이 보이던 문제를 고친다 (fd6dad3)
-- 저장소를 대소문자만 다르게 적어도 아직 없는 자료 폴더의 겹침을 잡는다 (fd8a182)
+
+- 본문이 sandbox iframe 안에만 있는 링크(Drop 등)도 본문 저장과 웹뷰 수집이 됩니다. iframe 주소에 든 토큰은 기록이나 화면에 남기지 않습니다.
+- 저장된 자료 대화를 읽지 못하면 새 질문이 대화 전체를 덮어쓰던 문제를 고쳤습니다. 이제 원래 파일을 앱 데이터의 `ask-chat-backup/` 에 옮겨 둔 뒤 저장합니다.
+- 결정함에서 정정 제안을 승인해도 열려 있던 자료 화면에 옛 본문이 보이던 문제를 고쳤습니다.
+- 저장소 경로를 대소문자만 다르게 적었을 때 아직 없는 자료 폴더가 저장소 안에 있다는 것을 놓쳐 자료 폴더 읽기까지 막히던 문제를 고쳤습니다.
+- 자료 대화와 결정함의 작은 화면 문제를 고쳤습니다. 무결성 카드가 내부 라벨 대신 「항목 #1」처럼 보이고, 「큐로 이어가기」 인용 카드에서 마크다운 기호가 빠지며, 후속 지시 템플릿 관리 화면에서 겹치던 제목을 정리했습니다.
+
+---
+
+### Added
+
+- Run a queue item in isolation. Turn on "Isolated run" in the row under the add bar and the item runs in a separate git worktree; when it finishes, you choose to merge, discard, or keep it as a branch. The toggle is hidden for paths that are not git repositories.
+- With "Card after the run completes" on a schedule rule, the card of a successful run can be removed from the queue. Set a per-path default under Settings › Schedule card cleanup, which now has a tab for each path; a path rule takes effect only after you preview and confirm the cards it would remove. Removed cards are listed on the "Cleanup log" tab of the run history.
+- The materials drawer now has three tabs, Chat, Materials, and Links, and the queue composer opens in place of the Chat tab.
+- Materials chat is saved, so you can keep asking after restarting the app. Results you handled in the Decision inbox are passed along with your next question.
+- Turn on "Also ask MCP" in materials chat and, in a project with a connected MCP server, claude also asks the source through that server's read-only tools. Answers show their sources split into "Material" and "Source (MCP)". Write tools, other MCP servers, and reading repository files are blocked. Only the GitHub server is supported for now.
+- Collect sub-pages and in-body links recursively through an MCP server. Only GitHub issue, PR, and file URLs are supported for now; depth defaults to 3 (1–10), and claude runs once per page.
+- On a page collected through MCP, "Compare with source" re-fetches just that page and shows line numbers and changed words. You can replace the saved copy or leave a source-outdated proposal.
+- Webview collection pauses when it reaches a sign-in page. Sign in in the same webview, then resume.
+- Link a module directly with "Choose folder". You can pick several open tabs at once, and folders that have no materials yet can be linked too. Attach can be turned on or off per module, and modules whose path is missing are not attached. A module you unlinked and link again starts out attached.
+- Switch the Links tab between List and Graph. The graph draws relation types, direction arrows, and node roles without overlapping, and fills in dependencies that the build tools reveal. You can open a tab or unlink a module right from the graph.
+- CLAUDE.md, AGENTS.md, and README.md at the root of a linked folder are attached as documents to questions, `[자료]` runs, and materials chat. These copies are stored under `linked-docs/` in the app data.
+- Use "Select" in the materials list to pick several materials and delete them at once.
+- Decision requests and the completion of cards with 🔔 on can now appear as a desktop popup or a top widget. Choose the style in Settings › Notifications.
+- Reopen a screen you left with "Back" using the "Forward" shortcut (⌃→).
+
+### Changed
+
+- The database moves to v38 (migrations v33–v38). "Keep the card" on existing schedule rules becomes "Follow path default", but when there is no path rule or it is off, the card is kept as before, so behavior does not change.
+- The setting that capped the number of linked modules is gone. After updating, linked modules that the cap used to leave out are all attached, up to an internal safety limit of 200 at a time.
+- Replies from the Decision inbox now go to the queue by default, and "Send to terminal" moved to a secondary button. A reply sent to the queue is grouped under the card of the path where that session first ran.
+- The notification checkbox in the add bar is gone. New cards follow "🔔 on new cards" in Settings, and you turn 🔔 on or off in the card or interactive terminal header.
+- Material collection blocks redirects and iframes that lead from a public site to a private address. Material integrity checks are stricter too; for example, saving a link again or re-importing a folder pauses while a material change is waiting for review.
+- Renaming a material updates the detail header title right away without reloading the webview.
+
+### Fixed
+
+- Links whose body lives only inside a sandboxed iframe (such as Drop) can now be saved and collected through the webview. Tokens in the iframe URL are not kept in logs or shown on screen.
+- If a saved materials chat could not be read, a new question no longer overwrites the whole chat. The original file is moved to `ask-chat-backup/` in the app data before saving.
+- Approving a correction proposal in the Decision inbox no longer leaves the old text on an open materials screen.
+- Fixed a case where, if the repository path was written with different letter case, CmdQ missed that a not-yet-created materials folder sits inside the repository and reading the materials folder was blocked.
+- Fixed minor display issues in materials chat and the Decision inbox: integrity cards show labels such as "Item #1" instead of internal ones, quote cards in "Continue in queue" drop Markdown symbols, and the overlapping title on the follow-up template screen is cleaned up.
 
 ## [0.4.0] - 2026-11-09
 

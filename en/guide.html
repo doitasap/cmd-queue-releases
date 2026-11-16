@@ -592,7 +592,7 @@ ol.list li{padding-left:4px}
     </table>
   </div>
   <p style="margin-top:14px">Hover a <b>Failed</b> or <b>Waiting for reset</b> badge to see the reason. Click it for the full text.</p>
-  <p style="margin-top:14px">A <b>Running</b> item keeps going as long as claude produces output. After 30 minutes with no output, CmdQ treats it as stuck, stops it and marks it <b>Failed</b> with "Stopped: no output for 30 minutes". Even with steady output, a run that passes 6 hours stops with "Stopped: exceeded the 6-hour maximum run time". Either way the queue moves on to the next item. You can't change these two limits in Settings.</p>
+  <p style="margin-top:14px">A <b>Running</b> item keeps going as long as claude produces output. After 30 minutes with no output, CmdQ treats it as stuck, stops it and marks it <b>Failed</b> with "Stopped: no output for 30 minutes". Even with steady output, a run that passes 6 hours stops with "Stopped: exceeded the 6-hour maximum run time". Either way the queue moves on to the next item. If claude has already finished its answer and is only waiting on background tasks, the run isn't marked Failed: CmdQ settles it with that answer and then stops claude. Status lines that plugins print don't count as output. You can't change these two limits in Settings.</p>
 </section>
 
 <!-- ══ Chains ══════════════════════════════════════════ -->
@@ -934,6 +934,7 @@ ol.list li{padding-left:4px}
     <li>Turn on <b>Run isolated by default</b> in a <a href="#schedule">recurring schedule</a> rule and the items that rule creates run isolated.</li>
     <li>Cards for isolated items carry an <b>Isolated</b> badge.</li>
   </ul>
+  <div class="callout" style="margin-top:14px">An isolated run separates only the card's target repository. If the task changes another repository (such as another module of a multi-module workspace), make that repository the card's target. Changes made directly in another repository are not part of the isolation result, and merge and discard don't reach them. The same note appears next to the toggle when you turn it on.</div>
 
   <h3>Worktree folder and branch</h3>
   <ul class="list">
@@ -979,6 +980,8 @@ ol.list li{padding-left:4px}
     <li>The buttons are refused while a task is running in that worktree or an interactive terminal is open there. Try again once it ends.</li>
     <li>An isolated card's interactive terminal opens inside its worktree. An isolated card that hasn't run yet must run once through the queue before you can open a terminal, and cards already handled as merged, discarded, no changes, or kept as a branch have the terminal button turned off.</li>
     <li>If tracked files in <b>Files to copy</b> were skipped, the run goes ahead and a notification appears.</li>
+    <li>If the task changed files outside the worktree, the result strip shows <b>N outside</b>, and the diff window lists <b>files changed outside isolation</b> at the top, grouped by repository. Each file shows its current state (modified, new, ignored by git, and so on); click it to see its diff (tracked files) or content (new files and files outside any repository). Even when the result is <b>No changes</b>, an <b>Outside changes</b> button opens the list if such files exist. Merge and discard don't apply to these files, so handle them in that repository yourself.</li>
+    <li>The list finds paths changed with file-editing tools in the run log. For each repository found that way, its other uncommitted changes (except files ignored by git, up to 200 per repository) are listed too under <b>Not in the run log</b>. They may have been changed by shell commands or already been changed before the run, so check the content. <b>N outside</b> on the result strip counts only files found in the run log. For a repository where the run changed files inside <code>.git/</code> or a <code>.gitattributes</code> file, git is not run and only file contents are shown. Files changed by shell commands outside a git repository may be missing. Claude's scratch folders (<code>/tmp/claude-*</code>) and <code>~/.claude</code> are not included.</li>
   </ul>
 
   <h3>Check at startup</h3>
@@ -1129,6 +1132,8 @@ ol.list li{padding-left:4px}
     <li>When the original changes, open the folder material and click <b>Re-import</b>. CmdQ then reports how many files changed, were added and were removed.</li>
     <li>CmdQ remembers the exclude patterns you typed when adding the folder and applies them again on re-import. If you typed none, only the default exclusions apply.</li>
     <li>If adding a folder skipped symbolic links or files it couldn't read, CmdQ tells you how many, for example "Folder added. Skipped N link(s) and N unreadable file(s)."</li>
+    <li>File materials also remember where the original is. Open a file material and click <b>Re-import</b> at the top; if the original is unchanged, the copy is left as is. Files added before CmdQ started remembering the original show the button turned off, so add them again.</li>
+    <li>When you open the materials drawer or materials change, CmdQ compares the original of each file and folder material with its copy once. If the original differs, a <b>Source changed</b> pill appears on the row and the detail screen; if the original can't be found, <b>Source missing</b>. CmdQ doesn't keep watching originals and never re-imports on its own.</li>
   </ul>
 
   <h3>Links and linked subpages</h3>

@@ -391,6 +391,7 @@ ol.list li{padding-left:4px}
     <li><a href="#terminal">Interactive terminal</a></li>
     <li><a href="#history">Progress and history</a></li>
     <li><a href="#decisions">Decision inbox</a></li>
+    <li><a href="#proposals">Proposals</a></li>
     <li><a href="#bookmarks">Bookmarks</a></li>
     <li><a href="#settings">Settings</a></li>
     <li><a href="#shortcuts">Shortcuts</a></li>
@@ -424,6 +425,7 @@ ol.list li{padding-left:4px}
     <li><b>Unreadable</b> means the last usage check failed. <b>N/A</b> means your plan doesn't report that value.</li>
     <li>On the right: <b>N terminals</b> (only while background terminals exist), 🔍 <b>Search questions</b> (<kbd>⌘K</kbd>, left of ☆; see <a href="#history">Progress and history</a>), ☆ <b>Bookmarks</b>, the light/dark toggle, and ⚙ Settings.</li>
     <li>When questions are waiting for your answer, a <b>? Decide N</b> badge appears left of 🔍. Click it or press <kbd>⇧⌘C</kbd> to open the <a href="#decisions">Decision inbox</a>.</li>
+    <li>When claude has posted task proposals, a <b>Proposals</b> N badge appears next to <b>? Decide N</b>. Click it to open <a href="#proposals">Proposals</a>.</li>
   </ul>
 
   <h3>Project tabs</h3>
@@ -490,6 +492,7 @@ ol.list li{padding-left:4px}
     </table>
   </div>
   <p style="margin-top:14px">These keys are fixed. They work the same no matter which queue the add bar shows, and you can't reassign them.</p>
+  <p>Use the <b>Model: default</b> and <b>Effort: default</b> pickers in the add bar to choose the model and effort this card runs with. Left at default, they follow your claude settings.</p>
 
   <h3>Skill autocomplete</h3>
   <p>
@@ -1390,7 +1393,7 @@ ol.list li{padding-left:4px}
 <!-- ══ Decision inbox ══════════════════════════════════ -->
 <section id="decisions">
   <div class="sec-head"><h2>Decision inbox</h2></div>
-  <p>The decision inbox gathers the questions claude stopped on across your sessions, so you can answer them in one place. When a question is waiting, a <b>? Decide N</b> badge appears to the left of 🔍 in the header. N is the number of questions waiting for you.</p>
+  <p>The decision inbox gathers the questions claude stopped on across your sessions, so you can answer them in one place. When a question is waiting, a <b>? Decide N</b> badge appears to the left of 🔍 in the header. N is the number of questions waiting for you. Task proposals claude posts for your schedules and queue go to <a href="#proposals">Proposals</a>, not the decision inbox.</p>
 
   <h3>What it collects</h3>
   <ul class="list">
@@ -1414,7 +1417,7 @@ ol.list li{padding-left:4px}
   <h3>Answering</h3>
   <ul class="list">
     <li>Click the badge or press <kbd>⇧⌘C</kbd> to open the inbox under the badge. Press the key again, press <kbd>Esc</kbd>, or click outside to close it. When no decisions are waiting and the badge is hidden, the key does nothing. Change the key in <a href="#shortcuts">Shortcuts</a>. Hover over the badge to see the current shortcut. If none is set, it says "No shortcut — you can set one in Settings".</li>
-    <li>Click a card's title row to expand or collapse it. <kbd>⌘↑</kbd> and <kbd>⌘↓</kbd> move the expanded card up and down.</li>
+    <li>When you open the inbox, every card is collapsed. Click a card's title row to expand or collapse it; an expanded card wraps its title so the whole title is visible. <kbd>⌘↑</kbd> and <kbd>⌘↓</kbd> move the expanded card up and down.</li>
     <li>The top of an expanded card shows the <b>Project</b> path the question came from and the <b>Command</b> that led to it. Hover over a cut-off path to see all of it, and use <b>Show all</b> to read a long command in full.</li>
     <li>Pick a choice or write in <b>Type your own</b>. Questions that allow several answers show checkboxes. If a choice has a <b>Preview</b>, expand it to read it.</li>
     <li>When claude asked several questions at once, each gets a step button, and <b>N questions left</b> shows how many still need an answer.</li>
@@ -1485,6 +1488,77 @@ ol.list li{padding-left:4px}
     <li>After you approve a suggestion, or choose <b>Keep</b> on a <b>Material changed without approval</b> card, the next question in the same <b>Ask materials</b> chat tells claude which materials changed so it reads them again. It survives an app restart (<a href="#materials">Ask materials</a>).</li>
     <li><b>Material changed without approval</b> cards appear in the same inbox (Materials changed without approval, under <a href="#materials">Project materials</a>). Keeping the deletion of a memo file removes that memo, and keeping a memo file is refused if the memo changed in CmdQ in the meantime.</li>
   </ul>
+</section>
+
+<!-- ══ Proposals ═══════════════════════════════════════ -->
+<section id="proposals">
+  <div class="sec-head"><h2>Proposals</h2></div>
+  <p>When claude thinks of something worth adding to CmdQ during a conversation, such as "this should run on a schedule" or "this should be its own queue item", it posts it here with its reasoning. When you accept, CmdQ creates the schedule or queue item the same way it would if you made it yourself. Nothing changes until you accept. Proposals is a separate panel from the <a href="#decisions">Decision inbox</a>, and it isn't counted in the inbox's totals, held items or notifications.</p>
+  <p>When there are proposals, a <b>Proposals</b> N badge appears next to the <b>? Decide N</b> badge, to the left of 🔍 in the header. N is the number of proposals shown as cards. If no cards are shown and only folded or held proposals remain, <b>folded</b> N and <b>on hold</b> N appear as well. Click the badge or press <kbd>⇧⌘V</kbd> to open Proposals, and click it again, press the key again or press <kbd>Esc</kbd> to close it. When no proposals exist and the badge is hidden, the key does nothing. Change the key in <a href="#shortcuts">Shortcuts</a>.</p>
+
+  <h3>Where proposals come from</h3>
+  <ul class="list">
+    <li>CmdQ adds an instruction describing the proposal format to headless auto-queue runs, interactive terminals opened in CmdQ, and <b>Ask materials</b> chats. claude leaves proposal blocks in that format in the last message of its reply.</li>
+    <li>For an auto-queue item, CmdQ reads the session's last reply once as soon as the run finishes and posts its proposals. For other sessions, the same scan the decision inbox uses (every session changed in the last 24 hours, every 15 seconds) posts proposal blocks when it finds them. The same proposal from the same reply is posted only once, even if both paths find it.</li>
+    <li>CmdQ doesn't add the format instruction to claude you start yourself outside the app, and there is no separate snippet that teaches the format. If such a session happens to leave a block in the same format, the scan above finds it.</li>
+    <li>The instruction tells claude not to edit <code>cmdq.db</code> directly and to make changes only through proposals.</li>
+    <li>Session history and the response view hide proposal blocks. The live log you watch during a run shows them as written.</li>
+  </ul>
+
+  <h3>What a card shows</h3>
+  <p>Like the inbox for decisions, each proposal shows as a collapsed one-line row by default. A row has a stripe on the left and a ▸ mark, then two lines. The first line has the bold <b>action name</b> (<b>Create schedule</b>, <b>Edit schedule</b>, <b>Add to queue</b>, <b>Continue in this session</b> or <b>Note only</b>), an importance chip, and how long ago it arrived. If the path has a problem, <b>⚠ Path warning</b> is added, and hovering it shows the warning text. The second line shows 📁 the project's last folder name only when the proposal has a path (long names are cut off; hover for the full path). Details such as the command or schedule name show when you expand the row. Folded and held proposals use the same row.</p>
+  <p>Click a row, or press <kbd>Enter</kbd> or <kbd>Space</kbd>, to expand it (▾); do it again to collapse it. Only one row is expanded at a time, so expanding another row collapses the previous one; the expanded row stays when the list refreshes. When you handle an expanded row, the next row in the same section (or the previous one if there is none) expands. When you expand a row, you see the bold title and one line of content at the top (for Add to queue, the first line of the command plus the step count for a chain; for Create schedule, the name and repeat; for Edit schedule, the rule number and the fields that change), then a row of chips showing importance, urgency, cost, overspec and evidence as words, and intent and expected effect up to two lines each. Click <b>Details</b> for the rest. At the bottom are two buttons, <b>Accept</b> and <b>Reject</b>. A collapsed row has no buttons, so you expand it and read it before deciding. A row can't be collapsed while it shows a processing error or a note that the session is held by an open terminal, and it stays open in those cases. If you expand another row meanwhile, both rows are open. All seven judgment fields are available on the card once you expand the row.</p>
+  <ul class="list">
+    <li><b>Intent</b>: what it wants to do and why</li>
+    <li><b>Expected effect</b>: what gets better</li>
+    <li><b>Overspec check</b>: <b>Fits</b> or <b>Possibly overspec</b>, with the reason. It is possibly overspec when claude can't answer "without this, what is the user doing by hand now?"</li>
+    <li><b>Urgency</b>: <b>Now</b>, <b>Next task</b> or <b>Someday</b></li>
+    <li><b>Importance</b>: High, Medium or Low</li>
+    <li><b>Cost</b>: Small, Medium or Large</li>
+    <li><b>Evidence</b>: <b>Fact</b> or <b>Guess</b>, with a quote. A proposal marked as fact without a quote is shown as a guess</li>
+  </ul>
+  <p>Values are shown as words, not colors, and only the <b>Possibly overspec</b> and <b>Guess</b> chips use a mild warning tone. <b>Details</b> holds the overspec reason, the evidence quote, and what would be created, such as the name, command, repeat, completion criteria, model, effort and chain steps.</p>
+
+  <h3>Which proposals become cards</h3>
+  <ul class="list">
+    <li>The instruction tells claude to leave at most 2 proposals per reply, and only those with high importance, or medium importance with urgency now.</li>
+    <li>CmdQ filters again when it collects proposals, not when you open the panel, and saves whether each one is shown as a card or folded. For each reply, only the 2 proposals with the highest score (importance × urgency ÷ cost, where importance high 3, medium 2, low 1; urgency now 3, next task 2, someday 1; cost small 1, medium 2, large 3) are shown as cards. Ties go to the order in the reply. The rest are folded as <b>Lower priority</b>.</li>
+    <li>Some proposals are folded before scoring. A proposal with the same kind and target as one you rejected in the same project is folded as <b>Rejected before</b>. One with the same command for the same path as an existing schedule rule or a queued item is folded as <b>Already exists</b>. One that is possibly overspec with urgency someday is folded as <b>Possibly overspec, someday</b>. Rejections in other projects have no effect.</li>
+    <li>Click <b>folded proposals</b> (shown with the count) at the bottom of the panel to expand them. Folded cards show the action name, title, content, reason, path and buttons, without the judgment fields. You can still accept or reject them.</li>
+    <li>Notifications go only to proposals shown as cards and follow the <b>Decision requests</b> setting (<a href="#notify">Notifications</a>). Clicking one opens Proposals, not the Decision inbox. In the popup and widget, proposal cards carry a <b>Proposal</b> chip instead of <b>Decision needed</b>.</li>
+  </ul>
+
+  <h3>Accepting each kind</h3>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">What the Accept button says and does, by proposal kind</caption>
+      <thead><tr><th scope="col">Kind</th><th scope="col">Accept button tooltip</th><th scope="col">What happens when you accept</th></tr></thead>
+      <tbody>
+        <tr><td><b>New schedule</b></td><td class="def"><b>Open in editor</b></td><td class="def">Opens the schedule editor filled with the proposed values. The rule is created only when you save (<a href="#schedule">Recurring schedule</a>)</td></tr>
+        <tr><td><b>Schedule change</b></td><td class="def"><b>Open in editor</b></td><td class="def">Opens the target rule's editor with the changed fields marked. The change applies only when you save. If the target rule is gone, the card says "Target rule not found. It may have been deleted." and <b>Accept</b> is disabled</td></tr>
+        <tr><td><b>Queue item</b></td><td class="def"><b>Add to queue now</b></td><td class="def">Adds it straight to To Do with the proposed command, model and effort. Chain steps, if any, are added as cards that continue in the same session (<a href="#chain">Chains</a>). If the path has a warning, <b>Accept</b> is disabled</td></tr>
+        <tr><td><b>Continue session</b></td><td class="def"><b>Tell this session to proceed</b></td><td class="def">Sends <code>제안 '제목' 수락, 진행하십시오</code> (proposal accepted, please proceed; the title goes in the quotes) to that session, by the same route as a decision inbox answer (see where answers go in the <a href="#decisions">Decision inbox</a>). If the session is in an open interactive terminal in CmdQ, nothing is sent. The card says "This session is in an open terminal in the app. Continue there directly." and shows a <b>Go to that terminal</b> button. The proposal stays unhandled</td></tr>
+        <tr><td><b>Note</b></td><td class="def"><b>Just record it</b></td><td class="def">Runs nothing and only records that you accepted it</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Accept with edits, hold, reject</h3>
+  <ul class="list">
+    <li>If you change the proposed values in the editor before saving, it is recorded as <b>Accepted with edits</b>. If you save them unchanged, it is recorded as <b>Accepted</b>.</li>
+    <li>If you close the editor without saving, the proposal stays unhandled. The same goes for a validation error or a failed send: the reason is shown and the proposal stays.</li>
+    <li>There is no hold button. Proposals held in an earlier version still show in the <b>on hold</b> section of the panel, and you handle those rows with <b>Accept</b> or <b>Reject</b> too.</li>
+    <li><b>Reject</b> takes effect with one click; no reason is asked. If the same proposal comes back in the same project, it is folded as <b>Rejected before</b>.</li>
+  </ul>
+
+  <h3>Safeguards</h3>
+  <ul class="list">
+    <li>If a proposal's path isn't absolute, contains <code>..</code>, points to a folder that doesn't exist ("The folder for this path doesn't exist.") or is outside the open project tabs ("This path is outside the open projects."), the card shows a warning. For a queue item with a warning, <b>Accept</b> is disabled, and hovering the button shows why.</li>
+    <li>A proposal's title, command and path are treated as untrusted and shown only as plain text. Accepting doesn't make CmdQ run the proposed command right away. A schedule runs by its repeat rule, and a queue item goes to To Do and waits there.</li>
+  </ul>
+
+  <h3>History</h3>
+  <p>Click <b>History</b> at the bottom of the panel to see handled proposals with their kind, title and result (<b>Accepted</b>, <b>Accepted with edits</b> or <b>Rejected</b>). For schedule rules created by accepting a proposal, the number of later runs that succeeded and failed is shown too. Unhandled proposals stay until you handle them.</p>
 </section>
 
 <!-- ══ Bookmarks ═══════════════════════════════════════ -->
@@ -1585,7 +1659,7 @@ ol.list li{padding-left:4px}
     <li><b>Alerts that always come</b>: reclaiming terminals at a limit, the alert that two runs changed the same file, rules turned off after failures, app updates, and isolated-run notices arrive as system banners whatever the 🔔 and per-event settings, unless the style is <b>Off</b>.</li>
     <li><b>Popup and widget styles</b>: done, input-wait, and decision alerts go only to the popup or widget, not to system banners. If the popup or widget can't be shown, a system banner is sent instead.</li>
     <li><b>Alert titles</b>: if you gave a terminal a name, the alert title shows that name instead of the path. Renaming applies from the next alert on, and cards already shown stay as they are.</li>
-    <li><b>Card buttons</b>: <b>Go to terminal</b> opens that item's or session's terminal in the main window. It takes the same path as running a card interactively, so it attaches to a live terminal or resumes the same session if it has ended. Decision cards have <b>Answer in decision inbox</b>. <b>Hide</b> clears only that card. The <b>🔕</b> (Mute) in the top-right corner of every card, decision cards included, turns off 🔔 for that session and closes all of its cards. The session's card 🔔 and terminal header 🔔 turn off together, and items that resume the session inherit the off 🔔, so no more done, input-wait, or decision alerts come from it. Turn the session's 🔔 back on to get them again. In the widget band, the 🔕 next to the latest alert does the same.</li>
+    <li><b>Card buttons</b>: <b>Go to terminal</b> opens that item's or session's terminal in the main window. It takes the same path as running a card interactively, so it attaches to a live terminal or resumes the same session if it has ended. Decision cards have <b>Answer in decision inbox</b>, and proposal cards have <b>View in Proposals</b>. <b>Hide</b> clears only that card. The <b>🔕</b> (Mute) in the top-right corner of every card, decision cards included, turns off 🔔 for that session and closes all of its cards. The session's card 🔔 and terminal header 🔔 turn off together, and items that resume the session inherit the off 🔔, so no more done, input-wait, or decision alerts come from it. Turn the session's 🔔 back on to get them again. In the widget band, the 🔕 next to the latest alert does the same.</li>
     <li><b>Widget</b>: the band shows the pending count and the latest alert, with the card list below. <b>Collapse</b> leaves only the count, and clicking the count expands it again. <b>Hide all</b> clears every card in both the popup and the widget.</li>
     <li><b>Hidden cards</b>: a hidden alert doesn't come back for the same event. CmdQ keeps this in memory only, so it resets when you restart the app. Cards for decisions answered elsewhere or cleared in the decision inbox, and cards for a session where you started new input, close on their own.</li>
     <li><b>While you're looking</b>: if the main window is in front and you have that terminal open, its done, input-wait, and decision alerts aren't sent. Decision alerts aren't sent at all while the main window is in front, since the Decision inbox count already shows them.</li>
@@ -1613,6 +1687,7 @@ ol.list li{padding-left:4px}
         <tr><td>Bookmarks</td><td><kbd>⇧⌘B</kbd></td><td class="def">Toggles the panel</td></tr>
         <tr><td>Terminals</td><td><kbd>⇧⌘T</kbd></td><td class="def">Opens or closes the background terminal list. With an interactive terminal open, works like <b>Run in background</b></td></tr>
         <tr><td>Decision inbox</td><td><kbd>⇧⌘C</kbd></td><td class="def">Opens or closes the decision inbox. Does nothing while the badge is hidden because no decisions are waiting</td></tr>
+        <tr><td>Proposals</td><td><kbd>⇧⌘V</kbd></td><td class="def">Opens or closes the proposal inbox. Does nothing while the badge is hidden because there are no proposals</td></tr>
         <tr><td>Switch to Queue · Switch to Schedule</td><td><kbd>⌘1</kbd> · <kbd>⌘2</kbd></td><td class="def">Same as clicking the Queue or Schedule tab in the header. After you save a schedule rule, going back to Queue turns off Show all and shows only that rule's path tab</td></tr>
         <tr><td>Back</td><td><kbd>⌃←</kbd></td><td class="def">List-opened terminal → list. Reply → session history list. Otherwise closes the terminal list or session history. In other terminals the key goes to claude</td></tr>
         <tr><td>Forward</td><td><kbd>⌃→</kbd></td><td class="def">Reopens the screen you left with Back, as it was before you pressed Back: the list-opened terminal, the session history reply or the closed list. Press it as many times as you pressed Back to retrace them in order</td></tr>

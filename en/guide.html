@@ -391,6 +391,7 @@ ol.list li{padding-left:4px}
     <li><a href="#terminal">Interactive terminal</a></li>
     <li><a href="#history">Progress and history</a></li>
     <li><a href="#decisions">Decision inbox</a></li>
+    <li><a href="#inbox">Inbox (external integrations)</a></li>
     <li><a href="#proposals">Proposals</a></li>
     <li><a href="#bookmarks">Bookmarks</a></li>
     <li><a href="#settings">Settings</a></li>
@@ -1491,6 +1492,77 @@ ol.list li{padding-left:4px}
     <li>After you approve a suggestion, or choose <b>Keep</b> on a <b>Material changed without approval</b> card, the next question in the same <b>Ask materials</b> chat tells claude which materials changed so it reads them again. It survives an app restart (<a href="#materials">Ask materials</a>).</li>
     <li><b>Material changed without approval</b> cards appear in the same inbox (Materials changed without approval, under <a href="#materials">Project materials</a>). Keeping the deletion of a memo file removes that memo, and keeping a memo file is refused if the memo changed in CmdQ in the meantime.</li>
   </ul>
+</section>
+
+<!-- ══ Inbox (external integrations, #161) ═══════════════ -->
+<section id="inbox">
+  <div class="sec-head"><h2>Inbox (external integrations)</h2></div>
+  <p>The inbox fetches GitHub issues and Todoist tasks and shows them as proposals for the queue. Click 📥 <b>Inbox</b> in the header to open the list. A proposal enters the queue only after you approve it; nothing runs on its own. Proposals from a source that fetches with "Author = me" show <b>by me</b> in place of the author; hover to see the original author value.</p>
+  <div class="callout">
+    <p>This feature is a Pro candidate and carries the <b>Pro Preview</b> badge. Until the official 1.0.0 release, it's free for everyone.</p>
+  </div>
+
+  <h3>Supported sources</h3>
+  <ul class="list">
+    <li><b>GitHub</b>: CmdQ runs the <code>gh</code> CLI on your Mac to fetch open issues from the repositories you link. It uses gh's own login; CmdQ neither reads nor stores the gh token.</li>
+    <li><b>Todoist</b>: CmdQ fetches tasks from the Todoist API itself. It needs an API token. Write link rules the way Todoist does: <code>@label</code> (e.g. <code>@cmdq</code>) or <code>#project</code> (e.g. <code>#Work</code>). A name without <code>@</code> also counts as a label. With rules, only tasks that carry one of those labels or sit in one of those projects are fetched. Project names must match exactly, including case. When there is a <code>#project</code> rule, the project list is read along with the tasks; if that list cannot be read (including older definitions that cannot read it), that round adds no new suggestions, does not change the path of existing ones, and leaves them as they are. Without rules, all tasks are fetched and you pick the path when you approve. If you change the rules so a task is no longer fetched, its existing suggestion stays as it is and is not marked as closed at the source.</li>
+    <li><b>GitHub MCP preset</b>: searches issues through the GitHub MCP server you registered in Claude Code. A local (stdio) server is started for each check and closed afterwards. A remote server is connected only if it uses https and has static <code>headers</code> in Claude Code's settings. Remote servers without headers (OAuth sign-in) are not connected.</li>
+  </ul>
+
+  <h3>Turning it on</h3>
+  <ul class="list">
+    <li>Click <b>Sources</b> in the inbox panel to open <b>Inbox sources</b>, then <b>Add connection</b>. The wizard lists its steps on the left, and each finished step keeps a one-line note of what you chose. In <b>Type</b> you pick GitHub issues, Todoist tasks, an MCP server, or your own definition. Your own definition goes <b>Type</b> → <b>Tool and conditions</b> → <b>Sample preview</b> → <b>Folder links</b> → <b>Reply</b> → <b>Review and save</b>. GitHub, Todoist and MCP servers with a prepared setup cannot be edited, so they skip <b>Tool and conditions</b> and take 5 steps. You can read that definition under the collapsed "Full definition" in <b>Review and save</b>; the "Author = me" note and the Todoist token field appear in <b>Folder links</b>. Without a token the sample is not fetched, and the wizard tells you which step takes the token. For sources that check each repository separately, such as the built-in GitHub source, and for sources that filter by label rules, such as Todoist, <b>Folder links</b> comes before <b>Sample preview</b>. With label rules, the sample shows only tasks that match a rule and tells you how many were skipped. The rule field shows an example for the kind of definition (<code>owner/repo</code> for GitHub, <code>@label</code> or <code>#project</code> for Todoist, <code>@label</code> only for definitions that do not read projects). If the project list cannot be read while fetching the sample, the wizard says so in one line. However long a step gets, the <b>Back</b>, <b>Next</b> and <b>Save and turn on</b> button row stays at the bottom and only the step content scrolls. Picking GitHub or Todoist again after adding it creates another one under a different name. If the connection name in <b>Review and save</b> clashes with an existing one, the wizard suggests another name and you cannot save until you change it. In <b>Folder links</b> you set link rules that tie a repository or label to a working path, and you can preview 3 sample items before saving. The sample check only reads; it never replies. A custom command also runs when the sample is fetched, so the wizard shows the command first and asks you to confirm it.</li>
+    <li>Every source starts off. Only sources switched <b>On</b> are checked on a schedule: every 10 minutes by default, and never more often than once a minute. To check right away, click <b>Refresh</b> or <b>Refresh all</b>.</li>
+    <li>When the current project tab's folder is a github.com repository, CmdQ reads <code>git remote -v</code> and suggests linking that repository to the path. The git commands used here only read, and CmdQ keeps only the owner/repo name, not the remote URL.</li>
+  </ul>
+
+  <h3>Proposals and approval</h3>
+  <ul class="list">
+    <li>In a project tab you see only proposals linked to that tab's path; with <b>Show all</b> you see every proposal.</li>
+    <li>The list is read 100 items at a time. If there are more, <b>Show more</b> at the end of the list adds the next 100.</li>
+    <li>Old proposals are cleaned up automatically. Proposals whose original was closed, or that you ignored, are cleaned up 30 days after they last changed. Approved proposals whose reply is finished (sent or skipped), or that had nothing to reply, are cleaned up after 90 days: their content such as the title and body is erased and they leave the list. Only the source name, the link name (owner/repo for GitHub), the original item's number, the status and the processing times are kept as a trace, so the same item isn't proposed again. Proposals with a failed or pending reply, and proposals whose approved task is still queued or running, are kept. Cleanup runs only while at least one source is on.</li>
+    <li>Each proposal has <b>Approve</b> and <b>Ignore</b>. A proposal whose original was closed is marked <b>Source closed</b> and can't be approved; click <b>Ignore</b> to clear it from the list. A proposal with no matching path is marked <b>No path</b>; pick one with <b>Choose folder</b> when you approve.</li>
+    <li><b>Approve</b> opens <b>Approve proposal</b>, which shows the <b>Working path</b>, the <b>Command to queue</b> and the <b>Attached body</b> exactly as they will be used. A long body is attached only in part. <b>Isolated run (runs in a separate worktree)</b> is on by default (<a href="#isolation">Isolated run</a>).</li>
+    <li>You can edit the <b>Command to queue</b> before approving. Once edited, an <b>Edited</b> mark and a <b>Restore original command</b> button appear, and your edit stays even if you change the path or the isolated run. An empty command can't be approved.</li>
+    <li>Under <b>Queue</b>, pick <b>Auto queue</b> or <b>To Do</b>. The default is the auto queue. An item added to To Do doesn't run right away; it waits in the To Do queue until you run it or promote it to the auto queue. Either way, the result is reported back to the source by the same rules when the item finishes. The summary line at the bottom of the window shows the queue you picked.</li>
+    <li>If the original changed after the dialog opened, CmdQ asks you to review the new content first. The proposal enters the queue only when you click <b>Approve and queue</b>.</li>
+  </ul>
+
+  <h3>Author filter</h3>
+  <p>By default only issues and tasks you wrote are fetched, so text someone else wrote in a public repository doesn't become a command. Turning on <b>Also fetch items written by others</b> in the source settings shows a prompt-injection warning, and it only turns on after you tick <b>I understand the risk</b>. Always check the content before approving after that. With the GitHub MCP preset, lifting the filter fetches issues assigned to you instead. For a custom MCP connection, you choose the author filter in the connection wizard: pick <b>Me only</b> when you put <code>author:@me</code> in the tool query (without it, nothing is fetched), or pick <b>All authors</b> and confirm the same warning before moving on.</p>
+
+  <h3>Replies</h3>
+  <ul class="list">
+    <li>When a task created from a proposal ends in <b>success</b>, CmdQ reports back to the original issue or task. GitHub gets a comment with a result summary by default, and Todoist gets the same summary comment before the task is closed. When the reply is <b>Complete / close</b> and the definition has a comment action, Todoist and MCP connections likewise leave the summary comment first and then close. GitHub (<code>gh</code>) leaves the same summary as a comment while closing. If the source has been turned off or the Pro Preview has ended by the time of the reply, nothing is sent and the reply is skipped.</li>
+    <li>Failed runs are not reported by default. Turn on <b>Comment even on failure</b> in the wizard's <b>Reply</b> step to leave only a fixed failure comment, "The task failed.", on the original when the task fails; it isn't closed. The task's result content is not sent. A failure comment is left only once per original item: if you run it again and it fails again, no new comment is left, and a later success still sends the success reply. If sending the failure comment itself failed, a later success doesn't send the success reply automatically; send it with <b>Resend reply</b>. This needs a comment action in the definition, and the option is hidden when the reply is <b>Nothing</b>. For an existing source, turn it on or off with the same switch on that source's row in the source settings.</li>
+    <li>The summary may end up in a public repository, so it is cut to 1,000 characters, and local paths, token-like strings and environment variable values are removed before sending.</li>
+    <li>If a reply fails, or no result arrives for over 5 minutes, it stays under <b>Reply failed</b> in the inbox panel with its cause. You can send it again with <b>Resend reply</b>, but the reply may already have been posted and could appear twice, so check the original first.</li>
+    <li>A reply skipped because the source was off or the Pro Preview had ended also stays under <b>Reply failed</b>, marked as skipped. You can send it with <b>Resend reply</b> while the source is on and Pro is available; otherwise the row shows why it was refused.</li>
+  </ul>
+
+  <h3>Tokens and the keychain</h3>
+  <ul class="list">
+    <li>Enter the Todoist token with <b>Enter token</b> in the source settings and <b>Save</b> it. The token is stored only in the macOS keychain, never in the database, settings files or logs.</li>
+    <li>Turning a source off doesn't delete its token; click <b>Delete token</b> for that. <b>Delete</b> on a source removes its connector file, the proposals fetched from it, and its keychain token.</li>
+    <li>At each check and reply, MCP sources read the server details only from <code>~/.claude.json</code>: the user scope (<code>mcpServers</code>) and the local scope of the linked folder (<code>projects.&lt;path&gt;.mcpServers</code>). A project's <code>.mcp.json</code> is not read. Header tokens for remote servers are used in memory only and never stored.</li>
+  </ul>
+
+  <h3>When something goes wrong</h3>
+  <p>Each source in the source settings shows <b>Last checked</b>, <b>Result</b>, <b>Cause</b> and <b>Next check</b>. After repeated failures the next check is pushed back (up to an hour), and after a rate limit CmdQ checks again a little later.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Inbox source failure causes and fixes</caption>
+      <thead><tr><th scope="col">Cause</th><th scope="col">Fix</th></tr></thead>
+      <tbody>
+        <tr><td>The gh CLI isn't installed</td><td class="def">Install <code>gh</code> from <a href="https://cli.github.com">cli.github.com</a>, then <b>Refresh</b></td></tr>
+        <tr><td>gh isn't signed in</td><td class="def">Run <code>gh auth login</code> in Terminal, then <b>Refresh</b></td></tr>
+        <tr><td>Authentication failed</td><td class="def">For Todoist, enter a new token and save again. For a remote MCP server, check the header token in Claude Code's settings. Remote servers without headers aren't connected, so they always end here</td></tr>
+        <tr><td>No token is saved, so the source wasn't checked</td><td class="def">Save a token with <b>Enter token</b></td></tr>
+        <tr><td>No link rules, so nothing was fetched</td><td class="def">Add a link rule that ties a repository or label to a working path</td></tr>
+        <tr><td>The address isn't allowed, so no request was made</td><td class="def">Only public https addresses are allowed; private and loopback addresses can't be used. Todoist and remote MCP connections always connect directly: they use neither the proxy from macOS System Settings nor the <code>HTTPS_PROXY</code>, <code>HTTP_PROXY</code> and <code>ALL_PROXY</code> environment variables (including ones exported in your login shell). Networks that can only reach the internet through a proxy aren't supported</td></tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
 <!-- ══ Proposals ═══════════════════════════════════════ -->

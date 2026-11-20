@@ -97,7 +97,7 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
 <section>
   <div class="wrap">
     <h2>수집하는 데이터</h2>
-    <p><b>없습니다.</b> CmdQ는 사용자 데이터를 외부로 전송하지 않습니다.</p>
+    <p><b>없습니다.</b> CmdQ는 사용자 데이터를 CmdQ 제작자나 다른 외부로 전송하지 않습니다. 사용자가 켠 외부 연계의 결과 회신만 예외로, 사용자가 연결한 서비스로 갑니다(아래 「외부 연계(선택 기능)」).</p>
     <p style="margin-top:12px">
       메뉴에서 <b>버그 제보</b>나 <b>기능 요청</b>을 누르면 GitHub의 새 이슈 화면이 브라우저에서 열립니다.
       이때 주소에는 앱 버전, macOS 버전, 아키텍처 세 가지만 담기고 경로나 큐 내용, 로그는 담기지 않습니다.
@@ -113,7 +113,7 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
     <dl class="kv">
       <dt>저장 위치</dt><dd>~/Library/Application Support/com.doitasap.cmdq/</dd>
       <dt>형식</dt><dd>SQLite 데이터베이스</dd>
-      <dt>외부 전송</dt><dd>없음 (제보 링크를 열 때 주소에 담겨 GitHub으로 가는 환경 정보는 위 설명 참고)</dd>
+      <dt>외부 전송</dt><dd>없음 (제보 링크를 열 때 주소에 담겨 GitHub으로 가는 환경 정보와, 사용자가 켠 외부 연계의 결과 회신은 위·아래 설명 참고)</dd>
     </dl>
     <p style="margin-top:12px">
       데이터베이스 파일과 로그는 소유자만 읽을 수 있도록 권한을 좁혀 저장합니다.
@@ -131,6 +131,11 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
       이 내용도 사용자 컴퓨터 밖으로 보내지 않습니다.
     </p>
     <p style="margin-top:12px">
+      외부 연계로 가져온 일감 제안(제목·본문·작성자·라벨·원본 주소)은 같은 데이터베이스에만 저장합니다. 연계 설정은 같은 폴더의
+      <code>connectors/</code>에 파일로 두고, 소스를 삭제하면 그 파일과 그 소스에서 가져온 제안을 함께 지웁니다.
+      원본이 닫혔거나 무시한 제안은 30일, 승인한 제안 중 회신이 끝났거나 회신할 것이 없는 제안은 90일이 지나면 제목·본문·작성자·라벨·원본 주소·작업 경로·결과 요약을 지웁니다. 같은 일감이 다시 제안되지 않도록 소스 이름, 연결 이름(GitHub 은 owner/repo), 원본 일감 번호, 제안·회신 상태, 처리 시각만 흔적으로 남기며, 흔적은 화면에 보이지 않습니다. 승인한 작업이 아직 대기·실행 중이면 지우지 않습니다(켠 소스가 하나 이상 있을 때 정리합니다).
+    </p>
+    <p style="margin-top:12px">
       사용량 스냅샷에는 Claude Code가 statusline에 넘기는 입력 JSON이 통째로 저장됩니다. 여기에는
       작업 폴더 경로(cwd), 세션 ID, 대화 기록 파일 경로(transcript_path), 모델 이름이 들어 있을 수
       있습니다. CmdQ는 그중 사용량 한도(<code>rate_limits</code>) 값만 읽습니다.
@@ -141,7 +146,7 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
 <section>
   <div class="wrap">
     <h2>네트워크 통신</h2>
-    <p>CmdQ가 직접 보내는 요청은 <b>업데이트 확인</b>과 사용자가 자료나 첨부로 넣은 링크를 앱 안 웹뷰로 여는 요청(아래 「웹뷰 수집과 로그인」)입니다.</p>
+    <p>CmdQ가 직접 보내는 요청은 <b>업데이트 확인</b>과 사용자가 자료나 첨부로 넣은 링크를 앱 안 웹뷰로 여는 요청(아래 「웹뷰 수집과 로그인」)입니다. 여기에 더해 <b>사용자가 연계를 켠 소스에 한해</b> 외부 일감 서비스로 요청을 보냅니다(아래 「외부 연계(선택 기능)」).</p>
     <dl class="kv">
       <dt>요청 대상</dt><dd>github.com (릴리스 정보)</dd>
       <dt>보내는 내용</dt><dd>없음 — 파일을 내려받기만 합니다</dd>
@@ -156,6 +161,44 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
       그 밖에 사용자가 실행한 Claude Code CLI 명령이 발생시키는 통신은 <b>공식 CLI가 수행하는
       것</b>이며 CmdQ의 통신이 아닙니다.
     </p>
+    <h3 style="margin-top:22px">외부 연계(선택 기능)</h3>
+    <p>
+      외부 연계는 GitHub 이슈나 Todoist 작업을 가져와 <b>받은 일감</b>에 제안으로 보여 주는 기능입니다. 소스마다 처음에는 꺼져 있고,
+      사용자가 소스를 켰을 때만 주기적으로 조회합니다. 그 밖에는 사용자가 <b>연결 추가</b>를 쓸 때만 동작합니다. MCP 서버 목록을 보면 Claude Code 설정을 읽고,
+      저장 전 샘플을 조회하면 같은 조회 요청을 한 번 보냅니다. 켠 소스가 없고 연결 추가도 쓰지 않으면 연계 때문에 생기는 네트워크 요청, <code>gh</code>·MCP 서버 실행,
+      키체인 접근이 없습니다. 지원하는 소스는 GitHub(<code>gh</code> CLI), Todoist(API), GitHub MCP 프리셋입니다.
+    </p>
+    <p style="margin-top:12px"><b>GitHub (<code>gh</code> CLI)</b></p>
+    <dl class="kv">
+      <dt>요청 대상</dt><dd>github.com — CmdQ가 이 컴퓨터의 <code>gh</code>를 실행하고, 요청은 <code>gh</code>가 보냅니다</dd>
+      <dt>보내는 내용</dt><dd>연결한 저장소의 열린 이슈 목록 조회(기본은 내가 쓴 이슈만). 작업이 성공하면 결과 요약 댓글(닫기 방식이면 요약 댓글을 남기며 이슈 닫기). 작업이 실패하면 <b>실패해도 댓글로 알림</b>을 켠 소스에만 고정 실패 문구(작업 결과 내용은 보내지 않음) 댓글(이슈는 닫지 않음)</dd>
+      <dt>시작 조건</dt><dd>소스 설정에서 이 소스를 켰을 때만</dd>
+      <dt>자격 저장 위치</dt><dd><code>gh</code> 자체 로그인. CmdQ는 <code>gh</code> 토큰을 읽거나 저장하지 않습니다</dd>
+    </dl>
+    <p style="margin-top:12px"><b>Todoist (API)</b></p>
+    <dl class="kv">
+      <dt>요청 대상</dt><dd>api.todoist.com — CmdQ가 직접 보냅니다</dd>
+      <dt>보내는 내용</dt><dd>작업 목록과 내 사용자 id 조회(기본은 내가 만든 작업만). 작업이 성공하면 결과 요약 댓글(닫기 방식이면 요약 댓글 뒤 작업 완료 처리). 작업이 실패하면 <b>실패해도 댓글로 알림</b>을 켠 소스에만 고정 실패 문구(작업 결과 내용은 보내지 않음) 댓글(완료 처리하지 않음)</dd>
+      <dt>시작 조건</dt><dd>토큰을 저장하고 소스를 켰을 때만</dd>
+      <dt>자격 저장 위치</dt><dd>macOS 키체인(CmdQ 자신의 항목). 데이터베이스·설정 파일·로그에는 남기지 않고, 소스를 삭제하면 키체인 항목도 지웁니다</dd>
+    </dl>
+    <p style="margin-top:12px"><b>MCP (GitHub MCP 프리셋)</b></p>
+    <dl class="kv">
+      <dt>요청 대상</dt><dd>사용자가 Claude Code에 등록한 MCP 서버. 로컬(stdio) 서버는 CmdQ가 직접 실행하고, 원격 서버는 https 공개 주소에만 CmdQ가 직접 연결합니다</dd>
+      <dt>보내는 내용</dt><dd>연계 정의에 적힌 읽기 도구 호출(기본은 내가 쓴 열린 이슈만). 작업이 성공하면 정의에 적힌 댓글 도구로 결과 요약(닫기 방식이면 요약 댓글 뒤 닫기 도구 호출). 작업이 실패하면 <b>실패해도 댓글로 알림</b>을 켠 소스에만 댓글 도구로 고정 실패 문구(작업 결과 내용은 보내지 않음)를 보냄(닫지 않음)</dd>
+      <dt>시작 조건</dt><dd>소스 설정에서 이 소스를 켰을 때만</dd>
+      <dt>자격 저장 위치</dt><dd>Claude Code 설정 <code>~/.claude.json</code>의 사용자 범위(<code>mcpServers</code>)와 연결 폴더의 로컬 범위(<code>projects.&lt;경로&gt;.mcpServers</code>). CmdQ는 읽기만 하고 저장하지 않습니다. 프로젝트의 <code>.mcp.json</code>은 읽지 않습니다</dd>
+    </dl>
+    <div class="callout">
+      MCP 소스는 조회·회신할 때마다 <code>~/.claude.json</code>의 사용자·로컬 범위에서만 서버 실행 정보를 읽습니다. 원격 서버는 설정에 <b>고정 헤더(<code>headers</code>)가 있을 때만</b>
+      연결하며, 그 헤더 값(토큰 포함)은 메모리에서만 쓰고 데이터베이스·연계 설정 파일·로그에 <b>저장하지 않습니다.</b> 헤더가 없는 원격 서버(OAuth 등)는
+      연결하지 않고 인증 실패로 표시합니다. 브라우저 로그인을 띄우거나 Claude Code의 OAuth 인증 정보를 읽지 않습니다.
+    </div>
+    <p style="margin-top:14px">
+      결과 회신은 공개 저장소에 올라갈 수 있으므로 길이를 1,000자로 자르고 로컬 경로·토큰 모양의 문자열·환경 변수 값을 지운 요약만 보냅니다.
+      실패한 작업은 <b>실패해도 댓글로 알림</b>을 켠 소스에만 고정 실패 문구 「작업이 실패했습니다.」(작업 결과 내용은 보내지 않음) 댓글을 남기고 닫지 않습니다. 실패 댓글은 원본 일감 하나에 한 번만 남깁니다. 회신하기 직전에 그 소스가 꺼져 있거나 Pro 미리보기가 끝났으면 보내지 않습니다. 가져온 일감은 사용자가 승인하기 전에는 실행되지 않습니다.
+      Todoist·원격 MCP 연결은 환경 변수의 프록시(<code>HTTPS_PROXY</code> 등)도 쓰지 않고 항상 직접 연결합니다. GitHub 연결을 제안하려고 열린 프로젝트 폴더의 <code>git remote -v</code>를 읽기만 하며, 주소 원문은 저장하지 않고 github.com의 저장소 이름만 씁니다.
+    </p>
     <h3 style="margin-top:22px">MCP 수집(선택 기능)</h3>
     <p>
       링크 수집에서 <b>MCP</b>를 고르면(지금은 GitHub 주소만 지원합니다) 그때만 시작합니다. CmdQ는 페이지 하나를 가져올 때마다
@@ -169,8 +212,9 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
       <dt>한도</dt><dd>용량 500MB, 주소 5,000개(웹뷰 수집과 같음), 깊이 기본 3(시작할 때 1~10)</dd>
     </dl>
     <div class="callout">
-      앱은 MCP 토큰, 인증 정보, MCP 설정 파일을 <b>읽지도 저장하지도 않습니다.</b> MCP 서버 목록은 <code>claude mcp list</code>가 출력하는
-      서버 이름과 상태로만 압니다. 인증은 Claude Code와 MCP 서버가 처리합니다.
+      MCP 수집에서 앱은 MCP 토큰, 인증 정보, MCP 설정 파일을 <b>읽지도 저장하지도 않습니다.</b> MCP 서버 목록은 <code>claude mcp list</code>가 출력하는
+      서버 이름과 상태로만 압니다. 인증은 Claude Code와 MCP 서버가 처리합니다. 설정 파일을 읽는 것은 위 「외부 연계」의 MCP 소스뿐이고,
+      그 소스를 켠 경우에만 읽습니다.
     </div>
     <p style="margin-top:14px">
       수집 전용 <code>claude -p</code>는 사용자의 훅과 CLAUDE.md를 불러옵니다. 훅과 CLAUDE.md를 끄는 옵션이 MCP도 함께 끄기 때문입니다.
@@ -190,15 +234,20 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
     <h2>인증 정보</h2>
     <p>CmdQ는 다음을 <b>수행하지 않습니다</b>.</p>
     <ul class="list no">
-      <li>OAuth 토큰 또는 API 키 읽기</li>
-      <li>인증 정보 저장 또는 전송</li>
+      <li>Claude·Anthropic의 OAuth 토큰 또는 API 키 읽기</li>
+      <li>Claude·Anthropic 인증 정보 저장 또는 전송</li>
       <li>로컬에 저장된 Claude Code 인증 정보 접근</li>
-      <li>MCP 토큰·인증 정보·MCP 설정 파일(<code>~/.claude.json</code>의 <code>mcpServers</code>, <code>.mcp.json</code> 등) 읽기와 저장</li>
+      <li>MCP 토큰·인증 정보·MCP 설정 파일(<code>~/.claude.json</code>의 <code>mcpServers</code>, <code>.mcp.json</code> 등)의 값 저장. MCP 수집에서는 읽지도 않습니다</li>
       <li>웹뷰에 입력한 비밀번호·쿠키 읽기와 저장</li>
     </ul>
-    <p style="margin-top:14px">모든 인증은 Claude Code CLI가 관리합니다.</p>
+    <p style="margin-top:14px">Claude 인증은 모두 Claude Code CLI가 관리합니다.</p>
     <p style="margin-top:14px">
-      사용량 조회에도 OAuth 토큰, claude.ai 쿠키, macOS 키체인을 쓰지 않습니다. 대신 Claude
+      사용자가 외부 연계를 켠 경우에만 예외가 있습니다(위 「외부 연계(선택 기능)」). Todoist 같은 API 연계의 토큰은 사용자가 입력한 값을 macOS 키체인의
+      CmdQ 항목에만 저장하고, 조회·회신할 때 그 연계의 주소로만 보냅니다. GitHub(<code>gh</code>)는 <code>gh</code> 자체 로그인을 그대로 씁니다.
+      MCP 소스는 Claude Code 설정의 서버 실행 정보와 원격 서버 헤더(토큰 포함)를 읽기만 하고 저장하지 않습니다.
+    </p>
+    <p style="margin-top:14px">
+      사용량 조회에는 OAuth 토큰, claude.ai 쿠키, macOS 키체인을 쓰지 않습니다. 대신 Claude
       Code statusline이 넘겨주는 값을, 처음 실행할 때 묻는 statusline 연결에 동의했을 때만 읽습니다.
     </p>
   </div>
@@ -209,8 +258,8 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
     <h2>기술적 근거</h2>
     <p>이 방침은 다음 확인에 기반합니다.</p>
     <ul class="list yes">
-      <li>인증 정보를 다루는 코드 없음 — <code>api_key</code>·<code>token</code>·<code>ANTHROPIC</code> 관련 코드가 존재하지 않습니다</li>
-      <li>앱 코드에서 HTTP로 요청하는 의존성은 업데이터 하나뿐이며, 그 요청 대상은 위에 명시한 릴리스 정보 파일입니다. MCP 수집은 앱이 요청을 보내는 것이 아니라 <code>claude</code> 프로세스를 실행하는 방식입니다</li>
+      <li>Claude·Anthropic 인증 정보를 다루는 코드 없음 — <code>api_key</code>·<code>ANTHROPIC</code> 관련 코드가 존재하지 않습니다. 토큰을 다루는 코드는 외부 연계의 키체인 저장·읽기와 MCP 원격 서버 헤더 전달뿐입니다</li>
+      <li>업데이터의 요청 대상은 위에 명시한 릴리스 정보 파일입니다. 앱 코드가 보내는 그 밖의 HTTP 요청은 사용자가 켠 외부 연계에서만 나가고, https 공개 주소만 허용합니다(사설·루프백 주소는 거부). MCP 수집은 앱이 요청을 보내는 것이 아니라 <code>claude</code> 프로세스를 실행하는 방식입니다</li>
       <li>분석·추적 도구를 포함하지 않습니다</li>
     </ul>
   </div>

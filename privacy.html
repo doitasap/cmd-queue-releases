@@ -97,7 +97,7 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
 <section>
   <div class="wrap">
     <h2>수집하는 데이터</h2>
-    <p><b>없습니다.</b> CmdQ는 사용자 데이터를 CmdQ 제작자나 다른 외부로 전송하지 않습니다. 사용자가 켠 외부 연계의 결과 회신만 예외로, 사용자가 연결한 서비스로 갑니다(아래 「외부 연계(선택 기능)」).</p>
+    <p><b>없습니다.</b> CmdQ는 사용자 데이터를 CmdQ 제작자나 다른 외부로 전송하지 않습니다. 예외는 둘입니다. MCP 허브를 검색하면 입력한 검색어만 허브로 가고(아래 「네트워크 통신」), 사용자가 켠 외부 연계의 결과 회신은 사용자가 연결한 서비스로 갑니다(아래 「외부 연계(선택 기능)」).</p>
     <p style="margin-top:12px">
       메뉴에서 <b>버그 제보</b>나 <b>기능 요청</b>을 누르면 GitHub의 새 이슈 화면이 브라우저에서 열립니다.
       이때 주소에는 앱 버전, macOS 버전, 아키텍처 세 가지만 담기고 경로나 큐 내용, 로그는 담기지 않습니다.
@@ -131,6 +131,11 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
       이 내용도 사용자 컴퓨터 밖으로 보내지 않습니다.
     </p>
     <p style="margin-top:12px">
+      프로젝트에 추가한 MCP 서버는 저장 위치에 따라 둘 중 한 곳에 둡니다. 기본인 앱 저장소를 고르면 같은 데이터베이스에 서버 정의(이름·실행 명령·인자·URL·환경 변수 이름)만 저장합니다.
+      프로젝트 <code>.mcp.json</code>을 고르면 앱이 그 파일의 <code>mcpServers</code>에 그 서버 항목 하나만 병합해 쓰고 다른 항목은 건드리지 않습니다.
+      서버를 추가할 때 입력한 환경 변수 값과 원격 서버의 인증 헤더 값(API 키 등)은 어느 쪽이든 macOS 키체인에만 저장하고, 데이터베이스와 <code>.mcp.json</code>에는
+      <code>${CMDQ_MCP_…}</code> 같은 참조 이름과 헤더 이름·모양(예: <code>Authorization: Bearer ${CMDQ_MCP_…}</code>)만 씁니다. <code>.mcp.json</code>은 프로젝트 폴더에 있으므로 저장소에 커밋될 수 있습니다.
+      Docker 이미지 서버의 실행 인자에는 서버 이름과 추가할 때 만든 무작위 id 라벨(<code>cmdq.mcp.server</code>·<code>cmdq.mcp.id</code>)만 붙이고, 프로젝트 경로에서 나온 값은 넣지 않습니다.
       외부 연계로 가져온 일감 제안(제목·본문·작성자·라벨·원본 주소)은 같은 데이터베이스에만 저장합니다. 연계 설정은 같은 폴더의
       <code>connectors/</code>에 파일로 두고, 소스를 삭제하면 그 파일과 그 소스에서 가져온 제안을 함께 지웁니다.
       원본이 닫혔거나 무시한 제안은 30일, 승인한 제안 중 회신이 끝났거나 회신할 것이 없는 제안은 90일이 지나면 제목·본문·작성자·라벨·원본 주소·작업 경로·결과 요약을 지웁니다. 같은 일감이 다시 제안되지 않도록 소스 이름, 연결 이름(GitHub 은 owner/repo), 원본 일감 번호, 제안·회신 상태, 처리 시각만 흔적으로 남기며, 흔적은 화면에 보이지 않습니다. 승인한 작업이 아직 대기·실행 중이면 지우지 않습니다(켠 소스가 하나 이상 있을 때 정리합니다).
@@ -146,7 +151,7 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
 <section>
   <div class="wrap">
     <h2>네트워크 통신</h2>
-    <p>CmdQ가 직접 보내는 요청은 <b>업데이트 확인</b>과 사용자가 자료나 첨부로 넣은 링크를 앱 안 웹뷰로 여는 요청(아래 「웹뷰 수집과 로그인」)입니다. 여기에 더해 <b>사용자가 연계를 켠 소스에 한해</b> 외부 일감 서비스로 요청을 보냅니다(아래 「외부 연계(선택 기능)」).</p>
+    <p>CmdQ가 직접 보내는 요청은 <b>업데이트 확인</b>, 사용자가 자료나 첨부로 넣은 링크를 앱 안 웹뷰로 여는 요청(아래 「웹뷰 수집과 로그인」), 사용자가 시작한 <b>MCP 허브 검색</b>과 <b>MCP 서버 연결 확인</b>(아래 같은 이름의 항목)입니다. 여기에 더해 <b>사용자가 연계를 켠 소스에 한해</b> 외부 일감 서비스로 요청을 보냅니다(아래 「외부 연계(선택 기능)」).</p>
     <dl class="kv">
       <dt>요청 대상</dt><dd>github.com (릴리스 정보)</dd>
       <dt>보내는 내용</dt><dd>없음 — 파일을 내려받기만 합니다</dd>
@@ -212,14 +217,39 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
       <dt>한도</dt><dd>용량 500MB, 주소 5,000개(웹뷰 수집과 같음), 깊이 기본 3(시작할 때 1~10)</dd>
     </dl>
     <div class="callout">
-      MCP 수집에서 앱은 MCP 토큰, 인증 정보, MCP 설정 파일을 <b>읽지도 저장하지도 않습니다.</b> MCP 서버 목록은 <code>claude mcp list</code>가 출력하는
-      서버 이름과 상태로만 압니다. 인증은 Claude Code와 MCP 서버가 처리합니다. 설정 파일을 읽는 것은 위 「외부 연계」의 MCP 소스뿐이고,
+      Claude Code에 등록한 MCP 서버는 MCP 수집·프로젝트 MCP 서버 기능에서 <code>claude mcp list</code>가 출력하는 서버 이름과 상태로만 압니다. 이 기능들은 Claude Code 설정 파일(<code>~/.claude.json</code>의 <code>mcpServers</code> 등)을
+      <b>읽지 않습니다.</b> 앱이 읽고 쓰는 MCP 설정은 앱 저장소와, 사용자가 저장 위치로 고른 프로젝트 <code>.mcp.json</code>의 그 서버 항목뿐입니다(위 「데이터 저장」).
+      MCP 서버의 OAuth 인증은 Claude Code와 MCP 서버가 처리하고, 앱은 그 토큰을 다루지 않습니다. Claude Code 설정 파일을 읽는 것은 위 「외부 연계」의 MCP 소스뿐이고,
       그 소스를 켠 경우에만 읽습니다.
     </div>
     <p style="margin-top:14px">
       수집 전용 <code>claude -p</code>는 사용자의 훅과 CLAUDE.md를 불러옵니다. 훅과 CLAUDE.md를 끄는 옵션이 MCP도 함께 끄기 때문입니다.
       이를 줄이려고 저장소 밖 빈 작업 폴더에서 실행하고, 모델의 답이 아니라 도구가 돌려준 원문만 저장합니다. 페이지마다 claude를 한 번 실행하므로
       페이지 수만큼 실행 비용과 시간이 듭니다. 요약 실행은 계속 사용자 MCP를 쓰지 못하게 막습니다. 자료 질문 대화도 기본으로 막고, 대화에서 <b>MCP 도 함께 묻기</b>를 켠 경우에만 그 서비스(지금은 GitHub)의 읽기 도구를 씁니다.
+      프로젝트 서버 목록에 켜 두고 도구를 고른 서버가 있으면 그 서버들 가운데 사용자가 고른 읽기 도구만 엽니다. 큐 실행은 사용자가 서버마다 <b>큐 실행에서 사용</b>을 켠 경우에만
+      그 서버를 넘기며, 이때는 쓰기 도구까지 열립니다(기본은 꺼짐). 프로젝트 <code>.mcp.json</code>에 둔 서버는 Claude Code가 그 폴더에서 파일을 직접 읽으므로, 스위치나 서버가 꺼져 있으면 큐 실행 인자로 그 서버의 도구를 막습니다. 같은 폴더에서 사용자가 직접 띄우는 claude는 CmdQ가 막지 못합니다.
+    </p>
+    <h3 style="margin-top:22px">MCP 허브 검색(선택 기능)</h3>
+    <p>
+      프로젝트 탭의 <b>MCP 허브</b>를 열고 검색어를 넣어 <b>검색</b>을 누를 때만 요청합니다. 창을 여는 것만으로는 요청하지 않고, 앱 시작이나 백그라운드에서도 요청하지 않습니다.
+    </p>
+    <dl class="kv">
+      <dt>요청 대상</dt><dd>registry.modelcontextprotocol.io (공식 MCP Registry 검색), desktop.docker.com (Docker MCP Catalog 공개 카탈로그 파일)</dd>
+      <dt>보내는 내용</dt><dd>공식 MCP Registry에는 검색어만 보냅니다. Docker MCP Catalog는 카탈로그 파일을 내려받기만 하고 검색은 앱 안에서 합니다. 프로젝트 경로·자료·큐 내용·사용자 식별자는 보내지 않습니다</dd>
+      <dt>시작 조건</dt><dd>사용자가 탐색 화면에서 검색할 때만</dd>
+      <dt>저장</dt><dd>검색 결과는 앱을 끌 때까지 메모리에만 두고 디스크에 저장하지 않습니다</dd>
+    </dl>
+    <h3 style="margin-top:22px">MCP 서버 연결 확인</h3>
+    <p>
+      프로젝트 MCP 서버 목록에서 <b>연결 확인</b>이나 <b>도구 목록 불러오기</b>를 누를 때, 그리고 허브에서 서버를 추가한 직후 그 서버 하나에 대해서만 앱이 서버에 연결해 도구 목록을 받습니다.
+      원격 서버는 <code>https</code> 주소에만 연결하고, MCP 연결 요청(<code>initialize</code>, 앱 이름과 버전 포함)과 도구 목록 요청만 보냅니다. 인증 헤더나 토큰은 보내지 않으며, 인증이 필요한 서버는 「인증 필요」로만 표시합니다.
+      연결하기 전에 주소를 해석해 사설·루프백·링크로컬·CGNAT·<code>0.0.0.0/8</code>·멀티캐스트·브로드캐스트·예약·IETF 프로토콜·벤치마크·문서용·6to4 릴레이·Teredo·폐기·폐기된 site-local·로컬 NAT64(<code>64:ff9b:1::/48</code>) 같은 내부·특수 IP(IPv6 주소 안에 담긴 IPv4 포함)가 하나라도 나오면 요청하지 않고, 연결할 때는 시스템 프록시를 거치지 않고 해석한 그 주소로만 직접 접속합니다. 이런 IP 주소의 원격 서버는 추가할 수도 없습니다.
+      로컬 서버(<code>npx</code>·<code>uvx</code>·<code>docker</code>로 띄우는 서버)는 앱이 그 프로세스를 실행하고, 그 서버나 실행 도구가 보내는 요청은 그 프로그램의 통신입니다.
+      이때 앱의 환경 변수는 물려주지 않고 <code>PATH</code>·<code>HOME</code>·<code>USER</code>·<code>LANG</code>·<code>LC_ALL</code>·<code>TMPDIR</code>·<code>SHELL</code>(있는 것만)과 그 서버의 키체인 값만 넘깁니다.
+    </p>
+    <p style="margin-top:14px">
+      Claude Code에 등록된 서버(프리셋 없는 서버)의 <b>도구 목록 불러오기</b>는 앱이 서버에 연결하지 않습니다. 그 프로젝트 폴더에서 <code>claude -p</code>를 짧게 띄워 시작 정보에 실린 도구 이름만 읽고 바로 끝냅니다. 끝낼 때 claude가 띄운 MCP 서버 프로세스까지 함께 끝냅니다. 이 실행에서 그 폴더 <code>.mcp.json</code>의 서버와 프로젝트 훅도 실행될 수 있습니다.
+      이때 생기는 통신은 claude와 claude가 띄우는 MCP 서버의 것이며, 앱은 Claude Code 설정 파일을 읽지 않습니다.
     </p>
     <h3 style="margin-top:22px">웹뷰 수집과 로그인</h3>
     <p>
@@ -237,10 +267,15 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
       <li>Claude·Anthropic의 OAuth 토큰 또는 API 키 읽기</li>
       <li>Claude·Anthropic 인증 정보 저장 또는 전송</li>
       <li>로컬에 저장된 Claude Code 인증 정보 접근</li>
-      <li>MCP 토큰·인증 정보·MCP 설정 파일(<code>~/.claude.json</code>의 <code>mcpServers</code>, <code>.mcp.json</code> 등)의 값 저장. MCP 수집에서는 읽지도 않습니다</li>
+      <li>MCP 서버의 OAuth 토큰 다루기, MCP 설정 파일(<code>~/.claude.json</code>의 <code>mcpServers</code> 등)의 값 저장. MCP 수집·프로젝트 MCP 서버 기능에서는 Claude Code 설정 파일을 읽지도 않습니다</li>
       <li>웹뷰에 입력한 비밀번호·쿠키 읽기와 저장</li>
     </ul>
-    <p style="margin-top:14px">Claude 인증은 모두 Claude Code CLI가 관리합니다.</p>
+    <p style="margin-top:14px">Claude 계정 인증과 MCP 서버의 OAuth 인증은 Claude Code CLI가 관리합니다.</p>
+    <p style="margin-top:14px">
+      예외는 MCP 서버를 추가할 때 사용자가 직접 입력한 환경 변수 값(API 키 등)입니다. 이 값은 macOS 키체인에만 저장하고, 앱이 서버를 실행할 때만
+      키체인에서 꺼내 그 프로세스의 환경 변수로만 넘깁니다. 연결 확인·자료 대화·MCP 서버에서 수집·큐 실행 모두 두 저장 위치의 서버에 해당하고, 큐 실행은 사용자가 <b>큐 실행에서 사용</b>을 켠 서버만 해당합니다. 같은 폴더에서 사용자가 직접 띄우는 claude에는 값을 넘기지 않습니다. 실행 인자·데이터베이스·<code>.mcp.json</code>·로그에는 변수 이름만 남고,
+      값을 꺼낼 때 macOS가 키체인 접근 허용 창을 띄울 수 있습니다. 서버를 삭제하면 키체인 값도 지웁니다. 외부 연계의 토큰도 키체인에만 두며 아래 「외부 연계」에 따로 적었습니다.
+    </p>
     <p style="margin-top:14px">
       사용자가 외부 연계를 켠 경우에만 예외가 있습니다(위 「외부 연계(선택 기능)」). Todoist 같은 API 연계의 토큰은 사용자가 입력한 값을 macOS 키체인의
       CmdQ 항목에만 저장하고, 조회·회신할 때 그 연계의 주소로만 보냅니다. GitHub(<code>gh</code>)는 <code>gh</code> 자체 로그인을 그대로 씁니다.
@@ -258,8 +293,8 @@ footer a{padding:0 8px;display:inline-flex;align-items:center;min-height:24px}
     <h2>기술적 근거</h2>
     <p>이 방침은 다음 확인에 기반합니다.</p>
     <ul class="list yes">
-      <li>Claude·Anthropic 인증 정보를 다루는 코드 없음 — <code>api_key</code>·<code>ANTHROPIC</code> 관련 코드가 존재하지 않습니다. 토큰을 다루는 코드는 외부 연계의 키체인 저장·읽기와 MCP 원격 서버 헤더 전달뿐입니다</li>
-      <li>업데이터의 요청 대상은 위에 명시한 릴리스 정보 파일입니다. 앱 코드가 보내는 그 밖의 HTTP 요청은 사용자가 켠 외부 연계에서만 나가고, https 공개 주소만 허용합니다(사설·루프백 주소는 거부). MCP 수집은 앱이 요청을 보내는 것이 아니라 <code>claude</code> 프로세스를 실행하는 방식입니다</li>
+      <li>Claude·Anthropic 인증 정보를 다루는 코드 없음 — <code>api_key</code>·<code>ANTHROPIC</code> 관련 코드가 존재하지 않습니다. 토큰을 다루는 코드는 외부 연계의 키체인 저장·읽기와 MCP 원격 서버 헤더 전달, 프로젝트 MCP 서버 환경 변수·인증 헤더 값의 키체인(macOS Security.framework) 저장·읽기뿐입니다</li>
+      <li>앱 코드가 HTTP로 요청하는 곳은 업데이터(릴리스 정보 파일), MCP 허브 검색, 원격 MCP 서버 연결 확인, 사용자가 켠 외부 연계이고 모두 <code>https</code>만 씁니다(외부 연계와 연결 확인은 사설·루프백 주소를 거부). MCP 수집·자료 대화·큐 실행에서 MCP를 쓰는 것은 앱이 요청을 보내는 것이 아니라 <code>claude</code> 프로세스를 실행하는 방식입니다</li>
       <li>분석·추적 도구를 포함하지 않습니다</li>
     </ul>
   </div>

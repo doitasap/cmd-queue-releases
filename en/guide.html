@@ -378,6 +378,7 @@ ol.list li{padding-left:4px}
   <p class="toc-title">Contents</p>
   <ol>
     <li><a href="#layout">The window</a></li>
+    <li><a href="#ideas">Ideas tab</a></li>
     <li><a href="#add">Adding tasks</a></li>
     <li><a href="#targets">Targets</a></li>
     <li><a href="#queues">Auto queue and To Do</a></li>
@@ -473,6 +474,124 @@ ol.list li{padding-left:4px}
       </tbody>
     </table>
   </div>
+</section>
+
+<!-- ══ Ideas tab ═══════════════════════════════════════ -->
+<section id="ideas">
+  <div class="sec-head"><h2>Ideas tab</h2></div>
+  <p>The <b>Ideas</b> tab in the header (<kbd>⌘1</kbd>) is where you talk to claude about a topic without a project. The app opens on the <b>Ideas</b> tab. Chats are split by topic, not by path, and run in a dedicated folder under the app data. The input box stays at the bottom of the window.</p>
+
+  <h3>Layout</h3>
+  <ul class="list">
+    <li>The screen has three columns: the chat list on the <b>left</b>, the chat in the <b>middle</b> and a rail on the <b>right</b>.</li>
+    <li>From top to bottom the rail shows <b>Sources</b>, the progress route (four stops: <b>Chat</b>, <b>Proposals</b>, <b>Queue</b>, <b>Results</b>) and <b>Attachments</b>.</li>
+    <li>In a narrow window the rail folds away. Open it as an overlay panel with the <b>Progress</b> button in the title row.</li>
+  </ul>
+
+  <h3>Conversation</h3>
+  <ul class="list">
+    <li>The chat looks the same as the chat in <a href="#materials">Project materials</a>. Type a question and send it. The input box shows "What would you like to think through?".</li>
+    <li>There is no limit on the number of chats, and one chat keeps up to 1000 turns. A title is added automatically after the first answer.</li>
+    <li>Scroll to the top of the chat to load earlier turns.</li>
+    <li>If you hit a usage limit, the question you sent is put back in the input box.</li>
+    <li>Click a source chip under an answer, an attachment in a question bubble or a sent link to open it. Files and source copies open from the copy saved in the chat folder in the default app. Links open the original address in the browser.</li>
+  </ul>
+
+  <h3>Empty chat</h3>
+  <ul class="list">
+    <li>A small logo sits at the top, with "Write a topic to start a conversation." below it.</li>
+    <li>Below that, <b>Recent results</b> shows up to 3 cards. Each card shows the status, a summary of the command and the title of the chat it came from. Click one to open that chat. When there are no returned results, this row does not appear.</li>
+  </ul>
+
+  <h3>Left panel</h3>
+  <ul class="list">
+    <li><b>＋ New chat</b> opens an empty chat.</li>
+    <li>The list is grouped into <b>Today</b>, <b>Yesterday</b>, <b>Previous 7 days</b> and <b>Older</b>. <b>Load more</b> appears when there are more.</li>
+    <li><b>Search chats</b> looks in titles and in the text of questions and answers.</li>
+    <li><b>Rename</b> (<kbd>F2</kbd>) on a row changes its title. <b>Delete</b> asks for confirmation. Deleting removes the questions, answers and attachments, and can't be undone.</li>
+    <li>In the list, <kbd>↑</kbd> and <kbd>↓</kbd> move to the neighboring chat and <kbd>Enter</kbd> opens it.</li>
+  </ul>
+
+  <h3>Right rail</h3>
+  <ul class="list">
+    <li><b>Sources</b>: the sources the answers in this chat used, by name. The same source appears once.</li>
+    <li><b>Progress</b>: the four stops on the vertical line are the group headings.
+      <ul class="list">
+        <li><b>Chat</b> stop: "N turns · last HH:MM".</li>
+        <li><b>Proposals</b> stop: "In inbox N" shows how many proposals are left in the inbox, and the proposals waiting for approval are listed below. Click one to open <a href="#proposals">Proposals</a>.</li>
+        <li><b>Queue</b> stop: counts by status, with the queue items listed below. Click one to go to that item in the <b>Workspace</b> tab.</li>
+        <li><b>Results</b> stop: returned results are listed. Status shows in text (<b>Waiting</b>, <b>Running</b>, <b>Done</b>, <b>Failed</b>), not only in color, and for a finished item you can expand its <b>Result summary</b>.</li>
+      </ul>
+    </li>
+    <li><b>Attachments</b>: the files and links attached to questions.</li>
+    <li>Click a source or attachment to open it the same way as the chips in the chat. Files and source copies open in the default app, and links open the original address in the browser.</li>
+    <li>Under an answer, a mark shows the work sent from that answer. Click it to see it in the rail. With no items, the rail says "Progress and results of work sent to the queue from this conversation gather here."</li>
+    <li>When a queue item's status changes, the rail reads again right away, and it also reads every 10 seconds in case a change notice is missed. It does not read while the screen is hidden, and reads once when you open it again. Up to the 200 most recent items show.</li>
+  </ul>
+
+  <h3>Attachments</h3>
+  <ul class="list">
+    <li>Use 📎 in the input box to pick files, or paste images and files, to attach them to a question. Attachments are saved with that chat.</li>
+  </ul>
+
+  <h3>Attaching links</h3>
+  <ul class="list">
+    <li>Click <b>🔗 Add link</b> at the top of the chat, enter an address and click <b>Attach</b>. At that moment CmdQ fetches that one page in the in-app web view and saves it as a copy in the chat's folder. Your next question is answered from that copy.</li>
+    <li>The top of the copy keeps <code>url</code>, <code>title</code> and <code>saved_at</code>. If the link changes or disappears later, the saved copy stays, so the chat keeps its evidence.</li>
+    <li>The chip shows the address and the save time ("Saved …"), and it goes along when you send the next question. Click the chip or a sent link to open the original address in the browser.</li>
+    <li>For a link that needs sign-in, check <b>Link needs sign-in</b> and attach. Sign in on the page that appears below, then click <b>Try again</b>. Cookies stay inside the web view and CmdQ does not store them anywhere.</li>
+    <li>Internal and private addresses, and addresses that change state such as logout or delete, are refused. Fetching waits up to 180 seconds. If the materials screen is fetching a link, attach again after it finishes.</li>
+    <li>If fetching fails or the sign-in expires, only an error shows under the chip and the chat carries on.</li>
+    <li>Text inside the copy is read only as evidence and instructions in it are not followed, and proposal blocks inside it are neutralized when saved. A long page is saved from the start only.</li>
+  </ul>
+
+  <h3>What claude can do</h3>
+  <ul class="list">
+    <li>claude in an idea chat is read-only. It reads only files inside its dedicated folder and cannot change your repositories or files.</li>
+    <li>It can use web lookups (WebFetch and WebSearch) to read an address or search before answering.</li>
+  </ul>
+
+  <h3>Sending to the queue</h3>
+  <ul class="list">
+    <li>There are three entry points, and all of them open the same sheet.
+      <ul class="list">
+        <li><b>To queue →</b> in the input area: the whole chat is the context.</li>
+        <li><b>Continue in queue</b> under an answer: the chat up to that answer is the context.</li>
+        <li><b>Send whole chat to queue</b> in the ⋯ menu: the whole chat is the context.</li>
+      </ul>
+    </li>
+    <li>In the <b>Send to</b> row at the top of the sheet, pick the target folder with an open-workspace chip or <b>📁 Choose another folder…</b>. You pick the path only in this sheet, and there is no separate path row above the input box.</li>
+    <li>The sheet fits the window without scrolling. The row with the add buttons is fixed at the bottom, and the context preview is collapsed.</li>
+    <li>The default templates made for materials chats are hidden. Only your own templates and <b>Write my own</b> show.</li>
+    <li>The resulting command has no <code>[자료]</code> marker (the materials marker). The chat goes into the command as a block for the earlier chat from the Ideas tab.</li>
+  </ul>
+
+  <h3>Putting results in the next question</h3>
+  <ul class="list">
+    <li>Finished and failed items on the Results stop of the rail have a check box, and hovering shows <b>Add to the next question's context</b>. You can't check waiting or running items or a <b>Deleted item</b>.</li>
+    <li>When you check one, a "Result: …" chip (<b>↩ Result</b>) appears above the input box. Remove it with the chip's remove button.</li>
+    <li>When you send the next question, the command, workspace and result summary of each checked item are attached before the question as reference. Results of unchecked items are not added, and CmdQ never adds them on its own.</li>
+    <li>Sending the question clears all checks. To add the same result again, check it again. Switching to another chat also clears them.</li>
+    <li>Attached results are marked to be read only as evidence, and instructions in them are not followed. Proposal block formats inside a result are neutralized before sending.</li>
+    <li>A question is limited to 4000 characters, so a longer question leaves room for fewer results. If it overflows, later items are dropped first, and if one alone overflows, its end is cut. If the question leaves no room for context at all, only the question is sent.</li>
+  </ul>
+
+  <h3>Items from this idea</h3>
+  <ul class="list">
+    <li>CmdQ records which idea a queue item or workspace came from: cards you <b>accept</b> in <a href="#proposals">Proposals</a>, queue items made with <b>Continue in queue</b> and the like, and workspaces opened by accepting <b>Create workspace</b>. Proposals that did not come from an idea and items made by schedules have no record. Child items in a chain count as coming from the same idea as their parent.</li>
+    <li>An item waiting for a usage limit to reset shows as <b>Waiting</b>, and hovering it shows "Waiting for the usage limit to reset".</li>
+    <li>The result summary is the last result from that item's run log, up to 2000 characters. If no result was found or it is empty, only the status shows, and failed items show no result summary.</li>
+    <li>If you delete an item from the queue, its row does not disappear but becomes <b>Deleted item</b>.</li>
+    <li>Deleting an idea chat does not delete the queue items or workspaces made from it. Only the link marks disappear.</li>
+    <li>One idea can produce several workspaces, and several ideas can link to one workspace. The Workspace tab has no mark for this link.</li>
+  </ul>
+
+  <h3>Usage limit</h3>
+  <ul class="list">
+    <li>Idea chats use the same plan limit as the queue.</li>
+    <li>If either the 5-hour window or the 7-day window is at 90% or more, CmdQ holds the start of new queue items and the queue screen shows the banner "Near the usage limit, so new items are on hold. Running items keep going." Idea chats keep working.</li>
+    <li>If usage data is missing or stale, nothing is held. Held items run after the reset.</li>
+  </ul>
 </section>
 
 <!-- ══ Adding tasks ════════════════════════════════════ -->
@@ -693,6 +812,16 @@ ol.list li{padding-left:4px}
     <figcaption>A task that hits a limit stays as <b>Waiting for reset</b>, then resumes in the same session after the reset.</figcaption>
   </figure>
 
+  <h3>When you're close to a limit</h3>
+  <ul class="list">
+    <li>If either the 5-hour window or the weekly limit is at 90% or more, CmdQ holds new queue items instead of starting them. This leaves the remaining usage for the idea chats you run yourself.</li>
+    <li>Items that are already running keep going to the end. Idea chats keep working too.</li>
+    <li>The hold applies to every queue item that is about to start, whatever its kind. That includes an item that delivers a decision-inbox answer and each run a recurring schedule creates.</li>
+    <li>While the hold is on, the notice above the queue changes to "Near the usage limit, so new items are on hold", with the window, its usage and the resume time in parentheses. If a limit has actually been reached, the usual reset notice shows instead.</li>
+    <li>Once usage drops after the reset, the hold lifts and waiting items run from the top.</li>
+    <li>CmdQ reads usage from the statusline. If the statusline isn't connected or its value is more than 10 minutes old, nothing is held.</li>
+  </ul>
+
   <h3>When a limit is reached</h3>
   <ul class="list">
     <li>CmdQ stops every running queue item, not only the one that hit the limit. Each goes to <b>Waiting for reset</b>.</li>
@@ -726,7 +855,7 @@ ol.list li{padding-left:4px}
 
   <h3>Overview</h3>
   <ul class="list">
-    <li>The <b>Queue</b> and <b>Schedule</b> switch in the header changes the screen. The Schedule screen has two views, <b>List</b> and <b>Calendar</b>.</li>
+    <li>The <b>Ideas</b>, <b>Workspace</b> and <b>Schedule</b> switch in the header changes the screen. The Schedule screen has two views, <b>List</b> and <b>Calendar</b>.</li>
     <li>It is a free feature, and there is no limit on the number of rules.</li>
     <li>Times follow this Mac's local time zone.</li>
     <li>A rule creates its runs while CmdQ is running. Runs that passed while it was off are handled as you choose under Conditions.</li>
@@ -940,12 +1069,13 @@ ol.list li{padding-left:4px}
 
   <h3>Turning it on</h3>
   <ul class="list">
-    <li>Turn on the <b>Isolated run</b> toggle on the row below the add bar before you add the item. It is off by default. The row appears only when the target is <b>Path</b> and that folder is a git repository. For session or interactive targets, or a folder that isn't a git repository, the row doesn't appear. With a missing git, a git older than 2.5, or a bare repository, the toggle stays off and the reason appears next to it.</li>
+    <li>Turn on the <b>Isolated run</b> toggle on the row below the add bar before you add the item. It is off by default. The row appears when the target is <b>Path</b>. For session or interactive targets, the row doesn't appear. With a folder that isn't a git repository, a missing git, a git older than 2.5, or a bare repository, the toggle stays off and the reason appears next to it. For a folder that isn't a git repository it reads "Isolated runs and other git features are unavailable because this is not a git repository".</li>
     <li>When the same path already has a running or queued task, a <b>Run isolated?</b> badge appears next to the toggle. Clicking it turns the toggle on. It is only a suggestion, so you can ignore it and add the item as is.</li>
     <li>Turn on <b>Always isolate</b> for a path in the <b>Isolated runs</b> section of Settings. The toggle then starts on when you pick that path. If you turn it off before adding, that item does not run isolated. Items that reach that path without the add bar, such as recurring schedule runs, run isolated.</li>
     <li>A <b>Queued</b> card that hasn't started has an <b>Isolate</b> or <b>Don't isolate</b> button. Running and finished cards can't be changed.</li>
     <li>Turn on <b>Run isolated</b> in a <a href="#schedule">recurring schedule</a> rule and the items that rule creates run isolated.</li>
     <li>Cards for isolated items carry an <b>Isolated</b> badge.</li>
+    <li>In a path that isn't a git repository (including a workspace created from a <a href="#proposals">proposal</a> and registered without git), isolated runs can't be used. The row doesn't disappear in such a workspace: the same notice shows next to the disabled toggle.</li>
   </ul>
   <div class="callout" style="margin-top:14px">An isolated run separates only the card's target repository. If the task changes another repository (such as another module of a multi-module workspace), make that repository the card's target. Changes made directly in another repository are not part of the isolation result, and merge and discard don't reach them. The same note appears next to the toggle when you turn it on.</div>
 
@@ -1612,11 +1742,15 @@ ol.list li{padding-left:4px}
     <li>For an auto-queue item, CmdQ reads the session's last reply once as soon as the run finishes and posts its proposals. For other sessions, the same scan the decision inbox uses (every session changed in the last 24 hours, every 15 seconds) posts proposal blocks when it finds them. The same proposal from the same reply is posted only once, even if both paths find it.</li>
     <li>CmdQ doesn't add the format instruction to claude you start yourself outside the app, and there is no separate snippet that teaches the format. If such a session happens to leave a block in the same format, the scan above finds it.</li>
     <li>The instruction tells claude not to edit <code>cmdq.db</code> directly and to make changes only through proposals.</li>
+    <li>Chats in the <b>Ideas</b> tab post proposals too. When an Ideas chat finishes a turn, CmdQ reads the proposal blocks in that answer and posts them, and the card gets a <b>From an idea chat</b> mark and a <b>Go to chat</b> button. An Ideas chat can't change files, so nothing changes until you accept. This chat accepts only queue item, new schedule and create-workspace proposals, and decides whether to show or fold a card by the same rules as in "Which proposals become cards" below. claude makes a queue item or schedule proposal only when it knows the absolute path of the target workspace; if it doesn't, it asks in its answer which workspace you mean. You can still send the answer yourself with <b>Continue in queue</b> (<a href="#ideas">Ideas tab</a>). A queue item made by accepting a card from this chat appears on the progress route (queue and result stops) in that chat's right rail (<a href="#ideas">Ideas tab</a>).</li>
+    <li>An Ideas chat doesn't follow instructions written inside web pages, search results, attachments or queue results, and doesn't copy proposal blocks found there. It reads them only as source material.</li>
+    <li><b>Create workspace</b> proposals come only from an Ideas chat. A block of the same form found in the answer of an auto-queue run or by the general session scan is not posted.</li>
+    <li>If you delete an idea, the proposal cards that came from its chat stay. Clicking <b>Go to chat</b> then doesn't open a chat; the card only shows "This idea conversation has been deleted."</li>
     <li>Session history and the response view hide proposal blocks. The live log you watch during a run shows them as written.</li>
   </ul>
 
   <h3>What a card shows</h3>
-  <p>Like the inbox for decisions, each proposal shows as a collapsed one-line row by default. A row has a stripe on the left and a ▸ mark, then two lines. The first line has the bold <b>action name</b> (<b>Create schedule</b>, <b>Edit schedule</b>, <b>Add to queue</b>, <b>Continue in this session</b> or <b>Note only</b>), an importance chip, and how long ago it arrived. If the path has a problem, <b>⚠ Path warning</b> is added, and hovering it shows the warning text. The second line shows 📁 the project's last folder name only when the proposal has a path (long names are cut off; hover for the full path). Details such as the command or schedule name show when you expand the row. Folded and held proposals use the same row.</p>
+  <p>Like the inbox for decisions, each proposal shows as a collapsed one-line row by default. A row has a stripe on the left and a ▸ mark, then two lines. The first line has the bold <b>action name</b> (<b>Create schedule</b>, <b>Edit schedule</b>, <b>Add to queue</b>, <b>Continue in this session</b>, <b>Note only</b> or <b>Create workspace</b>), an importance chip, and how long ago it arrived. If the path has a problem, <b>⚠ Path warning</b> is added, and hovering it shows the warning text. The second line shows 📁 the project's last folder name only when the proposal has a path (long names are cut off; hover for the full path). Details such as the command or schedule name show when you expand the row. Folded and held proposals use the same row.</p>
   <p>Click a row, or press <kbd>Enter</kbd> or <kbd>Space</kbd>, to expand it (▾); do it again to collapse it. Only one row is expanded at a time, so expanding another row collapses the previous one; the expanded row stays when the list refreshes. When you handle an expanded row, the next row in the same section (or the previous one if there is none) expands. When you expand a row, you see the bold title and one line of content at the top (for Add to queue, the first line of the command plus the step count for a chain; for Create schedule, the name and repeat; for Edit schedule, the rule number and the fields that change), then a row of chips showing importance, urgency, cost, overspec and evidence as words, and intent and expected effect up to two lines each. Click <b>Details</b> for the rest. At the bottom are two buttons, <b>Accept</b> and <b>Reject</b>. A collapsed row has no buttons, so you expand it and read it before deciding. A row can't be collapsed while it shows a processing error or a note that the session is held by an open terminal, and it stays open in those cases. If you expand another row meanwhile, both rows are open. All seven judgment fields are available on the card once you expand the row.</p>
   <ul class="list">
     <li><b>Intent</b>: what it wants to do and why</li>
@@ -1627,7 +1761,19 @@ ol.list li{padding-left:4px}
     <li><b>Cost</b>: Small, Medium or Large</li>
     <li><b>Evidence</b>: <b>Fact</b> or <b>Guess</b>, with a quote. A proposal marked as fact without a quote is shown as a guess</li>
   </ul>
-  <p>Values are shown as words, not colors, and only the <b>Possibly overspec</b> and <b>Guess</b> chips use a mild warning tone. <b>Details</b> holds the overspec reason, the evidence quote, and what would be created, such as the name, command, repeat, completion criteria, model, effort and chain steps.</p>
+  <p>Values are shown as words, not colors, and only the <b>Possibly overspec</b> and <b>Guess</b> chips use a mild warning tone. <b>Details</b> holds the overspec reason, the evidence quote, and what would be created, such as the name, command, repeat, completion criteria, model, effort and chain steps. An <b>Add to queue</b> card shows a <b>Done when</b> line. When you accept, CmdQ adds a blank line after the command and then a "Done when: ..." line, and that becomes the queue item. For a chain, it goes on the first (root) command only.</p>
+
+  <h3>Create-workspace proposals</h3>
+  <p>When an Ideas chat suggests starting a new project, a <b>Create workspace</b> card appears. It shows path candidates (a new folder or an existing repository, up to 3), a name, and the <b>First queue items</b> (up to 5) with their done criteria. A proposal for a new folder carries "Accepting creates a new folder at the chosen path and initializes a git repository."; one for an existing repository carries "Registers the existing folder as is. No new folder is created."</p>
+  <ul class="list">
+    <li>You can accept only after you settle on a path: pick a candidate, type an absolute path under <b>Enter a path</b>, or pick a folder with <b>Choose folder…</b>. Until then the button's tooltip says "Choose or enter a path before accepting".</li>
+    <li>No folder is created before you accept. When you accept, CmdQ creates the new folder, runs <code>git init</code>, opens the workspace tab and puts the first queue item into To Do. With more than one item, they go in as a chain that follows the first.</li>
+    <li>A folder that already has contents is never overwritten. "The folder already has contents, so nothing was created. Choose another path." appears and the card stays.</li>
+    <li>If you pick an existing repository that is already an open workspace, CmdQ doesn't open a new tab and uses the open one.</li>
+    <li>If a proposal for the same path is already waiting, the new one is folded as <b>Already exists</b>.</li>
+  </ul>
+  <p>If you pick an existing repository whose folder isn't a git repository, CmdQ registers it as is and shows "This folder is not a git repository, so git features (such as worktree isolation) are unavailable."</p>
+  <p>If git isn't installed or <code>git init</code> fails, accepting doesn't stop with an error. CmdQ only creates the folder and registers the workspace, and shows "Git was not found, so the folder was not made a repository." and "Features that need git (such as worktree isolation) are unavailable in this workspace." Features that need git, such as the worktree of an <a href="#isolation">isolated run</a>, can't be used in this workspace. An old git version is reported separately: "Your git version is too old for worktree isolation. Update git to use it."</p>
 
   <h3>Which proposals become cards</h3>
   <ul class="list">
@@ -1648,6 +1794,7 @@ ol.list li{padding-left:4px}
         <tr><td><b>Schedule change</b></td><td class="def"><b>Open in editor</b></td><td class="def">Opens the target rule's editor with the changed fields marked. The change applies only when you save. If the target rule is gone, the card says "Target rule not found. It may have been deleted." and <b>Accept</b> is disabled</td></tr>
         <tr><td><b>Queue item</b></td><td class="def"><b>Add to queue now</b></td><td class="def">Adds it straight to To Do with the proposed command, model and effort. Chain steps, if any, are added as cards that continue in the same session (<a href="#chain">Chains</a>). If the path has a warning, <b>Accept</b> is disabled</td></tr>
         <tr><td><b>Continue session</b></td><td class="def"><b>Tell this session to proceed</b></td><td class="def">Sends <code>제안 '제목' 수락, 진행하십시오</code> (proposal accepted, please proceed; the title goes in the quotes) to that session, by the same route as a decision inbox answer (see where answers go in the <a href="#decisions">Decision inbox</a>). If the session is in an open interactive terminal in CmdQ, nothing is sent. The card says "This session is in an open terminal in the app. Continue there directly." and shows a <b>Go to that terminal</b> button. The proposal stays unhandled</td></tr>
+        <tr><td><b>Create workspace</b></td><td class="def"><b>Create the workspace at the chosen path</b></td><td class="def">After you settle on a path and accept, CmdQ creates the folder, registers it as a workspace tab and puts the first queue items in (<a href="#proposals">Create-workspace proposals</a>)</td></tr>
         <tr><td><b>Note</b></td><td class="def"><b>Just record it</b></td><td class="def">Runs nothing and only records that you accepted it</td></tr>
       </tbody>
     </table>
@@ -1798,7 +1945,7 @@ ol.list li{padding-left:4px}
         <tr><td>Terminals</td><td><kbd>⇧⌘T</kbd></td><td class="def">Opens or closes the background terminal list. With an interactive terminal open, works like <b>Run in background</b></td></tr>
         <tr><td>Decision inbox</td><td><kbd>⇧⌘C</kbd></td><td class="def">Opens or closes the decision inbox. Does nothing while the badge is hidden because no decisions are waiting</td></tr>
         <tr><td>Proposals</td><td><kbd>⇧⌘V</kbd></td><td class="def">Opens or closes the proposal inbox. Does nothing while the badge is hidden because there are no proposals</td></tr>
-        <tr><td>Switch to Queue · Switch to Schedule</td><td><kbd>⌘1</kbd> · <kbd>⌘2</kbd></td><td class="def">Same as clicking the Queue or Schedule tab in the header. After you save a schedule rule, going back to Queue turns off Show all and shows only that rule's path tab</td></tr>
+        <tr><td>Switch to Ideas · Switch to Workspace · Switch to Schedule</td><td><kbd>⌘1</kbd> · <kbd>⌘2</kbd> · <kbd>⌘3</kbd></td><td class="def">Same as clicking the Ideas, Workspace or Schedule tab in the header. After you save a schedule rule, going back to Workspace turns off Show all and shows only that rule's path tab</td></tr>
         <tr><td>Back</td><td><kbd>⌃←</kbd></td><td class="def">List-opened terminal → list. Reply → session history list. Otherwise closes the terminal list or session history. In other terminals the key goes to claude</td></tr>
         <tr><td>Forward</td><td><kbd>⌃→</kbd></td><td class="def">Reopens the screen you left with Back, as it was before you pressed Back: the list-opened terminal, the session history reply or the closed list. Press it as many times as you pressed Back to retrace them in order</td></tr>
       </tbody>
@@ -1812,6 +1959,7 @@ ol.list li{padding-left:4px}
     <li>A combination needs <kbd>⌘</kbd>, <kbd>⌥</kbd> or <kbd>⌃</kbd>.</li>
     <li>A combination already in use is refused with the name of the action that has it.</li>
     <li>If you had already assigned <kbd>⌘K</kbd> to another action, Search starts as <b>None</b>. Assign it a combination in Settings to use it.</li>
+    <li>If you saved shortcut settings before, <kbd>⌘1</kbd> stays on Workspace and <kbd>⌘2</kbd> on Schedule, and <b>Switch to Ideas</b> starts as <b>None</b>. Assign it a combination under <b>Shortcuts</b> in Settings to use it.</li>
     <li>You can't assign: the app menu keys (<kbd>⌘C</kbd> <kbd>⌘V</kbd> <kbd>⌘X</kbd> <kbd>⌘A</kbd> <kbd>⌘Z</kbd> <kbd>⇧⌘Z</kbd> <kbd>⌘Q</kbd> <kbd>⌘H</kbd> <kbd>⌥⌘H</kbd> <kbd>⌘M</kbd> <kbd>⌃⌘F</kbd>), the submit keys (<kbd>⌘Enter</kbd> <kbd>⌃Enter</kbd> <kbd>⌃⌘Enter</kbd>), and <kbd>⇧⌘D</kbd> (save terminal diagnostics).</li>
   </ul>
   <h3>When shortcuts work</h3>

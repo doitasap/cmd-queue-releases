@@ -514,7 +514,7 @@ ol.list li{padding-left:4px}
       <div class="concept">
         <h3>When you hit a limit</h3>
         <p class="def">Running tasks and terminals switch to <b>Waiting for reset</b> and continue in the same session when the limit resets.
-        An interactive terminal opened without a task resumes as a background terminal. The weekly limit works the same way.</p>
+        Interactive terminals resume as background terminals too, whether or not you opened them from a task. The weekly limit works the same way.</p>
       </div>
     </div>
     <p class="more"><a href="guide.html#chain">Chains: details →</a></p>
@@ -588,7 +588,7 @@ ol.list li{padding-left:4px}
     <div class="card">
       <p>
         Attach files, links, and notes with the <b>📎</b> button or by dropping files on the window. Attachments belong to a session and every command in it can use them.
-        Put <code>[첨부]</code> (the marker is Korean in every language) in a command to pass them to claude when it runs, or type <code>#</code> in the command box to pick specific ones.
+        When a command runs, claude gets a list of what's attached and opens only what it needs. To hand over the full contents up front, put <code>[첨부]</code> (the marker is Korean in every language) in the command. Type <code>#</code> in the command box to pick specific ones.
       </p>
     </div>
     <p class="more"><a href="guide.html#attachments">Details →</a></p>

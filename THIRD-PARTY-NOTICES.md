@@ -9,7 +9,7 @@ CmdQ 는 아래 서드파티 구성요소를 포함하거나 링크한다. 각 �
 
 ---
 
-## 1. 번들 폰트 — D2Coding
+## 1. 번들 폰트 — D2Coding · Pretendard
 
 앱은 D2Coding 폰트를 `src/assets/fonts/D2Coding.ttf` 로 번들해 배포한다. 한글 글자폭이
 라틴의 정확히 2배(1000:500)라 대화형 터미널의 East Asian Wide 배치와 일치하기 때문이다.
@@ -26,8 +26,23 @@ This Font Software is licensed under the SIL Open Font License, Version 1.1.
 - 배포처: https://github.com/naver/d2codingfont
 - 예약 폰트 이름(Reserved Font Name): `D2Coding`
 
+앱은 UI 본문 글꼴로 Pretendard Variable 을 `src/assets/fonts/PretendardVariable.woff2` 로 번들해
+배포한다. 배포본 v1.3.9 의 `dist/web/variable/woff2/PretendardVariable.woff2` 를 고치지 않고 그대로
+넣었다(서브셋·이름 변경 없음). CDN 에서 받지 않으므로 오프라인에서도 같은 글꼴로 그려진다.
+
+```
+Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard),
+with Reserved Font Name Pretendard.
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+```
+
+- 배포처: https://github.com/orioncactus/pretendard
+- 예약 폰트 이름(Reserved Font Name): `Pretendard`
+
 OFL 1.1 조건 2 는 폰트를 소프트웨어와 함께 번들·재배포할 때 **사본마다 위 저작권 고지와
-라이선스 전문이 포함될 것**을 요구한다. 그 전문을 아래에 그대로 싣는다.
+라이선스 전문이 포함될 것**을 요구한다. 두 폰트 모두 같은 OFL 1.1 이므로 그 전문을 아래에 한 번
+그대로 싣는다.
 
 ### SIL Open Font License 1.1 전문
 

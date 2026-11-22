@@ -825,7 +825,7 @@ ol.list li{padding-left:4px}
   <h3>When a limit is reached</h3>
   <ul class="list">
     <li>CmdQ stops every running queue item, not only the one that hit the limit. Each goes to <b>Waiting for reset</b>.</li>
-    <li>Interactive terminals are closed (reclaimed). A terminal opened from a card puts its item in <b>Waiting for reset</b>.</li>
+    <li>Interactive terminals are closed (reclaimed). A terminal opened from a card puts its item in <b>Waiting for reset</b>. A card already handed off to a terminal is not run again by the auto queue, so it stays done. Its conversation shows as a <b>Waiting for reset</b> row in the background terminal list instead, and after the reset CmdQ reopens the same session as a background terminal.</li>
     <li>A terminal with no card (opened with <b>Interactive</b>, <b>▶ Terminal</b> or a bookmark) gets a row in the background terminal list: <b>Waiting for reset · resumes HH:MM</b>. Click the row to read the past conversation. <b>Cancel resume</b> keeps it from reopening.</li>
     <li>You get a <b>Terminal reclaimed</b> notification for each closed terminal, and the menu bar icon gets a yellow dot.</li>
     <li>The auto queue banner shows how long until queued items start again.</li>
@@ -1198,9 +1198,26 @@ ol.list li{padding-left:4px}
 
   <h3>Using them in a command</h3>
   <p>
-    Attachments reach claude only when the command contains a marker. <code>[첨부]</code> passes every attachment in the session. <code>[첨부:3]</code> passes attachment 3 only.
+    <code>[첨부]</code> passes every attachment in the session, with its contents. <code>[첨부:3]</code> passes attachment 3 only.
     The marker word is Korean in every UI language. Type it as shown.
   </p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Attachment markers</caption>
+      <thead><tr><th scope="col">In the command</th><th scope="col">What claude gets at run time</th></tr></thead>
+      <tbody>
+        <tr><td><code>[첨부]</code></td><td class="def">Every attachment in the session</td></tr>
+        <tr><td><code>[첨부:3]</code></td><td class="def">Attachment 3 only</td></tr>
+        <tr><td>No marker</td><td class="def">An index of the attachments (type, title, path) and the attachment folder. claude reads the contents when it needs them. There is no setting to turn it off</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list">
+    <li>When a card has attachments and its command has neither <code>[첨부]</code> nor <code>[첨부:3]</code>, CmdQ appends the index to the end of the command at run time and opens the attachment folder so claude can read it. A memo is written as a file in the attachment folder, and its path is given.</li>
+    <li>With any marker present, only the attachments the marker picks are passed with their contents. Picking some with <code>[첨부:3]</code> does not add the rest as an index. With <code>[자료]</code> but no <code>[첨부]</code>, the index follows the <code>[자료]</code> content.</li>
+    <li>The index is added only when the card runs for the first time. A chain follow-up, or a card that already has a session (a re-run, a resume after a limit, or a reopened interactive terminal), doesn't get the index again; it only reopens the folder. A card with a session you picked gets the index on its first run. If the index exceeds 120 KB on the first run, a short omission notice is added instead of the index, and a headless run doesn't open the attachment folder either. Only an interactive terminal still opens the session's attachment folder in that case.</li>
+    <li>The index is always added and there is no setting to turn it off, so existing cards with attachments also send something different when their command has no marker.</li>
+  </ul>
   <p>
     Type <code>#</code> to pick instead of typing markers. The list has <b>All attachments</b>, <b>Session attachments</b> and <b>Command attachments</b>.
     <kbd>Space</kbd> checks several, <kbd>Tab</kbd> or <kbd>Enter</kbd> inserts their markers.
@@ -1224,7 +1241,7 @@ ol.list li{padding-left:4px}
         <tr><td>Materials per project</td><td class="def">100 (<a href="#materials">Project materials</a>)</td></tr>
         <tr><td>Size per file</td><td class="def">20 MB by default, up to 100 MB (<b>Max size per file</b>). The error has a <b>Change in settings</b> button</td></tr>
         <tr><td>Text preview</td><td class="def">2 MB</td></tr>
-        <tr><td>Expanded command</td><td class="def">120 KB. Blocks past that are left out with a note</td></tr>
+        <tr><td>Expanded command</td><td class="def">120 KB. Blocks past that are left out with a note. A command with the index appended counts the same: past the limit on a first run, a note replaces the index and the attachment folder isn't opened. A follow-up run that only reopens the folder opens it regardless of the limit</td></tr>
         <tr><td>Memo text per command</td><td class="def">64 KB in total</td></tr>
       </tbody>
     </table>
@@ -1237,10 +1254,10 @@ ol.list li{padding-left:4px}
   <p>
     CmdQ stores copies. Your original files stay where they are.
     The copies are deleted once no command, bookmark or open terminal uses the session. When deleting a bookmark would remove them, CmdQ tells you how many and asks first.
-    A resumed run (after a limit, or a reopened session) doesn't get the attachment block again; the session already has it.
+    A card that already ran, or a chain follow-up (for example after a limit, or a reopened session), doesn't get the attachment index again; it only reopens the folder.
   </p>
   <p>
-    Interactive terminals don't expand markers. In a terminal, use 📎 in the header to paste attachments into the input line (<a href="#terminal">Interactive terminal</a>).
+    A new interactive terminal opened from the add bar doesn't expand markers. Opening an existing card in an interactive terminal expands its markers on the first run, or appends the index when there is no marker, and opens the attachment folder. In a terminal, use 📎 in the header to paste attachments into the input line (<a href="#terminal">Interactive terminal</a>).
   </p>
 </section>
 <!-- ══ Project materials ═══════════════════════════════ -->
@@ -1405,7 +1422,7 @@ ol.list li{padding-left:4px}
       <tbody>
         <tr><td><code>[자료]</code></td><td class="def">The path's materials folder (<code>--add-dir</code>) and the path of <code>index.md</code>. Material text isn't expanded</td></tr>
         <tr><td><code>[자료]</code> and <code>[첨부]</code></td><td class="def">Both the materials folder and the attachments</td></tr>
-        <tr><td>No marker</td><td class="def">Nothing extra</td></tr>
+        <tr><td>No marker</td><td class="def">No materials. If the card has attachments, their index is still added without a marker (<a href="#attachments">Attachments</a>)</td></tr>
       </tbody>
     </table>
   </div>

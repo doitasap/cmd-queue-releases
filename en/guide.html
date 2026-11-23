@@ -1220,7 +1220,7 @@ ol.list li{padding-left:4px}
   </div>
   <ul class="list">
     <li>When a card has attachments and its command has neither <code>[첨부]</code> nor <code>[첨부:3]</code>, CmdQ appends the index to the end of the command at run time and opens the attachment folder so claude can read it. A memo is written as a file in the attachment folder, and its path is given.</li>
-    <li>With any marker present, only the attachments the marker picks are passed with their contents. Picking some with <code>[첨부:3]</code> does not add the rest as an index. With <code>[자료]</code> but no <code>[첨부]</code>, the index follows the <code>[자료]</code> content.</li>
+    <li>With any marker present, only the attachments the marker picks are passed with their contents. Picking some with <code>[첨부:3]</code> does not add the rest as an index. With <code>[자료]</code> but no <code>[첨부]</code>, the index follows the <code>[자료]</code> content. With neither marker and project materials present, the attachment index follows the materials guide.</li>
     <li>The index is added only when the card runs for the first time. A chain follow-up, or a card that already has a session (a re-run, a resume after a limit, or a reopened interactive terminal), doesn't get the index again; it only reopens the folder. A card with a session you picked gets the index on its first run. If the index exceeds 120 KB on the first run, a short omission notice is added instead of the index, and a headless run doesn't open the attachment folder either. Only an interactive terminal still opens the session's attachment folder in that case.</li>
     <li>The index is always added and there is no setting to turn it off, so existing cards with attachments also send something different when their command has no marker.</li>
   </ul>
@@ -1557,7 +1557,8 @@ ol.list li{padding-left:4px}
       <tbody>
         <tr><td><code>[자료]</code></td><td class="def">The path's materials folder (<code>--add-dir</code>) and the path of <code>index.md</code>. Material text isn't expanded</td></tr>
         <tr><td><code>[자료]</code> and <code>[첨부]</code></td><td class="def">Both the materials folder and the attachments</td></tr>
-        <tr><td>No marker</td><td class="def">No materials. If the card has attachments, their index is still added without a marker (<a href="#attachments">Attachments</a>)</td></tr>
+        <tr><td>No marker, first run</td><td class="def">If there are materials, a short guide giving the path of the materials index (<code>index.md</code>) and the materials folder (<code>--add-dir</code>). The guide says to read only when needed and not to edit. With no materials at all, nothing is passed. If the card has attachments, their index is still added without a marker (<a href="#attachments">Attachments</a>)</td></tr>
+        <tr><td>No marker, follow-up or resume</td><td class="def">Only the materials folder is reopened, without the guide (a chain follow-up card, a re-run, a resume after a limit, or a reopened interactive terminal)</td></tr>
       </tbody>
     </table>
   </div>
@@ -1566,6 +1567,11 @@ ol.list li{padding-left:4px}
     <li>If the path has no materials folder yet, <code>[자료]</code> stays as plain text.</li>
     <li>If an attached linked module has root docs (CLAUDE.md, AGENTS.md, README.md), a fresh copy of them is made under <code>linked-docs/</code> at every run, and the copy's path goes into the module line as a table of contents. The text isn't expanded; claude reads it when needed.</li>
     <li>When a run resumes after a limit, or you reopen that card in an interactive terminal, the materials folder stays attached.</li>
+    <li>The guide in a run without the marker carries only the index paths of the current project and the attached linked modules. Suggestion rules, reference marks, module roles and relations, and linked-doc copies come only with <code>[자료]</code>. If only linked modules have materials, the guide carries only their module lines.</li>
+    <li>Runs that <b>Write to materials folder only</b> don't get the guide. What those runs receive is the same as before the guide existed. A command with <code>[첨부]</code> does get the guide.</li>
+    <li>Reading only is an instruction in the guide, not something CmdQ enforces. Opening the materials folder doesn't block writes, and queued runs use --dangerously-skip-permissions, so claude can change materials if it ignores the instruction. The comparison at the end of a run also covers only runs with <code>[자료]</code> and <b>Write to materials folder only</b> runs; runs without the marker aren't compared (<a href="#materials">Materials changed without approval</a>).</li>
+    <li>If the command and the guide together exceed 120 KB on the first run, the guide is dropped and the materials folder isn't opened either. No omission notice is added. Follow-up runs open the folder whatever the length.</li>
+    <li>There is no setting to turn the guide off. In a project with materials, existing cards without <code>[자료]</code> also send something different on their first run.</li>
     <li>A new interactive terminal opened from the add bar can't expand <code>[자료]</code>, so if the command contains <code>[자료]</code>, CmdQ doesn't open it and shows "The [자료] materials marker is not expanded in an interactive session. Remove the marker or add it as a command". Use <b>Ask materials</b> to ask questions grounded in the materials.</li>
   </ul>
   <div class="table-wrap">

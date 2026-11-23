@@ -1818,7 +1818,7 @@ ol.list li{padding-left:4px}
 <!-- ══ Inbox (external integrations, #161) ═══════════════ -->
 <section id="inbox">
   <div class="sec-head"><h2>Inbox (external integrations)</h2></div>
-  <p>The inbox fetches GitHub issues and Todoist tasks and shows them as proposals for the queue. Click the <b>Inbox</b> badge in the header (it also shows the number of new proposals) to open the list right below it. A proposal enters the queue only after you approve it; nothing runs on its own. Proposals from a source that fetches with "Author = me" show <b>by me</b> in place of the author; hover to see the original author value.</p>
+  <p>The inbox fetches GitHub issues and Todoist tasks and shows them as proposals for the queue. Click the <b>Inbox</b> badge in the header (it also shows the number of new proposals) or press <kbd>⌘L</kbd> to open the list right below it, and press the key again to close it. Change the key in <a href="#shortcuts">Shortcuts</a>. A proposal enters the queue only after you approve it; nothing runs on its own. Proposals from a source that fetches with "Author = me" show <b>by me</b> in place of the author; hover to see the original author value.</p>
   <div class="callout">
     <p>This feature is a Pro candidate and carries the <b>Pro Preview</b> badge. Until the official 1.0.0 release, it's free for everyone.</p>
   </div>
@@ -2111,6 +2111,7 @@ ol.list li{padding-left:4px}
         <tr><td>Terminals</td><td><kbd>⇧⌘T</kbd></td><td class="def">Opens or closes the background terminal list. With an interactive terminal open, works like <b>Run in background</b></td></tr>
         <tr><td>Decision inbox</td><td><kbd>⇧⌘C</kbd></td><td class="def">Opens or closes the decision inbox. Does nothing while the badge is hidden because no decisions are waiting</td></tr>
         <tr><td>Proposals</td><td><kbd>⇧⌘V</kbd></td><td class="def">Opens or closes the proposal inbox. Does nothing while the badge is hidden because there are no proposals</td></tr>
+        <tr><td>Inbox</td><td><kbd>⌘L</kbd></td><td class="def">Opens or closes the inbox list. Does nothing when there is no Inbox badge</td></tr>
         <tr><td>Switch to Ideas · Switch to Workspace · Switch to Schedule</td><td><kbd>⌘1</kbd> · <kbd>⌘2</kbd> · <kbd>⌘3</kbd></td><td class="def">Same as clicking the Ideas, Workspace or Schedule tab in the header. After you save a schedule rule, going back to Workspace turns off Show all and shows only that rule's path tab</td></tr>
         <tr><td>Back</td><td><kbd>⌃←</kbd></td><td class="def">List-opened terminal → list. Reply → session history list. Otherwise closes the terminal list or session history. In other terminals the key goes to claude</td></tr>
         <tr><td>Forward</td><td><kbd>⌃→</kbd></td><td class="def">Reopens the screen you left with Back, as it was before you pressed Back: the list-opened terminal, the session history reply or the closed list. Press it as many times as you pressed Back to retrace them in order</td></tr>

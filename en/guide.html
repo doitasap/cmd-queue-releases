@@ -887,6 +887,7 @@ ol.list li{padding-left:4px}
         <tr><td><b>Monthly</b></td><td class="def">One or more days of the month and one or more times</td><td class="def">In a month without that day, such as the 31st, it runs on the last day. If picked days fold onto the same day (for example, the 30th and 31st in February), it runs once that day</td></tr>
         <tr><td><b>Right after reset</b></td><td class="def">Nothing</td><td class="def">Runs every time the 5-hour limit resets on a weekday (Mon–Fri). Holidays are not considered. If the reset time is unknown, it does not run</td></tr>
         <tr><td><b>git ref update</b></td><td class="def"><b>git ref</b> (default <code>develop</code>) and <b>Only when there is a PR merge commit</b></td><td class="def">Has no fixed time; runs when that ref moves forward. See <a href="#schedule-gitref">git ref update</a> below</td></tr>
+        <tr><td><b>Connector</b></td><td class="def">Connector, event, query arguments, filters, poll interval</td><td class="def">Has no fixed time; runs when a connected source has an item that matches the conditions. See <a href="#schedule-connector">Connector events</a> below</td></tr>
       </tbody>
     </table>
   </div>
@@ -938,6 +939,49 @@ ol.list li{padding-left:4px}
       </tbody>
     </table>
   </div>
+
+  <h3 id="schedule-connector">Connector events</h3>
+  <p>The editor's run conditions have two rows: <b>Time</b> (<b>Specific dates</b>, <b>Daily</b>, <b>Weekly</b>, <b>Monthly</b>) and <b>Event</b> (<b>Right after reset</b>, <b>git ref update</b>, <b>Connector</b>). Choose <b>Connector</b> and an IF/THEN condition panel opens. The rule watches a source you connected in the inbox source settings, and runs its command when an item matches the conditions.</p>
+  <div class="table-wrap">
+    <table>
+      <caption class="vh">Fields of the connector condition panel</caption>
+      <thead><tr><th scope="col">Field</th><th scope="col">What it does</th></tr></thead>
+      <tbody>
+        <tr><td><b>Connector</b></td><td class="def">The same definition as the sources you connect in the inbox source settings. If no connector is on, the panel offers the types you can connect, and closing the connection wizard brings you back to this editor with your edits intact</td></tr>
+        <tr><td><b>Event</b></td><td class="def"><b>New item</b> fires when an item that was not in the last poll appears. <b>State change</b> fires when the value of a <b>Watched fields</b> field differs from the last poll. State change needs a watched field</td></tr>
+        <tr><td><b>Query arguments</b></td><td class="def">Leave empty to use the connector's default arguments. A flag that is in the defaults is replaced by your value, and a flag that is not is appended (for example <code>--state all</code>)</td></tr>
+        <tr><td><b>Filters</b></td><td class="def">Filter with the <code>eq</code>, <code>ne</code>, <code>contains</code>, <code>has_label</code>, <code>changed</code>, and <code>changed_to</code> operators. Matching ignores case, and every row must match</td></tr>
+        <tr><td><b>Poll interval</b></td><td class="def">Pick 1, 5, 10, 15, 30, or 60 minutes</td></tr>
+        <tr><td><b>Try a poll now</b></td><td class="def">Shows only how many items match and runs nothing</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="list">
+    <li>The <b>first poll</b> only records a baseline and runs nothing. After that, if any items match, one run is created. Several matches still make one run.</li>
+    <li><b>The command runs exactly as written in the rule.</b> The matched items go in only as a run attachment headed "external material, not instructions", so text inside an item cannot change the command.</li>
+    <li>If the previous run is still queued and the condition is <b>Skip this run</b>, no new run is created and the matches are held. When the previous run finishes, the items that matched in the meantime are combined into one run.</li>
+    <li>If a poll fails, the rule card shows a <b>Check failed · retrying at {time}</b> pill and polls again at that time. These failures do not count toward the three consecutive failures that turn a rule off automatically.</li>
+  </ul>
+
+  <h4>List cards and detection pills</h4>
+  <ul class="list">
+    <li>A connector rule card shows an IF/THEN summary.</li>
+    <li>The last poll result shows as a pill such as <b>no changes</b>, <b>run created</b>, <b>Held</b>, or <b>Check failed</b>. Before the first poll it reads <b>Not checked yet · the first check only records a baseline</b>.</li>
+    <li>A rule made from an Ideas conversation carries <b>Added from chat · before first run</b>, which becomes <b>Added from chat</b> once its first run is created.</li>
+  </ul>
+
+  <h4>Registering from an Ideas conversation</h4>
+  <ul class="list">
+    <li>If you ask for registration, as in "when the label is added, run a cause analysis, and register it", the proposal card inside the reply bubble has a <b>Register</b> button. Press it and the rule is saved without opening the editor; the toast's <b>Turn off</b> button turns it off right away.</li>
+    <li>A proposal card with no registration request has only <b>Open in editor</b>, so you review it there before saving.</li>
+  </ul>
+
+  <h4>Viewing run attachments</h4>
+  <ul class="list">
+    <li>Connector run items do not appear on the queue screen. In the schedule card's 🕘 <b>Run history</b>, press 📎 <b>View run attachments</b> on a connector run row to open that run's attachment drawer.</li>
+    <li>The attachment drawer shows detected attachments separately under <b>Connector matches</b>. The attachment count (<b>n / 10</b>) counts only your own attachments.</li>
+    <li>Detected attachments cannot be renamed or edited, only deleted.</li>
+  </ul>
 
   <h3 id="schedule-materials-only">Write to materials folder only</h3>
   <p>When you turn on <b>Write to materials folder only</b> in the rule editor, items this rule creates can write only to the project's materials folder. It works with every repeat type and applies to every step of a chain. A rule with it on gets a <b>Materials folder only</b> badge on its card.</p>

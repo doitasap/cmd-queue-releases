@@ -458,7 +458,7 @@ ol.list li{padding-left:4px}
     CmdQ keeps running in the menu bar after you close the window, and the auto queue keeps going. Choose <b>Quit</b> (<kbd>⌘Q</kbd>) in the menu to stop it.
   </p>
   <p>
-    Click the icon for a menu showing your plan, both usage figures with a usage ring, each reset countdown right below its figure, a line with the check interval and last update time, and an auto queue summary. Each row has a small icon, and the usage ring fills in 5% steps. Below that: <b>Refresh usage</b>, <b>Open window</b>, <b>Settings…</b>, <b>Open log folder</b>, a <b>Help &amp; Support</b> submenu and <b>Quit</b>. <b>Help &amp; Support</b> holds <b>About</b>, <b>Check for Updates…</b>, <b>Report a bug</b>, <b>Request a feature</b>, <b>Support CmdQ — Star on GitHub</b> and <b>Sponsor…</b>.
+    Click the icon for a menu showing your plan, both usage figures with a usage ring, each reset countdown right below its figure, a line with the check interval and last update time, and an auto queue summary (<code>Auto queue · N queued · N running · N interactive · N terminal(s) awaiting reset</code>). The last figure counts terminals that were pulled back by a usage limit and are waiting for the reset; it is not added to the queued count. The usage ring fills in 5% steps, and each menu item name starts with an emoji. Below that: <b>Refresh usage</b>, <b>Open window</b>, <b>Settings…</b>, <b>Open log folder</b>, a <b>Help &amp; Support</b> submenu and <b>Quit</b>. <b>Help &amp; Support</b> holds <b>About</b>, <b>Check for Updates…</b>, <b>Report a bug</b>, <b>Request a feature</b>, <b>Support CmdQ — Star on GitHub</b> and <b>Sponsor…</b>.
     <b>Report a bug</b> opens a prefilled GitHub issue in your browser with the app version, macOS version and CPU type. Nothing is sent until you submit it.
   </p>
   <p>
@@ -469,9 +469,9 @@ ol.list li{padding-left:4px}
       <caption class="vh">Dots on the menu bar icon</caption>
       <thead><tr><th scope="col">Dot</th><th scope="col">Meaning</th></tr></thead>
       <tbody>
-        <tr><td>Orange dot</td><td class="def">Unread notifications. Cleared when you look at the window. The only dot with color</td></tr>
-        <tr><td>Hollow dot</td><td class="def">At least one item is waiting for a reset</td></tr>
-        <tr><td>Solid dot</td><td class="def">An item or an interactive terminal is running</td></tr>
+        <tr><td>Red dot</td><td class="def">Unread notifications. Cleared when you look at the window</td></tr>
+        <tr><td>Yellow hollow dot</td><td class="def">At least one item, or a terminal pulled back by a usage limit, is waiting for a reset</td></tr>
+        <tr><td>Green solid dot</td><td class="def">An item or an interactive terminal is running</td></tr>
       </tbody>
     </table>
   </div>
@@ -485,8 +485,21 @@ ol.list li{padding-left:4px}
   <h3>Layout</h3>
   <ul class="list">
     <li>The screen has three columns: the chat list on the <b>left</b>, the chat in the <b>middle</b> and a rail on the <b>right</b>.</li>
-    <li>From top to bottom the rail shows <b>Sources</b>, the progress route (four stops: <b>Chat</b>, <b>Proposals</b>, <b>Queue</b>, <b>Results</b>) and <b>Attachments</b>.</li>
+    <li>From top to bottom the rail shows <b>Sources</b>, the progress route (four stops: <b>Chat</b>, <b>Proposals</b>, <b>Queue</b>, <b>Results</b>), <b>Attachments</b> and <b>Reports</b>.</li>
     <li>In a narrow window the rail folds away. Open it as an overlay panel with the <b>Progress</b> button in the title row.</li>
+  </ul>
+
+  <h3>Status and goal</h3>
+  <ul class="list">
+    <li>For a saved chat, the select box in the title row sets it to <b>In progress</b>, <b>On hold</b> or <b>Done</b>. A new chat is <b>In progress</b>. Changing it does not reorder the list.</li>
+    <li>Under the title row, the <b>Goal</b> box takes one line (up to 500 characters) describing what would make this idea done. Press <kbd>Enter</kbd> or leave the box to save, and <kbd>Esc</kbd> reverts.</li>
+    <li>A saved goal is put in front of every question you send, so claude sees it. It is not shown in the question bubble. If the question is so long that there is no room for the goal line, it is left off that question and you are told.</li>
+  </ul>
+
+  <h3>Export a chat</h3>
+  <ul class="list">
+    <li><b>Export</b> in the title row opens a window to choose where to save, then saves the chat as a single Markdown file. It holds the status, the goal, the questions and answers, the queue items that came from this idea, the attachments and the names of the report files.</li>
+    <li>You can't export while an answer is coming in. Press it again after the answer ends.</li>
   </ul>
 
   <h3>Conversation</h3>
@@ -509,6 +522,7 @@ ol.list li{padding-left:4px}
     <li><b>＋ New chat</b> opens an empty chat.</li>
     <li>The list is grouped into <b>Today</b>, <b>Yesterday</b>, <b>Previous 7 days</b> and <b>Older</b>. <b>Load more</b> appears when there are more.</li>
     <li><b>Search chats</b> looks in titles and in the text of questions and answers.</li>
+    <li>The select box above the chat list filters by <b>All</b>, <b>In progress</b>, <b>On hold</b> or <b>Done</b>. Rows get a badge only for <b>On hold</b> and <b>Done</b>; <b>In progress</b> has none.</li>
     <li><b>Rename</b> (<kbd>F2</kbd>) on a row changes its title. <b>Delete</b> asks for confirmation. Deleting removes the questions, answers and attachments, and can't be undone.</li>
     <li>In the list, <kbd>↑</kbd> and <kbd>↓</kbd> move to the neighboring chat and <kbd>Enter</kbd> opens it.</li>
   </ul>
@@ -525,6 +539,7 @@ ol.list li{padding-left:4px}
       </ul>
     </li>
     <li><b>Attachments</b>: the files and links attached to questions.</li>
+    <li><b>Reports</b>: the files claude wrote in the <code>reports</code> folder of this chat's folder, including files in subfolders. The list is read again when you open the chat and when an answer ends. md, txt, csv and json files open in the default app when clicked; other formats are not opened, and Finder shows where the file is.</li>
     <li>Click a source or attachment to open it the same way as the chips in the chat. Files and source copies open in the default app, and links open the original address in the browser.</li>
     <li>Under an answer, a mark shows the work sent from that answer. Click it to see it in the rail. With no items, the rail says "Progress and results of work sent to the queue from this conversation gather here."</li>
     <li>When a queue item's status changes, the rail reads again right away, and it also reads every 10 seconds in case a change notice is missed. It does not read while the screen is hidden, and reads once when you open it again. Up to the 200 most recent items show.</li>
@@ -548,7 +563,7 @@ ol.list li{padding-left:4px}
 
   <h3>What claude can do</h3>
   <ul class="list">
-    <li>claude in an idea chat is read-only. It reads only files inside its dedicated folder and cannot change your repositories or files.</li>
+    <li>claude in an idea chat reads only files inside its dedicated folder. It may write only inside the <code>reports</code> folder of this chat's folder: ask for a report or summary document as a file and it writes a Markdown file there. It cannot change your repositories or files. If the <code>reports</code> folder can't be prepared, that chat answers read-only and sending questions is not blocked.</li>
     <li>It can use web lookups (WebFetch and WebSearch) to read an address or search before answering.</li>
   </ul>
 
@@ -579,7 +594,7 @@ ol.list li{padding-left:4px}
 
   <h3>Items from this idea</h3>
   <ul class="list">
-    <li>CmdQ records which idea a queue item or workspace came from: cards you <b>accept</b> in <a href="#proposals">Proposals</a>, queue items made with <b>Continue in queue</b> and the like, and workspaces opened by accepting <b>Create workspace</b>. Proposals that did not come from an idea and items made by schedules have no record. Child items in a chain count as coming from the same idea as their parent.</li>
+    <li>CmdQ records which idea a queue item or workspace came from: cards you <b>accept</b> in <a href="#proposals">Proposals</a>, queue items made with <b>Continue in queue</b> and the like, and workspaces opened by accepting <b>Create workspace</b>. Proposals that did not come from an idea have no record. A recurring schedule rule made from an idea chat is recorded as coming from that idea, and the runs that rule creates carry the same record. A rule already recorded as coming from another idea keeps its original source. Child items in a chain count as coming from the same idea as their parent.</li>
     <li>An item waiting for a usage limit to reset shows as <b>Waiting</b>, and hovering it shows "Waiting for the usage limit to reset".</li>
     <li>The result summary is the last result from that item's run log, up to 2000 characters. If no result was found or it is empty, only the status shows, and failed items show no result summary.</li>
     <li>If you delete an item from the queue, its row does not disappear but becomes <b>Deleted item</b>.</li>
@@ -611,7 +626,7 @@ ol.list li{padding-left:4px}
         <tr><td><kbd>Enter</kbd></td><td class="def">Adds to <b>To Do</b></td></tr>
         <tr><td><kbd>⌘Enter</kbd> · <kbd>⌃Enter</kbd> · <kbd>⌃⌘Enter</kbd></td><td class="def">Adds to the <b>Auto queue</b></td></tr>
         <tr><td><kbd>Shift+Enter</kbd></td><td class="def">New line</td></tr>
-        <tr><td><kbd>/</kbd> (anywhere outside a text field)</td><td class="def">Moves focus to the command box</td></tr>
+        <tr><td><kbd>/</kbd> (anywhere outside a text field)</td><td class="def">Moves focus to the command box. On the Ideas tab it moves to the chat input box</td></tr>
       </tbody>
     </table>
   </div>
@@ -1151,14 +1166,14 @@ ol.list li{padding-left:4px}
   <div class="callout warn" style="margin-top:14px">The prepare command runs as written in the isolated folder every time an item runs. Only enter commands you have checked and trust.</div>
 
   <h3>After the run</h3>
-  <p>Once an isolated card has a result, an <b>Isolation result</b> strip appears under its command. The strip shows the result state (<b>Awaiting decision</b> at first), how many files changed, and the buttons below, in one row. The changed file count is taken after the run ends and the auto-commit is made. Every button except <b>View diff</b> asks for confirmation.</p>
+  <p>Once an isolated card has a result, an <b>Isolation result</b> strip appears under its command. The strip shows the result state (<b>Awaiting decision</b> at first), how many files changed, and the buttons below, in one row. The changed file count is taken after the run ends and the auto-commit is made. Before you handle the result, while the worktree still exists, it also counts changes made in an interactive terminal that aren't committed yet (it is counted again when that terminal ends). Every button except <b>View diff</b> asks for confirmation.</p>
   <p>The <b>View diff</b> window also has <b>Discard</b>, <b>Keep as branch</b>, and <b>Merge</b> in its bottom bar, so you can decide right where you read the diff. Clicking one turns the bottom bar into a confirmation sentence with <b>Cancel</b> and the action button; confirm and the result is handled and the window closes. It is the same command as the card strip, so while one side is handling the result the other side's buttons are off and it can't be handled twice. If the result is <b>Kept as branch</b> or the run is still going, the bottom bar shows a status sentence instead of buttons.</p>
   <div class="table-wrap">
     <table>
       <caption class="vh">Isolated result buttons</caption>
       <thead><tr><th scope="col">Button</th><th scope="col">What it does</th><th scope="col">Watch out</th></tr></thead>
       <tbody>
-        <tr><td><b>View diff</b></td><td class="def">Opens a window in CmdQ with the changed files (added and deleted line counts per file) on the left and the diff text on the right. Click a file name in the list to see only that file's diff; click it again or click <b>All files</b> to see everything. Long paths are shortened from the front so the file name stays visible</td><td class="def">Long diff text is cut at a size limit. Files after the cut can't be viewed on their own</td></tr>
+        <tr><td><b>View diff</b></td><td class="def">Opens a window in CmdQ with the changed files (added and deleted line counts per file) on the left and the diff text on the right. Click a file name in the list to see only that file's diff; click it again or click <b>All files</b> to see everything. Long paths are shortened from the front so the file name stays visible. Like <code>git diff</code>, added lines and removed lines are colored differently. Uncommitted changes show too</td><td class="def">Long diff text is cut at a size limit. Files after the cut can't be viewed on their own</td></tr>
         <tr><td><b>Merge</b></td><td class="def">Creates a merge commit on the current branch of the original repository (<code>--no-ff</code>)</td><td class="def">Refused when tracked files in the original repository have uncommitted changes or it is on a commit instead of a branch (detached HEAD). Untracked files are ignored. On a conflict, the merge is cancelled, the result is kept as a branch, and you get a notification</td></tr>
         <tr><td><b>Discard</b></td><td class="def">Deletes the worktree and the branch</td><td class="def">Can't be undone</td></tr>
         <tr><td><b>Keep as branch</b></td><td class="def">Deletes only the worktree folder and keeps the <code>cmdq/item-number</code> branch. Leftover changes are committed first</td><td class="def">Merge or delete the branch yourself later</td></tr>
@@ -1170,6 +1185,7 @@ ol.list li{padding-left:4px}
     <li>Failed and stopped isolated items keep their worktree too. Check the diff and use the same three buttons.</li>
     <li>An item that ends without changing any file has its worktree and branch removed right away and shows <b>No changes</b>.</li>
     <li>The buttons are refused while a task is running in that worktree or an interactive terminal is open there. Try again once it ends.</li>
+    <li>A card queued by a session inside an isolated worktree has the worktree as its path, so it would stay hidden unless you opened that tab yourself. When a card whose path is inside a live worktree appears, CmdQ adds that path as a tab at the end. It doesn't change the tab you're on, doesn't reopen a tab you closed until the app restarts, and keeps the tab limit.</li>
     <li>An isolated card's interactive terminal opens inside its worktree. An isolated card that hasn't run yet must run once through the queue before you can open a terminal, and cards already handled as merged, discarded, no changes, or kept as a branch have the terminal button turned off.</li>
     <li>If tracked files in <b>Files to copy</b> were skipped, the run goes ahead and a notification appears.</li>
     <li>If the task changed files outside the worktree, the result strip shows <b>N outside</b>, and the diff window lists <b>files changed outside isolation</b> below the file list on the left, grouped by repository. Each file shows its current state (modified, new, ignored by git, and so on); click it to see its diff (tracked files) or content (new files and files outside any repository). Even when the result is <b>No changes</b>, an <b>Outside changes</b> button opens the list if such files exist. Merge and discard don't apply to these files, so handle them in that repository yourself. The decision sentence in the diff window's bottom bar also notes that they stay as they are.</li>
@@ -1298,7 +1314,7 @@ ol.list li{padding-left:4px}
   </div>
 
   <h3>Bulk delete and display names</h3>
-  <p>The card and session attachment drawers also have <b>Select</b> in the list header, so you can pick several attachments and delete them at once (it works like bulk delete in <a href="#materials">Project materials</a>). Use ✎ on a row to change its display name (alias). It starts as the name you registered; Enter or moving focus saves it, and <code>Esc</code> cancels. An empty name isn't saved.</p>
+  <p>The card and session attachment drawers also have <b>Select</b> in the list header, so you can pick several attachments and delete them at once (it works like bulk delete in <a href="#materials">Project materials</a>). Use ✎ on a row to change its display name (alias). The attachment dialog opened with 📎 in the interactive terminal header has the same ✎, so a link attachment can have a name instead of showing only its address. It starts as the name you registered; Enter or moving focus saves it, and <code>Esc</code> cancels. An empty name isn't saved.</p>
 
   <h3>Lifetime</h3>
   <p>
@@ -1779,6 +1795,7 @@ ol.list li{padding-left:4px}
   </div>
   <ul class="list">
     <li>In session history, check questions (or <b>Select all</b>) and save them as <b>🖼 Image</b> or <b>📄 PDF</b>.</li>
+    <li>Press <kbd>⌘F</kbd> in the response window or session history to open a <b>Find in text</b> bar. Matches are highlighted as you type (case doesn't matter), and <kbd>Enter</kbd>, <kbd>F3</kbd> or the up and down buttons on the bar move between them; <kbd>Shift+Enter</kbd> goes to the previous match. When the text changes, the same query is counted again. <kbd>Esc</kbd> once closes only the find bar and clears the query; a second <kbd>Esc</kbd> closes the window.</li>
     <li>On a reply, <b>⧉ Copy</b> copies it and <b>← Back</b> (<kbd>⌃←</kbd>) returns to the list. In a card's <b>💬</b> response window, <b>⧉ Copy</b> is always in the action row at the bottom.</li>
     <li>For an answer you sent from the decision inbox, a collapsed <b>Questions answered</b> section sits above the question. Expand it to see the summary, questions and choices of the reply it answered. The same goes for a reply opened from header search. An answer to a single text question carries no marker, so it shows as an ordinary question.</li>
     <li>Run logs are what the response and live log read. Settings controls when they're compressed and deleted. Session history comes from Claude Code's own files, which Claude Code deletes on its own schedule (<a href="#trouble">Troubleshooting</a>).</li>
@@ -1860,6 +1877,7 @@ ol.list li{padding-left:4px}
     </table>
   </div>
   <ul class="list">
+    <li>The answer to a question from an isolated session continues on a card at the original path. Before you handle the result, it goes in as a child step of that isolated chain, so it shows on the original path's tab, continues the earlier conversation in the same worktree, and stays tied to the isolation result (diff and merge). If the worktree was already cleaned up by merging, discarding or keeping as a branch, the answer goes in as a new conversation at the original path, with how the result was handled and where the earlier conversation is recorded added after it. In that case <b>Send to terminal</b> also puts it in the queue.</li>
     <li>CmdQ reads the session again right before sending. If the question was answered elsewhere in the meantime, nothing is sent and the card is removed.</li>
     <li>If the session is still working, or the terminal closed before sending, the card shows why. Try again shortly. If the auto queue started running a session that wasn't open in the meantime, CmdQ doesn't ask to take it over and doesn't send, for the same reason.</li>
     <li>If the interactive terminal can't be opened, the card says "Couldn't open a terminal, so it wasn't sent. Please try again." If Claude Code isn't installed, it says "Claude Code isn't installed, so no terminal was opened. Install it and send again." instead, and if the first-run notice hasn't been accepted yet, "No terminal was opened because the first-run notice hasn't been accepted. Accept it and send again." In every case the answer isn't marked as sent and isn't queued either.</li>
@@ -1919,9 +1937,16 @@ ol.list li{padding-left:4px}
 
   <h3>Turning it on</h3>
   <ul class="list">
-    <li>Click <b>Sources</b> in the inbox panel to open <b>Inbox sources</b>, then <b>Add connection</b>. The wizard lists its steps on the left, and each finished step keeps a one-line note of what you chose. Click a finished step to go straight back to it (going back to <b>Sample preview</b> fetches the sample again). In <b>Type</b> you pick GitHub issues, Todoist tasks, an MCP server, or your own definition. Your own definition goes <b>Type</b> → <b>Tool and conditions</b> → <b>Sample preview</b> → <b>Folder links</b> → <b>Reply</b> → <b>Review and save</b>. GitHub, Todoist and MCP servers with a prepared setup cannot be edited, so they skip <b>Tool and conditions</b> and take 5 steps. You can read that definition under the collapsed "Full definition" in <b>Review and save</b>; the "Author = me" note and the Todoist token field appear in <b>Folder links</b>. Without a token the sample is not fetched, and the wizard tells you which step takes the token. For sources that check each repository separately, such as the built-in GitHub source, and for sources that filter by label rules, such as Todoist, <b>Folder links</b> comes before <b>Sample preview</b>. With label rules, the sample shows only tasks that match a rule and tells you how many were skipped. The rule field shows an example for the kind of definition (<code>owner/repo</code> for GitHub, <code>@label</code> or <code>#project</code> for Todoist, <code>@label</code> only for definitions that do not read projects). If the project list cannot be read while fetching the sample, the wizard says so in one line. The bottom row shows “Step N of M · step name” on the left and <b>Back</b> and <b>Next</b> (<b>Save and turn on</b> on the last step) on the right. However long a step gets, that row stays at the bottom and only the step content scrolls. If you have picked something and try to close with ✕ in the header or Esc, the bottom row changes to “Stop adding this connection? Nothing you entered will be saved.” with <b>Keep editing</b> and <b>Discard</b>. Picking GitHub or Todoist again after adding it creates another one under a different name. If the connection name in <b>Review and save</b> clashes with an existing one, the wizard suggests another name and you cannot save until you change it. In <b>Folder links</b> you set link rules that tie a repository or label to a working path, and you can preview 3 sample items before saving. The sample check only reads; it never replies. A custom command also runs when the sample is fetched, so the wizard shows the command first and asks you to confirm it.</li>
+    <li>Click <b>Sources</b> in the inbox panel to open <b>Inbox sources</b>, then <b>Add connection</b>. The wizard lists its steps on the left, and each finished step keeps a one-line note of what you chose. Click a finished step to go straight back to it (going back to <b>Sample preview</b> fetches the sample again). In <b>Type</b> you pick GitHub issues, Todoist tasks, an MCP server, or your own definition. Your own definition goes <b>Type</b> → <b>Tool and conditions</b> → <b>Sample preview</b> → <b>Folder links</b> → <b>Reply</b> → <b>Review and save</b>. GitHub, Todoist and MCP servers with a prepared setup cannot be edited, so they skip <b>Tool and conditions</b> and take 5 steps. You can read that definition under the collapsed "Full definition" in <b>Review and save</b>; the "Author = me" note and the Todoist token field appear in <b>Folder links</b>. Without a token the sample is not fetched, and the wizard tells you which step takes the token. For sources that check each repository separately, such as the built-in GitHub source, and for sources that filter by label rules, such as Todoist, <b>Folder links</b> comes before <b>Sample preview</b>. With label rules, the sample shows only tasks that match a rule and tells you how many were skipped. The rule field shows an example for the kind of definition (<code>owner/repo</code> for GitHub, <code>@label</code> or <code>#project</code> for Todoist, <code>@label</code> only for definitions that do not read projects). If the project list cannot be read while fetching the sample, the wizard says so in one line. The bottom row shows “Step N of M · step name” on the left and <b>Back</b> and <b>Next</b> (<b>Save and turn on</b> on the last step) on the right. However long a step gets, that row stays at the bottom and only the step content scrolls. If you have picked something and try to close with ✕ in the header or Esc, the bottom row changes to “Stop adding this connection? Nothing you entered will be saved.” with <b>Keep editing</b> and <b>Discard</b>. Picking GitHub or Todoist again after adding it creates another one under a different name. If the connection name in <b>Review and save</b> clashes with an existing one, the wizard suggests another name and you cannot save until you change it. In <b>Folder links</b> you set link rules that tie a repository or label to a working path, and you can preview 3 sample items before saving. The sample table has no body column, because long text breaks the screen; only short columns such as the title show. The sample check only reads; it never replies. A custom command also runs when the sample is fetched, so the wizard shows the command first and asks you to confirm it.</li>
     <li>Every source starts off. Only sources switched <b>On</b> are checked on a schedule: every 10 minutes by default, and never more often than once a minute. To check right away, click <b>Refresh</b> or <b>Refresh all</b>.</li>
     <li>When the current project tab's folder is a github.com repository, CmdQ reads <code>git remote -v</code> and suggests linking that repository to the path. The git commands used here only read, and CmdQ keeps only the owner/repo name, not the remote URL.</li>
+  </ul>
+
+  <h3>Editing a saved source</h3>
+  <ul class="list">
+    <li>On a source's row in the source settings, <b>Edit</b> on a link rule changes its link key. This covers Todoist <code>#project</code> and <code>@label</code> keys as well as GitHub <code>owner/repo</code>. If a rule with the same link key already exists, it is not saved.</li>
+    <li>Each rule also has <b>Delete</b>. It asks first, and once deleted, items matching that rule no longer link to this folder. For sources that fetch per rule (such as GitHub), pending proposals fetched by that rule expire on the next fetch, and fetching fails once the last rule is deleted. Tasks you already approved stay as they are.</li>
+    <li>On the same row you can change <b>What Claude should do afterwards</b>. Edit it in place and click <b>Save</b>; save it empty to remove it. Text over 2000 characters or with an unknown variable is rejected and the file stays as it was. What you typed before saving is kept even if the screen is redrawn.</li>
   </ul>
 
   <h3>Proposals and approval</h3>
@@ -1949,6 +1974,14 @@ ol.list li{padding-left:4px}
     <li>The summary may end up in a public repository, so it is cut to 1,000 characters, and local paths, token-like strings and environment variable values are removed before sending.</li>
     <li>If a reply fails, or no result arrives for over 5 minutes, it stays under <b>Reply failed</b> in the inbox panel with its cause. You can send it again with <b>Resend reply</b>, but the reply may already have been posted and could appear twice, so check the original first.</li>
     <li>A reply skipped because the source was off or the Pro Preview had ended also stays under <b>Reply failed</b>, marked as skipped. You can send it with <b>Resend reply</b> while the source is on and Pro is available; otherwise the row shows why it was refused.</li>
+  </ul>
+
+  <h3>What Claude should do afterwards</h3>
+  <ul class="list">
+    <li>The wizard's <b>Reply</b> step has a <b>What Claude should do afterwards (optional)</b> box. Things the reply actions above can't do, such as adding labels or moving projects, go here and Claude handles them at the end of the task.</li>
+    <li>The text is appended to the queue item's command as an "After finishing, also" line. You can use item values such as <code>{id}</code>, <code>{title}</code> and <code>{url}</code>.</li>
+    <li>Claude needs a tool that can reach the original service, such as gh or the Todoist MCP.</li>
+    <li>If the definition file (TOML) holds a value in a form this box can't read, it is saved as it is and the box is locked. To change it, edit the TOML into a one-line double-quoted string.</li>
   </ul>
 
   <h3>Tokens and the keychain</h3>
@@ -2168,9 +2201,9 @@ ol.list li{padding-left:4px}
     <li><b>Alerts that always come</b>: reclaiming terminals at a limit, the alert that two runs changed the same file, rules turned off after failures, app updates, and isolated-run notices arrive as system banners whatever the 🔔 and per-event settings, unless the style is <b>Off</b>.</li>
     <li><b>Popup and widget styles</b>: done, input-wait, and decision alerts go only to the popup or widget, not to system banners. If the popup or widget can't be shown, a system banner is sent instead.</li>
     <li><b>Alert titles</b>: if you gave a terminal a name, the alert title shows that name instead of the path. Renaming applies from the next alert on, and cards already shown stay as they are.</li>
-    <li><b>Answer from the popup</b>: a decision request with one question and a single choice shows its options as buttons plus a typed-answer box inside the card. Clicking an option sends it right away; a typed answer is sent with <b>Send</b> or Enter (Enter during IME composition does not send, and an empty box is not sent). Where it goes depends on the session. If nothing is using the session, it is queued at the front as a resume (the same as <b>Send to queue</b> in the decision inbox). If an open interactive terminal is asking with a choice dialog, the answer goes into that terminal. A text question in a session whose terminal is open is not sent from the popup; it tells you to answer in the decision inbox or that terminal. The popup never opens a new interactive terminal. If the decision inbox and the popup answer the same decision at once, only one answer is sent and the later one shows "being answered elsewhere" or "already answered elsewhere or gone". If the card closed while sending, it says the alert card was already closed. Wherever you answer, both the inbox and the popup clear that decision. Decisions with several questions, multi-select questions, or blocked decisions open with <b>Answer in decision inbox</b>. <b>Answer</b> in the widget band expands the list and moves to that card's options.</li>
+    <li><b>Answer from the popup</b>: a decision request that answers a session shows its options as buttons plus a typed-answer box inside the card. With one question and a single choice, clicking an option sends it right away and a typed answer is sent with <b>Send</b> or Enter. With several questions or a multi-select question, you turn options on or off or type an answer for each question, then press <b>Send</b> once to send all the answers together (what you picked stays even if the card is redrawn while you choose). Enter during IME composition does not send, and an empty answer is not sent. Where it goes depends on the session. If nothing is using the session, it is queued at the front as a resume (the same as <b>Send to queue</b> in the decision inbox). If an open interactive terminal is asking with a choice dialog, the answer goes into that terminal. A text question in a session whose terminal is open is not sent from the popup; it tells you to answer in the decision inbox or that terminal. The popup never opens a new interactive terminal. If the decision inbox and the popup answer the same decision at once, only one answer is sent and the later one shows "being answered elsewhere" or "already answered elsewhere or gone". If the card closed while sending, it says the alert card was already closed. Wherever you answer, both the inbox and the popup clear that decision. Blocked decisions open with <b>Answer in decision inbox</b>. <b>Answer</b> in the widget band expands the list and moves to that card's options.</li>
     <li><b>One-line cards</b>: done, failed, limit-wait, and input-wait cards take one line. <b>↗</b> goes to the terminal and <b>✕</b> hides the card; hover the title to see the summary.</li>
-    <li><b>Card buttons</b>: <b>Go to terminal</b> opens that item's or session's terminal in the main window. It takes the same path as running a card interactively, so it attaches to a live terminal or resumes the same session if it has ended. Decision cards have <b>Answer in decision inbox</b>, and proposal cards have <b>View in Proposals</b>. <b>Hide</b> clears only that card. The <b>🔕</b> (Mute) in the top-right corner of every card, decision cards included, turns off 🔔 for that session and closes all of its cards. The session's card 🔔 and terminal header 🔔 turn off together, and items that resume the session inherit the off 🔔, so no more done, input-wait, or decision alerts come from it. Turn the session's 🔔 back on to get them again. In the widget band, the 🔕 next to the latest alert does the same.</li>
+    <li><b>Card buttons</b>: <b>Go to terminal</b> opens that item's or session's terminal in the main window. It takes the same path as running a card interactively, so it attaches to a live terminal or resumes the same session if it has ended. Decision cards have <b>Answer in decision inbox</b>, and proposal cards have <b>Accept</b>, <b>Reject</b> and <b>View in Proposals</b>. <b>Accept</b> and <b>Reject</b> pass the action from the popup to Proposals; a proposal that needs editing or a folder choice continues in the main window. <b>Hide</b> clears only that card. The <b>🔕</b> (Mute) in the top-right corner of every card, decision cards included, turns off 🔔 for that session and closes all of its cards. The session's card 🔔 and terminal header 🔔 turn off together, and items that resume the session inherit the off 🔔, so no more done, input-wait, or decision alerts come from it. Turn the session's 🔔 back on to get them again. In the widget band, the 🔕 next to the latest alert does the same.</li>
     <li><b>Widget</b>: the band shows the pending count and the latest alert, with the card list below. <b>Collapse</b> leaves only the count, and clicking the count expands it again. The main button next to the latest alert handles it directly (<b>Answer</b> for decisions, <b>View in Proposals</b> for proposals, <b>↗</b> otherwise). The <b>✕</b> (Hide all) at the end of the band clears every card in both the popup and the widget.</li>
     <li><b>Hidden cards</b>: a hidden alert doesn't come back for the same event. CmdQ keeps this in memory only, so it resets when you restart the app. Cards for decisions answered elsewhere or cleared in the decision inbox, and cards for a session where you started new input, close on their own.</li>
     <li><b>While you're looking</b>: if the main window is in front and you have that terminal open, its done, input-wait, and decision alerts aren't sent. Decision alerts aren't sent at all while the main window is in front, since the Decision inbox count already shows them.</li>

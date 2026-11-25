@@ -1923,6 +1923,7 @@ ol.list li{padding-left:4px}
 
   <h3>When something goes wrong</h3>
   <p>Each source in the source settings shows <b>Last checked</b>, <b>Result</b>, <b>Cause</b> and <b>Next check</b>. After repeated failures the next check is pushed back (up to an hour), and after a rate limit CmdQ checks again a little later.</p>
+  <p>The gray chip next to a source's name is its connection name (the definition file name). If you named it wrong, click <b>Rename</b> next to the chip, fix it, and press Enter or <b>Save</b> (Esc cancels). It must be up to 40 lowercase letters, digits, - or _, and can't match another connection. Received proposals, an http source's token and connector schedule rules watching that source move to the new name, so you don't need to delete and reconnect it.</p>
   <div class="table-wrap">
     <table>
       <caption class="vh">Inbox source failure causes and fixes</caption>

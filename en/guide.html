@@ -1723,6 +1723,43 @@ ol.list li{padding-left:4px}
     <li>When you come back from another app or reopen a terminal, CmdQ has claude redraw the screen. If the screen still goes blank, press <kbd>⇧⌘D</kbd> to save a diagnostics file to <code>diagnostics/</code> in the app data folder and attach it to a bug report. It contains terminal output, so read it before sharing.</li>
     <li>If a usage limit hits, the terminal closes and resumes after the reset (<a href="#limits">Usage limits</a>).</li>
   </ul>
+
+  <h3 id="focus-session">Focus sessions</h3>
+  <p>Use this when you watch several interactive terminals at once. Register a terminal as a <b>focus session</b> and a small always-on-top card window stacks one card per session. Without going back to the main window, you can see each session's status, answer its decisions, and click a card to type in a popup window that shows only that terminal. A registered terminal stays in the background terminal list.</p>
+
+  <h4>Registering and releasing</h4>
+  <ul class="list">
+    <li>Click the ◎ button on a row in the background terminal list (tooltip: "Register as focus session"). A registered row gets a "◎ Focus" tag, and the same button becomes "Release focus".</li>
+    <li>The <b>Focus</b> toggle in the interactive terminal's tool row also registers it. It then reads <b>Focused</b>; click it again to release.</li>
+    <li>You can also release from a card with <b>Release focus</b>. The terminal keeps running, and an <b>Undo</b> button appears so you can register it again right away.</li>
+    <li>While any focus session exists, a <b>◎ Focus n</b> badge shows in the main header. Click it to reopen the card window (it expands if it was a badge). The menu bar tray item <b>🎯 Open Focus Cards</b> opens it too.</li>
+    <li>When the terminal ends, its card disappears.</li>
+  </ul>
+
+  <h4>The card window</h4>
+  <ul class="list">
+    <li>The card window stays on top of other apps and doesn't take focus from the app you're using when you click it. Cards stack vertically and the window height follows the card count. Drag it to move it; it remembers the position.</li>
+    <li>Each card shows a status: <b>Responding</b>, <b>Awaiting input</b> or <b>Awaiting decision</b>. Below it, a second line shows the last sentence or progress line on that terminal's screen. The window header summarizes the counts by decision, input and responding.</li>
+    <li>A card's title is the name you gave the terminal with ✎ in the list. Without a name, it uses the name shown on the list row. Renaming changes the card and popup window titles together.</li>
+    <li>The header buttons change the view: <b>Show all as one line</b> and <b>Show two-line cards</b> pick the card size, and <b>Collapse to badge</b> shrinks the window to a small badge. <b>Hide card window</b> hides only the window; focus registrations stay.</li>
+  </ul>
+
+  <h4>Answering decisions on a card</h4>
+  <ul class="list">
+    <li>When a card is <b>Awaiting decision</b>, click <b>Answer</b> to expand it. You can answer one to four questions, multiple-choice questions and free-text answers in the card, and the answer reaches that terminal through the same path as the decision inbox. After sending, "Answer sent" shows and <b>Collapse</b> folds the card.</li>
+    <li>If a decision can't be answered on a card, you see "Answer in the terminal window." and <b>Open terminal</b>. If it was already handled elsewhere, you see "This decision was already handled."</li>
+  </ul>
+
+  <h4>The terminal popup window</h4>
+  <ul class="list">
+    <li>Click a card to open a separate terminal window for that session. This popup handles input and the terminal size.</li>
+    <li>If you open the same terminal in the main window, an "Open in popup window — read-only" band shows and input is blocked. Typing there shows "Read-only. Type in the popup window." Click <b>Go to popup window</b> in the band to switch to it.</li>
+    <li>The popup opens <b>📎 Attachments</b> and <b>🕐 History</b> as panels inside the window. Viewing the attachment list, adding notes and links, reordering, and reading the question history work in the popup. Adding files, viewing contents and deleting go through <b>Open in main window</b>. While a panel is open, keystrokes don't reach the terminal.</li>
+    <li><kbd>⌘W</kbd> closes only the popup. The terminal and its focus registration stay. After it closes, the app you were using right before closing comes to the front and the main window keeps its place in the order. If you opened the popup from the main window, the main window stays in front.</li>
+  </ul>
+
+  <h4>Notifications</h4>
+  <p>A focus session's <b>input-wait</b> and <b>decision request</b> notifications don't appear as notification popups, because the card already shows the state. This is true even when the card window is hidden. Once you release focus, notifications created after that arrive as usual (<a href="#notify">Notifications</a>).</p>
 </section>
 
 <!-- ══ History ═════════════════════════════════════════ -->

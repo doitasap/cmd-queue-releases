@@ -941,7 +941,7 @@ ol.list li{padding-left:4px}
   </div>
 
   <h3 id="schedule-connector">Connector events</h3>
-  <p>The editor's run conditions have two rows: <b>Time</b> (<b>Specific dates</b>, <b>Daily</b>, <b>Weekly</b>, <b>Monthly</b>) and <b>Event</b> (<b>Right after reset</b>, <b>git ref update</b>, <b>Connector</b>). Choose <b>Connector</b> and an IF/THEN condition panel opens. The rule watches a source you connected in the inbox source settings, and runs its command when an item matches the conditions.</p>
+  <p>The editor's run conditions have two rows: <b>Time</b> (<b>Specific dates</b>, <b>Daily</b>, <b>Weekly</b>, <b>Monthly</b>) and <b>Event</b> (<b>Right after reset</b>, <b>git ref update</b>, <b>Connector</b>). Choose <b>Connector</b> and an IF/THEN condition panel opens. The rule watches a source you connected in the inbox source settings, and runs its command when an item matches the conditions. Until you pick a connector, the fields below it are dimmed and locked, with the note <b>Pick a connector first.</b></p>
   <div class="table-wrap">
     <table>
       <caption class="vh">Fields of the connector condition panel</caption>
@@ -949,10 +949,10 @@ ol.list li{padding-left:4px}
       <tbody>
         <tr><td><b>Connector</b></td><td class="def">The same definition as the sources you connect in the inbox source settings. If no connector is on, the panel offers the types you can connect, and closing the connection wizard brings you back to this editor with your edits intact</td></tr>
         <tr><td><b>Event</b></td><td class="def"><b>New item</b> fires when an item that was not in the last poll appears. <b>State change</b> fires when the value of a <b>Watched fields</b> field differs from the last poll. State change needs a watched field</td></tr>
-        <tr><td><b>Query arguments</b></td><td class="def">Leave empty to use the connector's default arguments. A flag that is in the defaults is replaced by your value, and a flag that is not is appended (for example <code>--state all</code>)</td></tr>
-        <tr><td><b>Filters</b></td><td class="def">Filter with the <code>eq</code>, <code>ne</code>, <code>contains</code>, <code>has_label</code>, <code>changed</code>, and <code>changed_to</code> operators. Matching ignores case, and every row must match</td></tr>
+        <tr><td><b>Query arguments</b></td><td class="def">Leave empty to use the connector's default arguments. The format depends on the connector type, and the hint under the field shows the format, an example, and the override rule for the connector you picked. cli takes flags separated by spaces (a flag with the same name is replaced and a new flag is appended, for example <code>--state all</code>), http takes a URL query (<code>state=open&amp;per_page=50</code>), and mcp takes a JSON object that overrides the tool arguments (<code>{"state":"open"}</code>)</td></tr>
+        <tr><td><b>Filters</b></td><td class="def">Filter with the <code>eq</code>, <code>ne</code>, <code>contains</code>, <code>has_label</code>, <code>changed</code>, and <code>changed_to</code> operators. Matching ignores case, and every row must match. For GitHub and Todoist connectors a short meaning appears under the field (for example <b>Issue state</b>, <b>GitHub repository</b>, <b>Todoist project</b>); for a connector whose source is unknown only the field name shows. After <b>Try a poll now</b>, a <b>Pick a candidate</b> list appears under the value of <code>state</code>, <code>labels</code>, and <code>project</code> rows with the values the polled items actually have and their counts (for example <code>OPEN (2)</code>). You can still type a value yourself</td></tr>
         <tr><td><b>Poll interval</b></td><td class="def">Pick 1, 5, 10, 15, 30, or 60 minutes</td></tr>
-        <tr><td><b>Try a poll now</b></td><td class="def">Shows only how many items match and runs nothing</td></tr>
+        <tr><td><b>Try a poll now</b></td><td class="def">Shows how many items match and the filter value candidates, and runs nothing. It never shows item titles, bodies, URLs, or authors</td></tr>
       </tbody>
     </table>
   </div>

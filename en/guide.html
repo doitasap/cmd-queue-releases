@@ -1739,7 +1739,7 @@ ol.list li{padding-left:4px}
 
   <h3>While you work</h3>
   <ul class="list">
-    <li>When output stops for 8 seconds, you get a <b>Waiting for input</b> notification, but only for terminals with 🔔 on in the terminal header. A terminal opened from a queue card follows that card's 🔔. It isn't sent while you're looking at that terminal in the main window. Change or turn off the delay with <b>Interactive input-wait alert</b> (<a href="#notify">Notifications</a>).</li>
+    <li>When output stops for 8 seconds, you get a <b>Waiting for input</b> notification, but only for terminals with 🔔 on in the terminal header. A terminal opened from a queue card follows that card's 🔔. It isn't sent while you're looking at that terminal in the main window, or while a background subagent that claude started is still running; you're notified of the input wait after that work ends. Background shell tasks (such as a dev server) may never end, so they don't count here. Change or turn off the delay with <b>Interactive input-wait alert</b> (<a href="#notify">Notifications</a>).</li>
     <li><kbd>⌘</kbd>+click a URL to open it in your browser.</li>
     <li>Mod panels take mouse clicks only with claude's fullscreen renderer: run <code>/tui fullscreen</code> in claude, or start it with <code>CLAUDE_CODE_NO_FLICKER=1</code>. With the default renderer, claude ignores the mouse.</li>
     <li>Emoji count as two cells, as in claude, so tables and panels stay aligned. For a wider terminal, set <b>Terminal window width</b> to <b>Full width</b>.</li>
@@ -1762,7 +1762,7 @@ ol.list li{padding-left:4px}
   <h4>The card window</h4>
   <ul class="list">
     <li>The card window stays on top of other apps and doesn't take focus from the app you're using when you click it. Cards stack vertically and the window height follows the card count. Drag it to move it; it remembers the position.</li>
-    <li>Each card shows a status: <b>Responding</b>, <b>Awaiting input</b> or <b>Awaiting decision</b>. Below it, a second line shows the last sentence or progress line on that terminal's screen. The window header summarizes the counts by decision, input and responding.</li>
+    <li>Each card shows a status: <b>Responding</b>, <b>Awaiting input</b> or <b>Awaiting decision</b>. While a background subagent that claude started is still running, the card stays <b>Responding</b> even if the main reply has stopped. Below it, a second line shows the last sentence or progress line on that terminal's screen. The window header summarizes the counts by decision, input and responding.</li>
     <li>A card's title is the name you gave the terminal with ✎ in the list. Without a name, it uses the name shown on the list row. Renaming changes the card and popup window titles together.</li>
     <li>The header buttons change the view: <b>Show all as one line</b> and <b>Show two-line cards</b> pick the card size, and <b>Collapse to badge</b> shrinks the window to a small badge. <b>Hide card window</b> hides only the window; focus registrations stay.</li>
   </ul>

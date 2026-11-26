@@ -1549,6 +1549,7 @@ ol.list li{padding-left:4px}
     <li>The block is added in full on the first run of a new claude session. On a continued session, an update (<code>&lt;linked-modules update&gt;</code>) is added <b>only when the link list has changed</b>. Change is judged by a fingerprint built from the sorted module paths, roles, and relations, so a branch change doesn't trigger it. If the list is the same, nothing is added, which saves tokens. The update says it replaces the list received earlier. A session that started before this feature and has no recorded fingerprint receives the full block once when it is continued.</li>
     <li>Each module line in the block carries the path of the module's root doc (<code>CLAUDE.md</code>, <code>AGENTS.md</code>, or <code>README.md</code>) as <code>docs</code>, plus the stored link evidence (below), up to 5 lines per module and 200 characters per line. The whole block stays within 12 KiB, and when it would go over, evidence of the farthest modules is cut first. At most 20 modules go in at once.</li>
     <li>It applies to headless queue runs (normal permissions) and interactive terminals. It doesn't apply to <b>Materials folder only</b> runs, the 📚 Ask chat, or the 💡 idea chat. The Ask chat keeps to the materials as its evidence, so it doesn't read linked modules' source, and the idea chat has no working path yet. With no linked modules, the prompt, arguments, and environment are the same as before this feature.</li>
+    <li>When a question can only be answered from a linked module's source, the 📚 Ask chat doesn't guess. It says it needs the source and posts a queue item proposal for this project's path to the <a href="#proposals">Proposals</a> inbox. If you accept it, the queue run reads the linked modules' source and answers the same question.</li>
   </ul>
 
   <h4 id="multi-module-snapshot">Using the same list from other tools and skills</h4>
@@ -2090,7 +2091,7 @@ ol.list li{padding-left:4px}
 
   <h3>Safeguards</h3>
   <ul class="list">
-    <li>If a proposal's path isn't absolute, contains <code>..</code>, points to a folder that doesn't exist ("The folder for this path doesn't exist.") or is outside the open project tabs ("This path is outside the open projects."), the card shows a warning. For a queue item with a warning, <b>Accept</b> is disabled, and hovering the button shows why.</li>
+    <li>If a proposal's path isn't absolute, contains <code>..</code>, points to a folder that doesn't exist ("The folder for this path doesn't exist.") or is outside the open project tabs ("This path is outside the open projects."), the card shows a warning. For a queue item with a warning, <b>Accept</b> is disabled, and hovering the button shows why. There's one exception. A proposal from an isolated run shows the original repository's path instead of the worktree path. If that path is inside the original repository, you can <b>Accept</b> it even when that tab is closed, and accepting opens the tab. A path outside the original repository is still blocked.</li>
     <li>A proposal's title, command and path are treated as untrusted and shown only as plain text. Accepting doesn't make CmdQ run the proposed command right away. A schedule runs by its repeat rule, and a queue item goes to To Do and waits there.</li>
   </ul>
 

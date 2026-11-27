@@ -485,7 +485,7 @@ ol.list li{padding-left:4px}
   <h3>Layout</h3>
   <ul class="list">
     <li>The screen has three columns: the chat list on the <b>left</b>, the chat in the <b>middle</b> and a rail on the <b>right</b>.</li>
-    <li>From top to bottom the rail shows <b>Sources</b>, the progress route (four stops: <b>Chat</b>, <b>Proposals</b>, <b>Queue</b>, <b>Results</b>), <b>Attachments</b> and <b>Reports</b>.</li>
+    <li>From top to bottom the rail shows <b>Sources</b>, the progress route (four stops: <b>Chat</b>, <b>Proposals</b>, <b>Queue</b>, <b>Results</b>), <b>Attachments</b>, <b>Reports</b> and <b>Outputs</b>. Outputs shows up only once the chat has a summary, or a note that claude made queue proposals instead of one.</li>
     <li>In a narrow window the rail folds away. Open it as an overlay panel with the <b>Progress</b> button in the title row.</li>
   </ul>
 
@@ -500,6 +500,18 @@ ol.list li{padding-left:4px}
   <ul class="list">
     <li><b>Export</b> in the title row opens a window to choose where to save, then saves the chat as a single Markdown file. It holds the status, the goal, the questions and answers, the queue items that came from this idea, the attachments and the names of the report files.</li>
     <li>You can't export while an answer is coming in. Press it again after the answer ends.</li>
+  </ul>
+
+  <h3 id="ideas-summary">Summarize a chat</h3>
+  <ul class="list">
+    <li>When a chat runs long, click <b>Summary</b> in the title row. claude reads the chat's turns, the queue results that came back and the list of attachments, and writes one summary document. The button appears only on saved chats, to the left of the status select box.</li>
+    <li>You can't summarize while an answer is coming in. While it works, the button shows "Summarizing… ns", and when it's done you see "Saved summary vN".</li>
+    <li>A summary has three parts. <b>Key summary</b> is a status table that marks each topic done, in progress, needs decision or blocked. <b>Critical comments · needs checking</b> is a table of things to check, ordered High to Low. <b>Action items</b> lists what to do, grouped by when. It's all tables and one-line items, no paragraphs, and each point cites a turn ("Turn N") or a queue run.</li>
+    <li>Queue results that came back or changed state since the last summary are gathered under <b>What changed</b>, below the key summary.</li>
+    <li>Each click adds a new version and keeps the earlier ones. The files go into the <code>summaries</code> folder of the chat's folder as Markdown, JSON and HTML named <code>v{n}-{time}</code>, and you find the list under <b>Outputs</b> in the rail.</li>
+    <li>If the input is over 400KB, the oldest turns are left out first. The row in Outputs says how many ("n earlier turns left out"). A summary waits up to 600 seconds.</li>
+    <li>When there isn't enough context to summarize, claude doesn't write one. It posts up to two queue proposals to <a href="#proposals">Proposals</a> to fill the gap instead, and Outputs shows "Not enough context, so n queue proposals were made instead of a summary" until you click <b>Close</b>.</li>
+    <li>A summary is written from the chat and results alone, so its claims may not have been checked against the code. When you send it to the queue, the command carries that warning too.</li>
   </ul>
 
   <h3>Conversation</h3>
@@ -540,6 +552,14 @@ ol.list li{padding-left:4px}
     </li>
     <li><b>Attachments</b>: the files and links attached to questions.</li>
     <li><b>Reports</b>: the files claude wrote in the <code>reports</code> folder of this chat's folder, including files in subfolders. The list is read again when you open the chat and when an answer ends. md, txt, csv and json files open in the default app when clicked; other formats are not opened, and Finder shows where the file is.</li>
+    <li><b>Outputs</b>: the <a href="#ideas-summary">summaries</a> made in this chat, newest first. Each row shows "Summary vN", when it was made, the turns it covers ("Turns a–b") and how many results it used. Below that sit status badges (High, Medium, Low, Blocked, Needs decision, To do); a badge with nothing to count is left out. Each row has four buttons.
+      <ul class="list">
+        <li><b>Browser</b>: opens the summary as an HTML page in your default browser.</li>
+        <li><b>Copy</b>: copies the summary's Markdown.</li>
+        <li><b>Compare</b>: opens a panel under the row. Pick an earlier version (the previous one is picked for you) to see which runs are new or changed and a line-by-line diff. <b>Open in browser</b> shows the full comparison of the two versions in the browser, where you can switch between unified and side by side. The oldest version has nothing to compare with, so its button is off.</li>
+        <li><b>To queue →</b>: opens the queue form with that summary as its basis. The summary goes in as data only, and the form offers instructions made for summaries: <b>Map to code</b>, <b>Change points · impact</b> and <b>Verify open checks</b>.</li>
+      </ul>
+    </li>
     <li>Click a source or attachment to open it the same way as the chips in the chat. Files and source copies open in the default app, and links open the original address in the browser.</li>
     <li>Under an answer, a mark shows the work sent from that answer. Click it to see it in the rail. With no items, the rail says "Progress and results of work sent to the queue from this conversation gather here."</li>
     <li>When a queue item's status changes, the rail reads again right away, and it also reads every 10 seconds in case a change notice is missed. It does not read while the screen is hidden, and reads once when you open it again. Up to the 200 most recent items show.</li>
@@ -605,7 +625,7 @@ ol.list li{padding-left:4px}
 
   <h3>Usage limit</h3>
   <ul class="list">
-    <li>Idea chats use the same plan limit as the queue.</li>
+    <li>Idea chats use the same plan limit as the queue. <b>Summary</b> calls claude once per click, so it uses the limit too.</li>
     <li>If either the 5-hour window or the 7-day window is at 90% or more, CmdQ holds the start of new queue items and the queue screen shows the banner "Near the usage limit, so new items are on hold. Running items keep going." Idea chats keep working.</li>
     <li>If usage data is missing or stale, nothing is held. Held items run after the reset.</li>
   </ul>
